@@ -1,0 +1,123 @@
+[
+  {
+    "act": "Transfer of Property Act, 1882",
+    "section": "105",
+    "title": "What a 'lease of immovable property' is",
+    "summary": "A lease is a transfer of a right to enjoy immovable property, made for a certain time or in perpetuity, in consideration of a price paid or promised (rent), and it must be created in writing for a year or for any term exceeding one year, registered as required.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1679",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=transfer%20of%20property%20act%20section%20105%20lease",
+    "verified": false,
+    "note": "No registered lease deed does not mean 'no tenancy' - a monthly tenancy can be proved by rent receipts, bank transfers and possession."
+  },
+  {
+    "act": "Transfer of Property Act, 1882",
+    "section": "106",
+    "title": "Notice to terminate a lease",
+    "summary": "In the absence of a contrary contract or local rule, a lease of immovable property from year to year, or for a term exceeding one year, or reserving a yearly rent, can be determined only by six months' notice in each case; all other leases can be determined by fifteen days' notice.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1679",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=transfer%20of%20property%20act%20section%20106%20notice%20to%20terminate",
+    "verified": false,
+    "note": "The core tenant protection against 'leave in a week' demands. A rent agreement usually sets its own (often shorter) notice period - read the deed first."
+  },
+  {
+    "act": "Transfer of Property Act, 1882",
+    "section": "108",
+    "title": "Rights and liabilities of lessor and lessee",
+    "summary": "In the absence of a contract or local usage to the contrary, the lessor must disclose the material part of his title, put the lessee in possession and be bound by the terms; the lessee must pay or tender the rent at the time and place agreed and use the property as a person of ordinary prudence.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1679",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=transfer%20of%20property%20act%20section%20108",
+    "verified": false,
+    "note": "Also the source of the lessee's duty not to do anything destructive to the property - the landlord's mirror argument."
+  },
+  {
+    "act": "Transfer of Property Act, 1882",
+    "section": "111",
+    "title": "Determination of lease",
+    "summary": "A lease is determined by merger, express surrender, implied surrender, forfeiture, or a notice to determine, and (for a lease at will) by such notice given by either party.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1679",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=transfer%20of%20property%20act%20section%20111%20determination%20of%20lease",
+    "verified": false,
+    "note": "Verify: this is the section that says a lease ends only in one of the listed ways - i.e. not by force."
+  },
+  {
+    "act": "State Rent Control Acts (e.g. Maharashtra Rent Control Act, 1999; Delhi Rent Control Act, 1958; Tamil Nadu Regulation of Rights and Responsibilities of Landlords and Tenants Act, 2017)",
+    "section": "act-level",
+    "title": "Eviction only by due process; controlled rents",
+    "summary": "Where a premises is under a rent-control law, the landlord cannot evict except on the grounds and in the manner set out in that Act, and the standard/controlled rent is fixed by the Act; where the state law instead deregulates (as Tamil Nadu's 2017 Act does for new tenancies), the contract and the Transfer of Property Act govern.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=maharashtra%20rent%20control%20act%201999%20eviction",
+    "verified": false,
+    "note": "MUST name the state - rent control in India is state law, and a wrong state's rule is worse than none."
+  },
+  {
+    "act": "Model Tenancy Act, 2016 (adopted in various forms by States and UTs)",
+    "section": "act-level",
+    "title": "Written agreement, security cap and the Rent Authority",
+    "summary": "The Model Act, where a state has adopted it, requires intimation to the Rent Authority, caps the security deposit (commonly two months' rent for residential premises), requires repairs to be done within a notified period, and provides that a tenant cannot be evicted except by order of the Adjudicating Authority and the eviction procedure is time-bound.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/2677",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=model%20tenancy%20act%202016%20security%20deposit",
+    "verified": false,
+    "note": "Check state adoption before using it - the Model Act is a template, not directly enforceable everywhere."
+  },
+  {
+    "act": "Indian Electricity Act, 2003 / state electricity supply regulations",
+    "section": "act-level",
+    "title": "Supply cannot be severed for a landlord's dispute",
+    "summary": "Electricity supply can be disconnected only for the reasons and in the manner provided in the Act and the licensee's regulations (default in payment by the consumer, unauthorised use); a landlord has no power to disconnect a tenant's supply, and cutting off essential services to force eviction is actionable.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1663",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=electricity%20act%202003%20section%20133%20disconnection",
+    "verified": false,
+    "note": "Verify the disconnection section number (Sec 133 of the 2003 Act is commonly cited for recovery of dues as arrears of land revenue)."
+  },
+  {
+    "act": "Real Estate (Regulation and Development) Act, 2016",
+    "section": "4 / 18",
+    "title": "Builder must register the project and return money on delay",
+    "summary": "A promoter must register the real estate project with the State RERA before advertising or selling, must specify the completion date, and the allottee can withdraw from the project with interest if the promoter is unable to give possession on the agreed date.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/3447",
+    "alternate_url": "https://rera.gov.in/",
+    "verified": false,
+    "note": "Flat-delay complaints go to the State RERA (not the consumer commission, in most cases), and the interest formula is in the state rules."
+  },
+  {
+    "act": "Bharatiya Nyaya Sanhita, 2023 (property offences / house trespass)",
+    "section": "act-level",
+    "title": "Criminal trespass and wrongful restraint",
+    "summary": "Entering or remaining in a property occupied by another with intent to commit an offence, or shutting a lawful occupant out, or wrongfully restraining a person from proceeding, are criminal offences; a landlord who changes locks, removes a tenant's belongings or cuts water and electricity can attract these provisions.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6193",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=bharatiya%20nyaya%20sanhita%20criminal%20trespass",
+    "verified": false,
+    "note": "The BNS section numbers replacing IPC 441/447 (trespass) and 341/342 (wrongful restraint) must be confirmed on India Code before being printed in a letter."
+  },
+  {
+    "act": "Registration Act, 1908",
+    "section": "17 / 18",
+    "title": "Lease deeds requiring registration",
+    "summary": "A lease of immovable property from year to year, or for any term exceeding one year, or reserving a yearly rent, must be registered; an unregistered lease of that kind cannot be received as evidence of any contract affecting the property, though it may be used for a collateral purpose.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1689",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=registration%20act%201908%20section%2017%20lease%20one%20year",
+    "verified": false,
+    "note": "Most 11-month rent agreements are drafted this way precisely to avoid registration."
+  },
+  {
+    "act": "Indian Stamp Act / state stamp duties",
+    "section": "act-level",
+    "title": "Stamp duty on the rent agreement",
+    "summary": "A rent agreement must be stamped at the rate fixed by the state; an insufficiently stamped instrument cannot be acted upon until the deficit duty (with penalty where applicable) is paid.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1187",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=indian%20stamp%20act%20lease%20stamp%20duty",
+    "verified": false,
+    "note": "Relevant when the tenant needs to rely on the agreement in a dispute."
+  }
+]

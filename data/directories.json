@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "why": "The legacy app invented lawyer personas (names, ratings, case counts, phone numbers) and a fake news ticker. Both are gone. This file contains only official government / institutional pointers. Every URL has `status` because a stale link is a broken promise to a person in trouble.",
+    "rule": "Never render a person's name or phone number that is not from an official source fetched at runtime. If a link 404s, the UI must say 'the directory moved - search for X' rather than guess.",
+    "verify_command": "npm run verify:links"
+  },
+  "legal_aid": [
+    {
+      "name": "National Legal Services Authority (NALSA)",
+      "kind": "Statutory authority",
+      "url": "https://nalsa.gov.in/",
+      "status": "needs_check",
+      "use": "The body that runs free legal aid in India: eligibility rules, schemes, and links to every State Legal Services Authority.",
+      "law": "Legal Services Authorities Act, 1987"
+    },
+    {
+      "name": "NALSA e-Sewa / petition portal",
+      "kind": "Online filing",
+      "url": "https://services.nalsa.gov.in/",
+      "status": "needs_check",
+      "use": "Where available, apply for legal aid or move a petition online instead of visiting the office."
+    },
+    {
+      "name": "District Legal Services Authority (DLSA) at your District & Sessions Court",
+      "kind": "Office - find yours",
+      "url": "",
+      "status": "manual",
+      "use": "Search 'DLSA <your district>' or open your State Legal Services Authority page and pick the district. The DLSA secretary allots a free advocate and can exempt court fee.",
+      "note": "Deliberately not a URL list - the correct office is always district-specific."
+    },
+    {
+      "name": "Supreme Court Legal Services Committee",
+      "kind": "Statutory authority",
+      "url": "https://legalaid.sci.gov.in/",
+      "status": "needs_check",
+      "use": "Free legal aid for matters before the Supreme Court."
+    },
+    {
+      "name": "eCourts Services - case status, cause lists and orders",
+      "kind": "Records",
+      "url": "https://ecourts.gov.in/",
+      "status": "needs_check",
+      "use": "Track your own filed case, find the next hearing date and download orders. Most districts publish here."
+    },
+    {
+      "name": "Legal aid helpline numbers",
+      "kind": "Phone",
+      "url": "",
+      "status": "manual",
+      "use": "Confirm the current number from nalsa.gov.in or your SLSA page before dialing; helpline numbers have changed over the years. Emergency: 112. Women: 181 / 1091. Cyber-financial fraud: 1930.",
+      "note": "The app must not print a helpline number it has not verified on the official site today."
+    }
+  ],
+  "find_a_professional": [
+    {
+      "name": "State Bar Council (advocates enrolled in your state)",
+      "kind": "Regulator directory",
+      "url": "https://www.barcouncilofindia.org/",
+      "status": "needs_check",
+      "use": "The Bar Council of India page links every State Bar Council; enrolment details of an advocate can be checked there before you appoint them.",
+      "note": "Verifying that a lawyer is enrolled is the single most protective step for a first-time litigant."
+    },
+    {
+      "name": "Advocate fee and appointment: what to insist on",
+      "kind": "Guidance",
+      "url": "",
+      "status": "static",
+      "use": "Get the fee in writing, ask for a copy of every filing within 24 hours, insist on the CMR/paperbook being maintained, and never pay only in cash without a receipt."
+    },
+    {
+      "name": "Consumer commissions (file yourself - no lawyer needed)",
+      "kind": "Forum",
+      "url": "https://edaakhil.nic.in/",
+      "status": "needs_check",
+      "use": "e-Daakhil allows a consumer to file in person; a lawyer is permitted but not required, which is why this route is often the cheapest for money claims."
+    },
+    {
+      "name": "NCDRC (national consumer commission)",
+      "kind": "Forum",
+      "url": "https://cdnc.gov.in/",
+      "status": "needs_check",
+      "use": "Judgments, cause lists and practice directions of the National Commission."
+    }
+  ],
+  "record_sources": [
+    { "name": "India Code - central acts and rules", "url": "https://www.indiacode.nic.in/", "status": "needs_check", "use": "The authoritative text of every central Act. Cite from here, not from memory." },
+    { "name": "Indian Kanoon - judgments", "url": "https://indiankanoon.org/", "status": "verified", "use": "Free full text of judgments; used to verify every precedent in this app." },
+    { "name": "Supreme Court of India - judgments and orders", "url": "https://main.sci.gov.in/judgments", "status": "needs_check", "use": "Official reports and the SCR." },
+    { "name": "Central Information Commission", "url": "https://dic.gov.in/", "status": "needs_check", "use": "Second-appeal decisions and the RTI annual reports." },
+    { "name": "Legislative Department - Constitution and bills", "url": "https://legislative.gov.in/", "status": "needs_check", "use": "Constitution text, bills and enacted amendments." },
+    { "name": "PRS India - legislative tracking", "url": "https://www.prsindia.org/", "status": "needs_check", "use": "Readable summaries of pending bills and committee reports; good for the 'what changed' section." },
+    { "name": "Ministry of Consumer Affairs / National Consumer Helpline", "url": "https://consumerhelpline.gov.in/", "status": "needs_check", "use": "File a complaint and track it; also shows the CCPA's actions on misleading ads." },
+    { "name": "MeitY / Cyber Crime Reporting Portal", "url": "https://cybercrime.gov.in/", "status": "needs_check", "use": "Report online financial fraud; the portal also handles prohibited-content complaints." },
+    { "name": "RBI Banking Ombudsman (RB-IOS)", "url": "https://banksompudhaar.rbi.org.in/", "status": "needs_check", "use": "Free escalation against banks and NBFCs." },
+    { "name": "EPFO member portal", "url": "https://www.epfindia.gov.in/", "status": "needs_check", "use": "PF passbook, UAN, and grievance redressal for PF defaults." }
+  ],
+  "news_policy": {
+    "removed": "The legacy hardcoded 'news ticker' items were fabricated for the demo and have been deleted.",
+    "current_behaviour": "The app links out to primary sources (India Code, Indian Kanoon, PRS, the commissions' own judgment pages) instead of pretending to have a news feed.",
+    "roadmap": "Add a real, live feed by fetching the RSS of these sources server-side with a cache; every item must show the source and publication date. No AI-written 'news summaries' until a source URL exists."
+  }
+}

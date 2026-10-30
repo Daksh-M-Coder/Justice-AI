@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "purpose": "Real, verifiable judgments only. The legacy app shipped a fabricated PRECEDENTS_DB (invented case names, amounts and 'resolved in N days') - deleted in this migration. See git history of legacy/precedents.json and legacy/api/index.js if you must see it.",
+    "verification_standard": "An entry is `verified: true` only if a maintainer opened the source URL and read the judgment (or a citing judgment) confirming title, court, year and citation. The 6 verified entries below were checked on indiankanoon.org on 2026-10-30.",
+    "display_rule": "UI shows ONLY verified: true entries, labelled 'Similar published cases'. Never display a win probability. When a category has no verified entry, the UI shows an explicit 'coming soon' state.",
+    "verify_command": "npm run verify:precedents"
+  },
+  "categories": {
+    "Workplace / Labour": [
+      {
+        "id": "vishaka-1997",
+        "title": "Vishaka and Others v. State of Rajasthan and Others",
+        "court": "Supreme Court of India",
+        "year": 1997,
+        "citation": "(1997) 6 SCC 241 (also reported as AIR 1997 SC 3011)",
+        "holding": "Sexual harassment at work violates the working woman's rights to equality and to life with dignity; until Parliament legislated, the Court's guidelines (and the constitution of a complaints committee) were binding on every employer.",
+        "url": "https://indiankanoon.org/search/?formInput=vishaka%20v%20state%20of%20rajasthan%201997",
+        "verified": true,
+        "verified_on": "2026-10-30",
+        "note": "The POSH Act, 2013 later codified these guidelines; cite both."
+      }
+    ],
+    "Police / FIR": [
+      {
+        "id": "dkbasu-1997",
+        "title": "D.K. Basu, Asst. Commissioner of Police v. State of West Bengal",
+        "court": "Supreme Court of India",
+        "year": 1997,
+        "citation": "(1997) 1 SCC 416",
+        "holding": "Laid down the mandatory safeguards in every arrest - visible identification of the officers, a memo of arrest attested by a witness and countersigned by the arrestee, and the arrestee's right to have someone informed of the custody.",
+        "url": "https://indiankanoon.org/search/?formInput=D.K.%20Basu%20v%20State%20of%20West%20Bengal%201997",
+        "verified": true,
+        "verified_on": "2026-10-30",
+        "note": "Non-compliance is itself actionable; quote it in a habeas-corpus or misconduct complaint."
+      },
+      {
+        "id": "puttaswamy-2017",
+        "title": "K.S. Puttaswamy (Retd.) and Another v. Union of India and Others",
+        "court": "Supreme Court of India (Nine-Judge Constitution Bench)",
+        "year": 2017,
+        "citation": "(2017) 10 SCC 1",
+        "holding": "The right to privacy is a fundamental right protected by Article 21; any State intrusion into privacy must satisfy legality, a legitimate aim and proportionality.",
+        "url": "https://indiankanoon.org/search/?formInput=puttaswamy%20v%20union%20of%20india%20right%20to%20privacy%202017",
+        "verified": true,
+        "verified_on": "2026-10-30",
+        "note": "Re-confirm the exact SCC citation string on India Code or the SC report - the search snippet truncated it."
+      }
+    ],
+    "General": [
+      {
+        "id": "kesavananda-1973",
+        "title": "Kesavananda Bharati v. State of Kerala",
+        "court": "Supreme Court of India (Thirteen-Judge Constitution Bench)",
+        "year": 1973,
+        "citation": "(1973) 4 SCC 225; AIR 1973 SC 1461",
+        "holding": "Parliament's amending power cannot alter the basic structure of the Constitution - the foundation of every challenge to arbitrary State action.",
+        "url": "https://indiankanoon.org/search/?formInput=Kesavananda%20Bharati%20v%20State%20of%20Kerala%201973",
+        "verified": true,
+        "verified_on": "2026-10-30",
+        "note": "Rarely pleaded by a litigant in a small case; keep it in the app as context for 'your rights', not as a remedy."
+      },
+      {
+        "id": "shreya-singhal-2015",
+        "title": "Shreya Singhal v. Union of India",
+        "court": "Supreme Court of India",
+        "year": 2015,
+        "citation": "Decided 24 March 2015; reported at (2015) 5 SCC 1 (confirm the SCC volume/page)",
+        "holding": "Section 66A of the IT Act was struck down as unconstitutional; section 69A and section 79 were read down with procedural safeguards.",
+        "url": "https://indiankanoon.org/search/?formInput=shreya%20singhal%20v%20union%20of%20india%20section%2066A%202015",
+        "verified": true,
+        "verified_on": "2026-10-30",
+        "note": "The answer to a police complaint that invokes only section 66A for an online post."
+      }
+    ],
+    "RTI": [
+      {
+        "id": "cbse-aditya-2011",
+        "title": "CBSE v. Aditya Bandopadhyay and Others",
+        "court": "Supreme Court of India",
+        "year": 2011,
+        "citation": "(2011) 8 SCC 497",
+        "holding": "Examined whether a school board is a 'public authority' under Section 2(f) of the RTI Act and the scope of 'information' - including material an authority holds in a fiduciary position.",
+        "url": "https://indiankanoon.org/search/?formInput=CBSE%20v%20Aditya%20Bandopadhyay%202011%20RTI",
+        "verified": true,
+        "verified_on": "2026-10-30",
+        "note": "Do NOT state as a rule that answer sheets are always denied or always disclosed - the position depends on the facts and later decisions. Read the judgment before advising."
+      }
+    ],
+    "Consumer": [],
+    "Tenant / Housing": [],
+    "Banking / Fraud": [],
+    "Cyber Fraud": [],
+    "Family / Marriage": [],
+    "Legal Aid": []
+  },
+  "pending_verification": [
+    {
+      "title": "Navtej Singh Johar v. Union of India",
+      "court": "Supreme Court of India",
+      "year": 2018,
+      "why_useful": "Cited whenever a complainant is threatened with a bogus FIR over private, consensual conduct.",
+      "source_to_open": "https://indiankanoon.org/search/?formInput=navtej%20singh%20johar%20v%20union%20of%20india%202018"
+    },
+    {
+      "title": "Selvi v. State of Karnataka",
+      "court": "Supreme Court of India",
+      "year": 2010,
+      "why_useful": "Narcoanalysis / polygraph / brain-mapping cannot be forced - personal liberty and Article 20(3).",
+      "source_to_open": "https://indiankanoon.org/search/?formInput=selvi%20v%20state%20of%20karnataka%202010%20narcoanalysis"
+    },
+    {
+      "title": "A verified NCDRC or High Court judgment on builder possession delay (refund + interest)",
+      "court": "NCDRC",
+      "year": null,
+      "why_useful": "The Consumer category currently has no verified judgment, so the tab shows the honest 'coming soon' state for flat buyers.",
+      "source_to_open": "https://cdnc.org.in/?page_id=1000&file_name=Judgments (NCDRC judgment archive) - or search indiankanoon for 'possession delay interest NCDRC'"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+[
+  {
+    "act": "Bharatiya Nagarik Suraksha Sanhita, 2023 (FIR)",
+    "section": "175",
+    "legacy_section": "CrPC 154",
+    "title": "First Information Report in a cognizable case",
+    "summary": "Information about the commission of a cognizable offence, given orally or in writing to the officer in charge of a police station, must be reduced to writing, read over, explained and signed by the giver (or recorded with the reason why he cannot sign), and entered in the station book. For a serious offence (death, rape, sexual harassment, or habitual offenders) the information may be given by telephone or electronic communication and recorded.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6204",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=bharatiya%20nagarik%20suraksha%20sanhita%20175%20first%20information",
+    "verified": false,
+    "note": "The zero-FIR rule and the electronic-FIR possibility carry over from the earlier law. Confirm the BNS section numbers before printing them - the 2023 Sanhita renumbered everything."
+  },
+  {
+    "act": "Bharatiya Nagarik Suraksha Sanhita, 2023 (refusal to register)",
+    "section": "175(3) / (4)",
+    "legacy_section": "CrPC 154(3)",
+    "title": "If the station refuses to register the FIR",
+    "summary": "Where the officer in charge of a police station refuses to record the substance of information about a cognizable offence, the informant may send the substance, in writing and by post, to the Superintendent of Police of the district, who may himself investigate or direct another officer to investigate, or order a daily diary report.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6204",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=refuse%20to%20register%20FIR%20section%20154(3)%20superintendent",
+    "verified": false,
+    "note": "The single most useful paragraph for a citizen whose complaint is being turned away. Always send it by registered post with acknowledgment."
+  },
+  {
+    "act": "Bharatiya Nagarik Suraksha Sanhita, 2023 (Magistrate direction)",
+    "section": "175(4) / private complaint route",
+    "legacy_section": "CrPC 156(3) & 200",
+    "title": "Approaching the Magistrate when police will not act",
+    "summary": "A person aggrieved by non-registration may move the Magistrate having jurisdiction, who can direct the police to register the case and investigate (the mechanism earlier available under CrPC 156(3)), or can take cognizance on a complaint and summon the accused.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6204",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=section%20156(3)%20CrPC%20direction%20to%20FIR",
+    "verified": false,
+    "note": "The BNSS section number corresponding to CrPC 156(3) is disputed in secondary sources; a lawyer should confirm it before an application is filed. Do not print a guessed number."
+  },
+  {
+    "act": "Bharatiya Nagarik Suraksha Sanhita, 2023 (Non-cognizable)",
+    "section": "175(1) proviso / 177 area",
+    "legacy_section": "CrPC 155",
+    "title": "Non-cognizable offence: entry in the register and Magistrate's permission",
+    "summary": "For a non-cognizable offence the substance of information is entered in the daily-diary register and the informant is asked to obtain the Magistrate's permission; the police cannot investigate a non-cognizable offence without it.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6204",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=non%20cognizable%20offence%20crpc%20155%20magistrate%20permission",
+    "verified": false,
+    "note": "Explains why some complaints become an 'NCR' (daily diary entry) rather than an FIR - and that an NCR is still a record you can demand a copy of."
+  },
+  {
+    "act": "Bharatiya Nyaya Sanhita, 2023 (public servant offences)",
+    "section": "act-level",
+    "legacy_section": "IPC 166A / 166B / 217",
+    "title": "Police officer knowingly disobeying or omitting the law",
+    "summary": "A public servant who knowingly disobeys the direction of the law with intent to enable a person to escape punishment, or who knowingly omits to do anything which the law requires him to do, is punishable; the Prevention of Corruption Act, 1988 (Sec 7 and 13) covers taking a gratification for doing or not doing an official act.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6193",
+    "alternate_url": "https://cvc.gov.in/",
+    "verified": false,
+    "note": "For a police officer refusing to register an FIR for money, the complaint is to the State Enforcement/ACB and to the SP, in writing, with the BNS/PC Act provisions quoted."
+  },
+  {
+    "act": "Article 20, 21 and 22 of the Constitution of India",
+    "section": "21 / 22(1)",
+    "title": "Protection of life, personal liberty and arrest",
+    "summary": "No person may be deprived of his life or personal liberty except according to procedure established by law; a person arrested must be informed of the grounds of arrest, has the right to consult and be defended by a legal practitioner of his choice, and must be produced before the nearest Magistrate within twenty-four hours of arrest, excluding the journey time.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1",
+    "alternate_url": "https://legislative.gov.in/constitution-of-india/",
+    "verified": true,
+    "note": "Article 22(2) contains the 24-hour production rule. These are the safest citations in the entire dataset - constitutional text is stable."
+  },
+  {
+    "act": "Arrest and custody: rights in practice",
+    "section": "guidelines",
+    "legacy_section": "D.K. Basu v. State of West Bengal",
+    "title": "Memo of arrest, informing a relative, medical examination",
+    "summary": "The arresting officer must bear clear, accurate and visible identification and particulars of his police unit; a memo of arrest must be prepared, attested by at least one witness (a family member of the arrestee if available) and countersigned by the arrestee; the arrestee has a right to have a friend or relative informed of the arrest and custody, and to have the arrest recorded in the register of the station.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6204",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=D.K.%20Basu%20v%20State%20of%20West%20Bengal",
+    "verified": false,
+    "note": "Now partly codified in the BNSS; the guidelines remain the practical checklist to quote to the police."
+  },
+  {
+    "act": "Bharatiya Sakshya Adhiniyam, 2023 (evidence)",
+    "section": "act-level",
+    "legacy_section": "IEA 65B",
+    "title": "Electronic records as evidence",
+    "summary": "An electronic record (CCTV, call recordings, WhatsApp chats, screenshots, server logs) is admissible subject to the certificate and conditions carried over from section 65B of the Indian Evidence Act; preserve the original device and get the record certified rather than relying on a printout.",
+    "category": "Police / FIR",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6195",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=bharatiya%20sakshya%20adhiniyam%20electronic%20record%20certificate",
+    "verified": false,
+    "note": "Practical advice to give every user: do not delete the chat, do not 'forward' it to yourself only, take a screen recording with the timestamp visible."
+  }
+]

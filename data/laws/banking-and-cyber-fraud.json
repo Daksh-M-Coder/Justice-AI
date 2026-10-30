@@ -1,0 +1,124 @@
+[
+  {
+    "act": "Information Technology Act, 2000",
+    "section": "66D",
+    "title": "Cheating by personation using a computer resource",
+    "summary": "A person who cheats or dishonestly induces a victim to deliver property or money, by personating in an electronic communication (fake bank official, fake delivery agent, fake police officer, fake investment app), is punishable with imprisonment and a fine; the amount involved is treated as a factor in the sentence.",
+    "category": "Cyber Fraud",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1671",
+    "alternate_url": "https://cybercrime.gov.in/",
+    "verified": false,
+    "note": "Section 66D was amended by the Bhartiya Nyaya Sanhita (Amendment) process in 2023-24; the current text and the quantum of punishment MUST be re-read on India Code before it is printed in a complaint. The plan's anchor for cyber-fraud cases."
+  },
+  {
+    "act": "Information Technology Act, 2000",
+    "section": "66C",
+    "title": "Identity theft",
+    "summary": "Deleting, altering or misusing another person's identity, password, or electronic signature, or opening an account or transacting in another person's name, is punishable with imprisonment and fine.",
+    "category": "Cyber Fraud",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1671",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=information%20technology%20act%2066C%20identity%20theft",
+    "verified": false,
+    "note": "Use when the fraudster used your KYC, photo or OTP-based access, not merely your phone number."
+  },
+  {
+    "act": "Information Technology Act, 2000",
+    "section": "66A (repealed position)",
+    "title": "66A cannot be used against you",
+    "summary": "Section 66A of the IT Act (sending offensive messages) was declared unconstitutional and void by the Supreme Court in Shreya Singhal v. Union of India; a police complaint invoking only 66A must be closed, though the other provisions of the Act continue to apply.",
+    "category": "Cyber Fraud",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1671",
+    "alternate_url": "https://indiankanoon.org/doc/356944/",
+    "verified": false,
+    "note": "Frequently mis-cited by police stations; the directive to shut such cases was reiterated by the Court. Verify the doc link before shipping it."
+  },
+  {
+    "act": "Bharatiya Nyaya Sanhita, 2023 (cheating and dishonestly inducing delivery of property)",
+    "section": "act-level",
+    "legacy_section": "IPC 420 / 415 / 417",
+    "title": "Cheating, fraud and criminal breach of trust",
+    "summary": "Dishonestly inducing a person to deliver property, or to do or omit something which he would not have done if not deceived, is cheating; the offence carries imprisonment and fine, and where the property is a valuable security or is held in trust the higher schedules apply.",
+    "category": "Banking / Fraud",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/6193",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=bharatiya%20nyaya%20sanhita%20cheating%20dishonestly%20inducing%20delivery",
+    "verified": false,
+    "note": "The BNS numbering (in the 316-318 range for cheating) must be confirmed; cite the IPC number as 'formerly' only when the incident predates 1 July 2024."
+  },
+  {
+    "act": "Reserve Bank of India - Master Direction on Compensation for Unauthorized Electronic Banking Transactions (2021)",
+    "section": "Para 3-5",
+    "title": "Zero liability if you report on time",
+    "summary": "For an unauthorised electronic banking transaction, the customer bears no liability where the bank is notified within three working days of the transaction (for card-less remote fund transfers) and the bank must reverse the disputed amount within the notified timelines; liability shifts to the bank or the customer depending on who is at error and how quickly each responded.",
+    "category": "Banking / Fraud",
+    "source_url": "https://www.rbi.org.in/",
+    "alternate_url": "https://rbigrivance.s3.amazonaws.com/",
+    "verified": false,
+    "note": "Supersedes the 2017 circular that the legacy app quoted. Report on the bank's helpline AND in writing; keep the complaint reference number - the clock runs from notice."
+  },
+  {
+    "act": "RBI Integrated Ombudsman Scheme, 2021",
+    "section": "Clause 8 / 10 / 14",
+    "title": "Banking Ombudsman: free escalation after 30 days",
+    "summary": "A customer may complain to the RB-IOS portal where the bank has failed to reply within thirty days of the written complaint, or has replied unsatisfactorily; the scheme is free to the complainant, covers banks and NBFCs, and the Ombudsman can award compensation up to the notified limit (Rs. 7 lakh ceiling under the 2021 Scheme, aggregated to Rs. 30 lakh where multiple complaints arise from the same cause).",
+    "category": "Banking / Fraud",
+    "source_url": "https://www.rbi.org.in/",
+    "alternate_url": "https://banksompudhaar.rbi.org.in/",
+    "verified": false,
+    "note": "banksompudhaar.rbi.org.in is the real complaint portal. Verify the compensation ceilings before quoting a figure to the user."
+  },
+  {
+    "act": "Payment and Settlement Systems Act, 2007 / UPI operating rules",
+    "section": "act-level",
+    "title": "Failed UPI transaction with money debited",
+    "summary": "Where a UPI or card transaction fails but the amount is debited, the amount must be auto-reversed within the notified time (currently, for failed UPI, the money-back framework applies: reversal within five days for a failed transaction where the beneficiary bank is at fault); if it is not reversed, the customer escalates in writing to the bank's nodal officer and then to RB-IOS.",
+    "category": "Banking / Fraud",
+    "source_url": "https://www.rbi.org.in/",
+    "alternate_url": "https://www.npci.org.in/",
+    "verified": false,
+    "note": "The 'one person, one town' / UPI circulars change often - state the timeline as 'as per the current RBI circular' and cite the writing, not the number."
+  },
+  {
+    "act": "Prevention of Money-Laundering Act, 2002",
+    "section": "12 / 13",
+    "title": "Bank must know your customer and can freeze suspicious accounts",
+    "summary": "Banks must carry out customer due diligence and report suspicious transactions; where an account is linked to a mule/fraud layer, the bank may freeze it under an order from the investigating authority, and the account holder must be told the reason so that he can make a representation.",
+    "category": "Banking / Fraud",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/2672",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=prevention%20of%20money%20laundering%20act%20freezing%20account",
+    "verified": false,
+    "note": "The practical advice for a frozen account: ask for the order, reply in writing, and pursue the lien-cancellation route with the issuing authority."
+  },
+  {
+    "act": "Consumer Protection Act, 2019 (banking deficiency)",
+    "section": "2(11)",
+    "title": "A bank's failure is a 'deficiency in service'",
+    "summary": "A bank's failure to honour a mandate, wrongful debit, unauthorised loan, harassment by a recovery agent, or failure to reverse a disputed amount is a deficiency in the service it holds itself out to provide, and is maintainable before the consumer commission (subject to the Ombudsman route being exhausted or the amount being outside its scope).",
+    "category": "Banking / Fraud",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/3920",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=banking%20service%20deficiency%20consumer%20protection%20act%20section%202(11)",
+    "verified": false,
+    "note": "For most bank-service complaints, complain to the bank in writing first, then the Ombudsman; the consumer commission is the alternative where the Ombudsman route does not cover the grievance."
+  },
+  {
+    "act": "National Cyber Crime Reporting Portal (MoHA)",
+    "section": "operational",
+    "title": "Where to report a cyber fraud within the golden hour",
+    "summary": "Report financial fraud at cybercrime.gov.in, or dial 1930 (the national cyber-crime helpline) which links to the State Cyber Crime Police's thinning/trace attempt on the money; report within the shortest possible time because the remittance chain moves in minutes, and preserve the reference/VPA/UPI trace ID, the numbers used, and screenshots of every message.",
+    "category": "Cyber Fraud",
+    "source_url": "https://cybercrime.gov.in/",
+    "alternate_url": "https://1930.gov.in/",
+    "verified": false,
+    "note": "The single highest-value instruction in a cyber-fraud case, and it is not in any statute - keep it in the app as an operational step, not as 'law'."
+  },
+  {
+    "act": "Telecom Regulatory Authority of India - Call Detail Record / DND regulations",
+    "section": "regulation",
+    "title": "Spam calls, and your right to complain to the telecom operator",
+    "summary": "A subscriber who has registered under DND and still receives commercial calls may complain to the access provider's grievance channel (and to the TAT CPR portal, e.g. 1909 / the operator's app); telemarketers calling with a spoofed bank number are evidence of an offence under the IT Act and BNS, not merely a nuisance.",
+    "category": "Cyber Fraud",
+    "source_url": "https://www.trai.gov.in/",
+    "alternate_url": "https://torch.trai.gov.in/",
+    "verified": false,
+    "note": "Sanity-check the TRAI commercial-communications-regulation references before naming them; the regulations were revised in 2018 and amended since."
+  }
+]

@@ -1,0 +1,24 @@
+rules_version = '2';
+
+// JusticeAI Firestore rules (plan step 12).
+// The API verifies the ID token and derives the uid server-side, but the database must
+// never depend on that: this is the last line of defence. The client SDK is never used
+// for writes - all persistence goes through /api/*, which authenticates first.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Own data only. The recursive wildcard also covers the subcollections:
+    //   users/{uid}/profile/data
+    //   users/{uid}/cases/{caseId}
+    //   users/{uid}/cases/{caseId}/messages/{msgId}
+    //   users/{uid}/cases/{caseId}/artifacts/{artifactId}
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Everything else - including listing /users - is refused.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

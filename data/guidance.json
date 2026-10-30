@@ -1,0 +1,232 @@
+{
+  "_meta": {
+    "purpose": "Category-specific legal clocks, document checklists and escalation ladders. Every clock carries `verify` because a limitation period quoted wrongly is worse than none. The UI labels all of this as guidance, never as advice.",
+    "sources": "Statutory periods are cross-referenced to the sections in data/laws/. Portal URLs are official government portals and must be re-checked before production (npm run verify:laws reports on them)."
+  },
+  "categories": {
+    "RTI": {
+      "deadlines": [
+        { "key": "rti_reply", "label": "PIO reply due", "days": 30, "from": "date the application was received (or transferred in)", "law": "RTI Act, 2005 - Sec 7(1)", "verify": true },
+        { "key": "rti_life_liberty", "label": "Life / personal liberty reply due", "hours": 48, "from": "date of receipt", "law": "RTI Act, 2005 - Sec 7(2)", "verify": true, "conditional": "only when the information concerns life or personal liberty" },
+        { "key": "rti_first_appeal", "label": "First appeal", "days": 30, "from": "day 31 (no reply) or the date the reply was received", "law": "RTI Act, 2005 - Sec 12 / 19(1)", "verify": true, "condonation": "delay can be condoned for sufficient cause" },
+        { "key": "rti_appeal_decide", "label": "First appellate order due", "days": 30, "from": "receipt of the first appeal", "law": "RTI Act, 2005 - Sec 19(7) area", "verify": true, "extension": "extendable once, for reasons in writing" },
+        { "key": "rti_second_appeal", "label": "Second appeal to the Information Commission", "days": 90, "from": "the date the appellate decision was (or should have been) received", "law": "RTI Act, 2005 - Sec 19(3)", "verify": true }
+      ],
+      "checklist": [
+        "Written application (English / Hindi / local language) with one subject per application",
+        "Particulars of the applicant - name and address (phone optional)",
+        "Prescribed fee proof: Indian currency note, cash receipt, postal receipt, demand draft or online payment receipt from rtionline.gov.in",
+        "BPL certificate copy if claiming fee exemption",
+        "Numbered list of the information sought - dates, file names, amounts, periods",
+        "Copy of the earlier application, its date of posting and the tracking number",
+        "Preferred form of the reply (certified copies / inspection / soft copy) and the delivery method"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Public Information Officer of the office that holds the record", "portal": "https://rtionline.gov.in/", "note": "Central bodies can be filed online; state bodies usually need the state portal or paper." },
+        { "step": 2, "where": "First Appellate Authority (officer senior to the PIO)", "portal": "", "note": "No fee. Within 30 days." },
+        { "step": 3, "where": "Central Information Commission", "portal": "https://dic.gov.in/", "note": "Second appeal within 90 days, free; penalty and disciplinary action can be sought." },
+        { "step": 4, "where": "State Information Commission (for state subjects)", "portal": "", "note": "Name of the state commission varies; search '<State> State Information Commission'." },
+        { "step": 5, "where": "High Court writ (Article 226) where the Commission itself is non-functional or the order is being ignored", "portal": "https://ecourts.gov.in/", "note": "Get a lawyer before this step." }
+      ]
+    },
+    "Consumer": {
+      "deadlines": [
+        { "key": "cpa_limitation", "label": "File the consumer complaint", "days": 730, "from": "the date the cause of action arose (delivery, refusal, bill date)", "law": "Consumer Protection Act, 2019 - limitation (Sec 69 area)", "verify": true, "condonation": "admission after 2 years requires sufficient cause" },
+        { "key": "cpa_appeal_state", "label": "Appeal a District Commission order", "days": 45, "from": "the date of the order / copy received", "law": "Consumer Protection Act, 2019 - appeal provision", "verify": true },
+        { "key": "cpa_grievance_ack", "label": "E-commerce grievance officer must acknowledge", "hours": 48, "from": "your written complaint", "law": "Consumer Protection (E-Commerce) Rules, 2020", "verify": true }
+      ],
+      "checklist": [
+        "Invoice / order confirmation / payment proof (card statement screenshot is acceptable)",
+        "Delivered product with the defect photographed (and the packaging, labels and warranty card)",
+        "Every communication with the seller: email threads, chat transcripts, call recordings, ticket numbers",
+        "Written rejection or non-response from the seller or brand",
+        "Repair job sheets, inspection reports, or a doctor's / technician's opinion on the defect",
+        "For services: agreement / purchase order, service report, bill, and the specific deficiency described",
+        "Identity proof of the complainant, and the seller's registered address from their website footer",
+        "A computation of the amount claimed (refund + interest + compensation + cost)"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Written demand to the seller/service provider (keep the letter generated here)", "portal": "", "note": "Give 15 days; keep the postal receipt." },
+        { "step": 2, "where": "Grievance officer / nodal officer of the platform or brand", "portal": "", "note": "Mandatory for marketplaces under the E-Commerce Rules." },
+        { "step": 3, "where": "National Consumer Helpline", "portal": "https://consumerhelpline.gov.in/", "note": "Free; also 1915 / 1800-11-1550. Good for mediation and for a record of the complaint." },
+        { "step": 4, "where": "District Consumer Disputes Redressal Commission (online filing)", "portal": "https://edaakhil.nic.in/", "note": "Fee is modest and refundable if the complaint succeeds." },
+        { "step": 5, "where": "State Commission (appeal above the District limit) and NCDRC", "portal": "https://cdnc.gov.in/", "note": "Pecuniary limits are revised by notification - confirm before filing." }
+      ]
+    },
+    "Workplace / Labour": {
+      "deadlines": [
+        { "key": "pw_act_wage_period", "label": "Employer must pay wages for the month", "days": 7, "from": "the last day of the wage period (10 days in larger establishments)", "law": "Payment of Wages Act, 1936 - Sec 4 / 5", "verify": true },
+        { "key": "pw_claim", "label": "Claim for unlawful deduction / delayed wages", "days": 180, "from": "the date the deduction came to your knowledge or wages fell due", "law": "Payment of Wages Act, 1936 - Sec 15", "verify": true, "condonation": "extendable for sufficient cause - confirm the current limit" },
+        { "key": "posh_complaint", "label": "POSH complaint to the Internal Committee", "days": 90, "from": "the date of the last incident", "law": "POSH Act, 2013 - Sec 9", "verify": true, "condonation": "extendable by another 3 months" },
+        { "key": "posh_inquiry", "label": "Inquiry must be completed", "days": 90, "from": "the date the complaint is filed", "law": "POSH Act, 2013", "verify": true },
+        { "key": "idt_25F_notice", "label": "Retrenchment notice (or wages in lieu)", "days": 30, "from": "the intended date of retrenchment", "law": "Industrial Disputes Act, 1947 - Sec 25F", "verify": true }
+      ],
+      "checklist": [
+        "Appointment letter / employment contract and any policy you signed",
+        "Salary slips for at least the last six months (and the last three showing the shortfall)",
+        "Bank statement showing the salary credit and the actual amount received",
+        "Attendance records, leave approvals, and the email/letter of termination or suspension",
+        "PF/ESI passbook screenshot from the EPFO member portal (for PF complaints)",
+        "Written notice of the alleged loss or damage and the show-cause, if any",
+        "Name and designation of the manager who took the decision, and the dates",
+        "For POSH: the complaint to the IC, its acknowledgment, and the composition of the committee"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Written representation to HR and the employer's grievance channel", "portal": "", "note": "Keep it factual, attach the payslip math." },
+        { "step": 2, "where": "Labour Commissioner / the authority appointed under the Payment of Wages Act in your state", "portal": "https://shramsuvidha.gov.in/", "note": "Single-window portal for several labour-compliance services." },
+        { "step": 3, "where": "EPFO Regional P.F. Commissioner (for PF deducted and not deposited)", "portal": "https://www.epfindia.gov.in/", "note": "Grievances can also be filed on the EPFO portal / UMANG." },
+        { "step": 4, "where": "Labour Court / Industrial Tribunal (dispute referred by the State Government)", "portal": "", "note": "A lawyer or union is normally needed from here." },
+        { "step": 5, "where": "DLSA free legal aid (most employees in this category are eligible)", "portal": "https://nalsa.gov.in/", "note": "" }
+      ]
+    },
+    "Police / FIR": {
+      "deadlines": [
+        { "key": "fir_production", "label": "Arrested person must be produced before a Magistrate", "hours": 24, "from": "the arrest, excluding travel time", "law": "Article 22(2), Constitution of India / BNSS", "verify": false },
+        { "key": "fir_sp_reply", "label": "SP/DCP decision after a Sec 175(3)-style written complaint", "days": 14, "from": "the date your written complaint was received", "law": "BNSS (formerly CrPC 154(3)) - practice, not a fixed statutory period", "verify": true, "note": "No statutory clock; 14 days is the customary follow-up interval, not law." },
+        { "key": "writ_timeline", "label": "Writ to the High Court (compelling registration)", "days": 180, "from": "the refusal, as a rule of prudence", "law": "Article 226 - limitation is discretionary", "verify": true, "note": "Delay must be explained; earlier is always better." }
+      ],
+      "checklist": [
+        "A written copy of the information you gave, with the date and time of each visit to the station",
+        "Name / rank of the officer you spoke to, and the station's daily-diary (Roznamcha) number if given",
+        "Any acknowledgment or receipt you were handed",
+        "Evidence: photographs of damage or injury, medical records, CCTV location and time, message and call logs",
+        "Names and addresses of witnesses, with their contact numbers",
+        "The postal receipt when you write to the SP/DCP (this is the step that most often works)",
+        "For an arrest: the memo of arrest, the arrestee's medical condition, and who was informed"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Officer in charge of the police station, in person and in writing", "portal": "", "note": "Ask for the DD/NCR number even if no FIR is registered." },
+        { "step": 2, "where": "Superintendent of Police / DCP of the district, by registered post", "portal": "", "note": "The statutory route when the station refuses." },
+        { "step": 3, "where": "State police complaint portal / DGP grievance cell and the CM helpline", "portal": "", "note": "Every major state runs an online complaint portal; search '<state> police complaint portal' rather than guessing a URL." },
+        { "step": 4, "where": "Magistrate having jurisdiction (directing registration / complaint route)", "portal": "https://ecourts.gov.in/", "note": "Lawyer strongly recommended; do not guess the BNSS section number." },
+        { "step": 5, "where": "High Court under Article 226", "portal": "https://ecourts.gov.in/", "note": "Writ of mandamus to compel registration." }
+      ]
+    },
+    "Banking / Fraud": {
+      "deadlines": [
+        { "key": "rbi_zero_liability", "label": "Report the unauthorised transaction to keep zero liability", "days": 3, "from": "the date of the transaction (working days)", "law": "RBI Master Direction on compensation for unauthorised electronic banking transactions", "verify": true },
+        { "key": "bank_reply", "label": "Bank must respond to a written complaint", "days": 30, "from": "the date of the written complaint", "law": "RBI Integrated Ombudsman Scheme, 2021", "verify": true },
+        { "key": "bank_ombudsman", "label": "Escalate to the Banking Ombudsman", "days": 365, "from": "receipt of the bank's final reply (or expiry of the 30 days)", "law": "RBI Integrated Ombudsman Scheme, 2021", "verify": true },
+        { "key": "civil_money_recovery", "label": "Civil / summary suit for the amount", "days": 1095, "from": "when the money became due and refused", "law": "Limitation Act, 1969 (three years for most suits)", "verify": true }
+      ],
+      "checklist": [
+        "Account statement highlighting the disputed entries with date, amount and reference/UTR number",
+        "The SMS, email or app notification for each transaction",
+        "Card / UPI details (mask the number in anything you share publicly)",
+        "Ticket or reference number of the first complaint to the bank, and every follow-up",
+        "Any OTP, device or IP the fraudster may have used, and the time of the fraud",
+        "Proof you are the account holder (PAN and address proof, masked where shared online)",
+        "Police / cybercrime complaint acknowledgment (needed by the bank to process a fraud claim)"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Written complaint to the bank / card issuer (and freeze the card immediately)", "portal": "", "note": "The clock for zero liability starts when you notify them." },
+        { "step": 2, "where": "Nodal / principal officer of the bank, quoting the first complaint number", "portal": "", "note": "Lists of nodal officers are published on each bank's website." },
+        { "step": 3, "where": "RBI Integrated Ombudsman (free, binding up to the notified amount)", "portal": "https://banksompudhaar.rbi.org.in/", "note": "Escalate after 30 days of silence or an unsatisfactory reply." },
+        { "step": 4, "where": "Consumer Commission for deficiency in service", "portal": "https://edaakhil.nic.in/", "note": "Where the grievance is service deficiency, not just a disputed transaction." },
+        { "step": 5, "where": "Cyber crime police + bank's nodal officer, in parallel, for fraud by a third party", "portal": "https://cybercrime.gov.in/", "note": "Reporting fast is the only lever that can trace the money." }
+      ]
+    },
+    "Cyber Fraud": {
+      "deadlines": [
+        { "key": "cyber_golden_hour", "label": "Report to 1930 / cybercrime.gov.in", "hours": 1, "from": "the moment you realise the fraud", "law": "operational guidance, not a statute", "verify": false, "note": "The trace is time-critical - money moves out of the mule accounts within minutes." },
+        { "key": "cyber_bank_report", "label": "Written complaint to the bank", "days": 3, "from": "the transaction date", "law": "RBI Master Direction (zero-liability window)", "verify": true },
+        { "key": "cyber_chargeback", "label": "Card chargeback / dispute window", "days": 90, "from": "the transaction date (network rules)", "law": "card network + RBI rules - confirm with your bank", "verify": true }
+      ],
+      "checklist": [
+        "Screenshot of every message, call log, SMS and the app or website used",
+        "The phone numbers, UPI IDs, VPA, bank account numbers and QR codes the fraudster used",
+        "Transaction reference numbers, dates, amounts and the beneficiary name shown",
+        "The URL / Play Store link / invoice and the seller's claimed identity",
+        "Do not wipe the phone; note the device model and the OS version",
+        "A written timeline of events in your own words, with times",
+        "The acknowledgment / complaint ID from cybercrime.gov.in"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Dial 1930 or file at the National Cyber Crime Reporting Portal", "portal": "https://cybercrime.gov.in/", "note": "Financial-fraud reports go here; it routes to the State cyber cell." },
+        { "step": 2, "where": "Written complaint to the bank's nodal officer for the fraudulent credit", "portal": "", "note": "Ask for a lien mark on the beneficiary account - the police order enables it." },
+        { "step": 3, "where": "Local cyber cell / police station FIR (IT Act + BNS provisions)", "portal": "", "note": "If refused, use the SP route as in Police / FIR." },
+        { "step": 4, "where": "Platform / app store takedown and the intermediary's grievance officer", "portal": "", "note": "IT Rules require a grievance officer; a written takedown request helps stop reuse." },
+        { "step": 5, "where": "Consumer Commission (platform's deficiency) or a civil recovery suit", "portal": "https://edaakhil.nic.in/", "note": "Where the platform's own conduct enabled the loss." }
+      ]
+    },
+    "Tenant / Housing": {
+      "deadlines": [
+        { "key": "tpa_notice_monthly", "label": "Notice to determine a lease other than year-to-year", "days": 15, "from": "the date the notice is served (or the contract's period)", "law": "Transfer of Property Act, 1882 - Sec 106", "verify": true },
+        { "key": "tpa_notice_yearly", "label": "Notice for a yearly / multi-year lease", "days": 180, "from": "the date of service", "law": "Transfer of Property Act, 1882 - Sec 106", "verify": true },
+        { "key": "deposit_recovery", "label": "Suit for the security deposit", "days": 1095, "from": "the date the deposit became refundable and was refused", "law": "Limitation Act, 1969", "verify": true },
+        { "key": "force_eviction", "label": "Police complaint / injunction when locked out", "hours": 24, "from": "the forcible act - move immediately", "law": "BNSS + Article 21 + rent law", "verify": true, "note": "Self-help eviction is unlawful; an interim injunction is often granted quickly." }
+      ],
+      "checklist": [
+        "The rent agreement (signed and, if applicable, registered) and any addendum",
+        "Every rent receipt, and bank transfers / UPI history proving payment",
+        "Photographs and videos of the property's condition at move-in and at the dispute",
+        "The landlord's notice (or the WhatsApp / SMS demanding vacation), with dates",
+        "Utility bills in your name, showing you were the occupant",
+        "Inventory of belongings and the estimate of any loss or damage",
+        "Society / association correspondence where the property is in a building",
+        "Written demand for the deposit, with the postal or delivery receipt"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Written notice to the landlord / agent (advocate's letterhead where affordable)", "portal": "", "note": "Set out the notice period, the deposit math and the deadline." },
+        { "step": 2, "where": "Police complaint where there is force, intimidation, lock changing or cutting of supply", "portal": "", "note": "Use the Police / FIR ladder - including the SP route." },
+        { "step": 3, "where": "Rent Controller / Court as provided by the applicable state rent law", "portal": "https://ecourts.gov.in/", "note": "Name the state law; eviction requires a court order." },
+        { "step": 4, "where": "Civil court / summary suit for the deposit, or consumer forum where the service was by a builder or agency", "portal": "", "note": "Money claims of the size typical of a deposit are usually summary-suit territory." },
+        { "step": 5, "where": "DLSA free legal aid", "portal": "https://nalsa.gov.in/", "note": "" }
+      ]
+    },
+    "Family / Marriage": {
+      "deadlines": [
+        { "key": "dv_act_reliefs", "label": "Application for protection / residence / monetary relief", "days": 0, "from": "as soon as the act occurs - there is no waiting period", "law": "Protection of Women from Domestic Violence Act, 2005", "verify": true, "note": "No limitation is prescribed; delay only weakens the case." },
+        { "key": "maintenance", "label": "Maintenance application (BNS/BNSS provision)", "days": 0, "from": "when the person refuses to maintain", "law": "BNSS maintenance provision (formerly CrPC 125)", "verify": true, "note": "The BNSS section number must be confirmed before use." }
+      ],
+      "checklist": [
+        "Marriage certificate or proof of the relationship, and addresses",
+        "Income proof of both parties (salary slips, ITR, bank statements)",
+        "Every threatening message, call recording and medical record of injury",
+        "Proof of the shared household (electricity bill, rent agreement, ration card)",
+        "List of stridhan and dowry articles with the bills, and where they are now",
+        "Children's school and medical records where custody or maintenance is involved",
+        "Dates and names of the police stations or DLSA approached"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Women helpline 181 / 1091, and the Protection Officer at the District Court", "portal": "", "note": "The Protection Officer assists in filing the DV Act application, free." },
+        { "step": 2, "where": "Police complaint (BNS / BNSS provisions) where there is cruelty or threat", "portal": "", "note": "Use the Police / FIR ladder if the station refuses." },
+        { "step": 3, "where": "Magistrate under the DV Act for protection, residence, custody and monetary orders", "portal": "https://ecourts.gov.in/", "note": "No court fee for a DV Act application." },
+        { "step": 4, "where": "Family Court / the personal-law forum for maintenance, divorce or custody", "portal": "", "note": "Personal law governs - a lawyer is essential here." },
+        { "step": 5, "where": "DLSA free legal aid (women are entitled without the income test)", "portal": "https://nalsa.gov.in/", "note": "" }
+      ]
+    },
+    "General": {
+      "deadlines": [
+        { "key": "civil_limitation", "label": "Most civil suits", "days": 1095, "from": "when the cause of action arose", "law": "Limitation Act, 1969", "verify": true, "note": "Contracts, money, damages and most possession claims run on three years; specific suits differ." }
+      ],
+      "checklist": [
+        "A one-page chronology with exact dates - the single most useful document in any case",
+        "Every agreement, invoice, notice and receipt, in date order",
+        "Copies of everything you sent, with the postal or delivery proof",
+        "Names, designations and addresses of the people involved",
+        "Identity and address proof of the complainant",
+        "Your own goal in one sentence: refund, apology, restoration, safety, or information"
+      ],
+      "escalation": [
+        { "step": 1, "where": "Written demand to the other party, with a deadline", "portal": "", "note": "Nearly every statute expects this first." },
+        { "step": 2, "where": "The regulator or ombudsman for that sector", "portal": "", "note": "Bank - RB-IOS; telecom - the operator + TRAI portal; electricity - the State Ombudsman." },
+        { "step": 3, "where": "RTI to get the official file notings behind a State action", "portal": "https://rtionline.gov.in/", "note": "Often the cheapest way to get the record." },
+        { "step": 4, "where": "Consumer forum / civil court / the special tribunal for the sector", "portal": "https://edaakhil.nic.in/", "note": "" },
+        { "step": 5, "where": "DLSA free legal aid and the High Court's legal services clinic", "portal": "https://nalsa.gov.in/", "note": "" }
+      ]
+    }
+  },
+  "letter_review_checklist": [
+    "Is every date correct, and in the letter's own chronology order?",
+    "Is the addressee's designation and office exactly right (not a person's name)?",
+    "Is your name, address, phone and (where relevant) account/reference number filled in?",
+    "Does the letter state the specific relief you want, with a number where money is involved?",
+    "Is the legal citation actually applicable to your state / sector, and does it match the facts?",
+    "Are all attachments listed and enclosed, and does the letter refer to them as Annexures?",
+    "Is there a deadline for reply, and is it reasonable (7 to 15 days)?",
+    "Have you removed anger, abuse or threats - they hurt the eventual reading in court?",
+    "Have you kept a signed copy and the postal receipt with the tracking number?",
+    "Have you checked whether a lawyer or DLSA should look at it before it goes?"
+  ]
+}

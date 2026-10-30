@@ -1,0 +1,123 @@
+[
+  {
+    "act": "Constitution of India",
+    "section": "Article 14",
+    "title": "Equality before law",
+    "summary": "The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India - the basis for challenging arbitrary action by any public authority.",
+    "category": "General",
+    "source_url": "https://legislative.gov.in/constitution-of-india/",
+    "alternate_url": "https://www.indiacode.nic.in/handle/123456789/1",
+    "verified": true,
+    "note": "Constitutional text is stable; safe to cite."
+  },
+  {
+    "act": "Constitution of India",
+    "section": "Article 19(1)(g)",
+    "title": "Right to practise any profession, or to carry on any occupation, trade or business",
+    "summary": "All citizens have the right to carry on any profession or business, subject only to reasonable restrictions imposed by the State under Article 19(6) - relevant to licence, shop-seal and permit grievances.",
+    "category": "General",
+    "source_url": "https://legislative.gov.in/constitution-of-india/",
+    "alternate_url": "https://www.indiacode.nic.in/handle/123456789/1",
+    "verified": true,
+    "note": "Use for arbitrary trade harassment, not for private disputes with another company."
+  },
+  {
+    "act": "Constitution of India",
+    "section": "Article 21",
+    "title": "Protection of life and personal liberty",
+    "summary": "No person shall be deprived of his life or personal liberty except according to procedure established by law; the Supreme Court has read into it the right to live with dignity, to health, to a clean environment, to privacy and to legal aid.",
+    "category": "General",
+    "source_url": "https://legislative.gov.in/constitution-of-india/",
+    "alternate_url": "https://www.indiacode.nic.in/handle/123456789/1",
+    "verified": true,
+    "note": "The anchor for custodial, medical, eviction-by-force and environmental complaints."
+  },
+  {
+    "act": "Constitution of India",
+    "section": "Article 21A and 45/51A(k)",
+    "title": "Right to education and duty of a parent to provide it",
+    "summary": "The State shall provide free and compulsory education to all children of the age of six to fourteen years in the manner provided by law; the Right of Children to Free and Compulsory Education Act, 2009 gives the machinery (neighbourhood school, no capitation fee, no screening procedure for admission).",
+    "category": "General",
+    "source_url": "https://legislative.gov.in/constitution-of-india/",
+    "alternate_url": "https://www.indiacode.nic.in/handle/123456789/1",
+    "verified": true,
+    "note": "Private-school fee and admission disputes go to the State Education Commission / RTE authority under the 2009 Act, not the consumer forum."
+  },
+  {
+    "act": "Constitution of India",
+    "section": "Article 32 / 226",
+    "title": "Constitutional remedies: the High Court and the Supreme Court",
+    "summary": "For enforcement of fundamental rights a person may move the High Court under Article 226 (writs of habeas corpus, mandamus, prohibition, certiorari and quo warranto) or the Supreme Court under Article 32; a writ of mandamus is the standard remedy to compel a public authority to perform a statutory duty, such as registering an FIR or deciding an RTI appeal.",
+    "category": "General",
+    "source_url": "https://legislative.gov.in/constitution-of-india/",
+    "alternate_url": "https://www.indiacode.nic.in/handle/123456789/1",
+    "verified": true,
+    "note": "Only available against State/public bodies and, in limited cases, private bodies performing public duty. The app should always route the user to a lawyer before a writ."
+  },
+  {
+    "act": "Legal Services Authorities Act, 1987",
+    "section": "7 / 9 / 12",
+    "title": "Free legal aid: who is entitled",
+    "summary": "A person with an annual income below the limit notified by the State (commonly Rs. 1,00,000, and lower in some states), or who is a woman or child, a member of a Scheduled Caste or Scheduled Tribe, a victim of traffic or industrial accidents, mass disasters, ethnic or caste violence, 'untouchability', a beggar, a disabled person, an unorganised-workforce worker, a factory or agricultural labourer, a prisoner, or is in control of a member of family, is entitled to free legal services; the income test does not apply to the other categories.",
+    "category": "Legal Aid",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1689",
+    "alternate_url": "https://nalsa.gov.in/",
+    "verified": false,
+    "note": "Section numbers must be re-read; the income ceiling is notified by each State Legal Services Authority, so always say 'as notified by your State'."
+  },
+  {
+    "act": "Legal Services Authorities Act, 1987",
+    "section": "13 / 16 / 17 / 18",
+    "title": "How legal aid is actually obtained",
+    "summary": "An application may be made (in writing or in person, and even through a NGO or a lawyer on behalf of the person) to the District Legal Services Authority or the Legal Services Clinic at the court; the Authority decides on eligibility, provides a lawyer, covers court fee, and can conduct a Lok Adalat settlement. Every litigant in a criminal case is entitled to a lawyer at State expense.",
+    "category": "Legal Aid",
+    "source_url": "https://nalsa.gov.in/",
+    "alternate_url": "https://ldlsamaxcourt.delhi.nic.in/",
+    "verified": false,
+    "note": "Use the DLSA at the District Court of the user's district; the section numbers require verification against the Act."
+  },
+  {
+    "act": "Lok Adalat / Permanent Lok Adalat",
+    "section": "Legal Services Authorities Act, 1987 Ch. VI-A",
+    "title": "One-hearing settlement, no court fee",
+    "summary": "Lok Adalats settle compoundable offences and civil/disputes pending before a court, or where pre-litigation settlement is possible, by compromise; every award of a Lok Adalat is deemed a decree of a civil court and is final and not appealable. Permanent Lok Adalats handle public-service disputes up to the notified value.",
+    "category": "Legal Aid",
+    "source_url": "https://nalsa.gov.in/",
+    "alternate_url": "https://legislative.gov.in/",
+    "verified": false,
+    "note": "Great for consumer, insurance, electricity, bank and maintenance disputes - fast, free, binding. Verify the value limits per state."
+  },
+  {
+    "act": "Right to Fair Compensation and Transparency in Labour Laws (Fortnightly Wage Period) - see Code on Wages, 2019",
+    "section": "n/a",
+    "title": "Where to complain about an employer",
+    "summary": "For wage and social-security complaints the aggrieved employee approaches the Labour Commissioner / the authority appointed under the Payment of Wages Act in the state, the EPFO Regional Commissioner for provident-fund defaults, and the Chief Labour Commissioner for establishments under the central labour laws.",
+    "category": "Workplace / Labour",
+    "source_url": "https://labour.gov.in/",
+    "alternate_url": "https://epfindia.gov.in/",
+    "verified": false,
+    "note": "Operational information, not a statutory citation - keep it out of the citation chips."
+  },
+  {
+    "act": "Indian Trusts Act / Societies Registration Act / Companies Act, 2013 (section 245)",
+    "section": "245 (class action)",
+    "title": "Class action by members and depositors",
+    "summary": "A class of members or depositors of a company, or a person authorised by them, may apply to the National Company Law Tribunal for an order restraining the company from acts prejudicial to public interest or the interests of its members, and for damages.",
+    "category": "General",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/2192",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=companies%20act%202013%20section%20245%20class%20action",
+    "verified": false,
+    "note": "Relevant for deposit-taking finance companies and cooperative housing societies; verify before citing."
+  },
+  {
+    "act": "Cooperative Societies Act (State) / Multi-State Co-operative Societies Act, 2002",
+    "section": "act-level",
+    "title": "Housing society disputes: managing committee, maintenance, no No Objection",
+    "summary": "Disputes between a member and a cooperative housing society (maintenance, unfair charges, refusal of a NOC or a duplicate share certificate, election of the managing committee) are referred to the Cooperative Court / Deputy Registrar of the state, not to the civil court.",
+    "category": "Tenant / Housing",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1993",
+    "alternate_url": "https://indiankanoon.org/search/?formInput=cooperative%20societies%20act%20dispute%20refer%20to%20registrar",
+    "verified": false,
+    "note": "Very common in urban India; state law governs, so name the state."
+  }
+]

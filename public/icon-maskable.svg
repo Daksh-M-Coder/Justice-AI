@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="JusticeAI">
+  <rect width="512" height="512" fill="#1a2a5c" />
+  <g transform="translate(51 51) scale(0.8)" stroke="#f2f4fb" stroke-width="20" stroke-linecap="round" fill="none">
+    <path d="M256 120v272" />
+    <path d="M152 168h208" />
+    <path d="M192 392h128" />
+    <path d="M152 168l-52 104h104z" fill="rgba(242,244,251,0.16)" />
+    <path d="M360 168l-52 104h104z" fill="rgba(242,244,251,0.16)" />
+  </g>
+  <circle cx="256" cy="148" r="15" fill="#e2b84a" />
+</svg>

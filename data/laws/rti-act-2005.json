@@ -1,0 +1,211 @@
+[
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "2(j)",
+    "title": "What 'right to information' covers",
+    "summary": "The right includes inspection of work, documents and records; taking notes, extracts or certified copies; taking certified samples of material; and obtaining information in electronic form or printed form.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Ask for what you are actually entitled to: copies and inspection, not opinions or interpretations of law."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "2(f)",
+    "title": "Definition of 'public authority'",
+    "summary": "Any body or institution of self-government established or constituted by or under the Constitution, by law made by Parliament or a State Legislature, or by government notification - including bodies owned, controlled or substantially financed by government, and NGOs substantially financed by government.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rtionline.gov.in/",
+    "verified": false,
+    "note": "Establishes who you can file against: municipalities, corporations, police, hospitals, schools receiving government aid, PSUs."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "3",
+    "title": "Right to information",
+    "summary": "Every citizen has a right to information, subject to this Act. No residency or proof of interest in the information is required - it is a citizen's right, not an interested-party's right.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Only Indian citizens can file. One citizen per application."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "4(1)(b)",
+    "title": "Suo motu (proactive) disclosure by public authorities",
+    "summary": "Public authorities must voluntarily publish, in all appropriate media, their functions and duties, the powers and duties of officers, procedure for filing complaints/applications, particulars of arrangements for access to information, fee details, and the names of officers to whom inquiries can be made.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "If the information was already mandated to be published, say so in the application - non-disclosure is itself a violation."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "5",
+    "title": "Designation of Public Information Officers (PIOs) and Assistant PIOs",
+    "summary": "Every public authority must designate PIOs in each administrative or sub-district unit and Assistant PIOs in sub-district blocks, and notify their particulars; a person seeking information cannot be refused for the reason that it is not his concern.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Address the application 'To The Public Information Officer' and name the office - not a person."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "6(1)",
+    "title": "Making the request",
+    "summary": "A citizen may request information in writing or by electronic means, in English, Hindi or the language of the area, giving his name and address, describing the information sought, and paying the prescribed fee. The PIO cannot ask why you want it.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rtionline.gov.in/",
+    "verified": false,
+    "note": "The provision to quote in the header of every generated RTI application. Online filing at rtionline.gov.in for central bodies."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "6(3)",
+    "title": "Transfer of application within five days",
+    "summary": "If the PIO holds the application but the information belongs to another public authority (or another PIO of the same authority), he must transfer the application within five days of receipt and inform the applicant.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "The 30-day clock starts from original receipt, not from transfer - a late transfer is not the applicant's fault."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "7(1)",
+    "title": "Reply within thirty days",
+    "summary": "The PIO must provide the information within thirty days of receipt of the application; if it was transferred under section 6(3), the clock still runs from the original receipt.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Primary legal clock for the deadline tracker: day 31 = deemed refusal, file first appeal."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "7(2)",
+    "title": "Forty-eight hour deadline for life and liberty information",
+    "summary": "Where the information sought concerns the life or personal liberty of a person, the PIO must furnish it within forty-eight hours of receipt of the request.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Use only when the request genuinely concerns life or personal liberty (custody, medical emergency, starvation deaths). Re-read the subsection on India Code before citing." 
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "7(9)",
+    "title": "No fee where delay happened / fee for copies",
+    "summary": "If the PIO fails to give information within the prescribed period, the information must be provided free of charge; further, the applicant has to pay only the actual cost of prints or samples as per the notified rate.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Sub-section numbering to verify; the rule that a late reply is free of charge is settled."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "8(1)",
+    "title": "Exemptions",
+    "summary": "Information whose disclosure would prejudicially affect the sovereignty, integrity, security, strategic, scientific or economic interests of the State, relations with a foreign state, or incite an offence, may be withheld.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Expect an exemption clause in refusals - then test it against section 8(2)."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "8(2)",
+    "title": "Public interest override",
+    "summary": "Notwithstanding the exemptions, a public information officer or an appellate authority may allow disclosure where the public interest in disclosure outweighs the harm to the protected interests.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Always argue 8(2) in the appeal when an exemption is invoked."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "11",
+    "title": "Assistance to applicants / third party information",
+    "summary": "The PIO must render reasonable assistance to illiterate or physically and mentally disabled applicants; where a third party's interests are involved, that person is given an opportunity to represent before disclosure.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Two different provisions often confused - verify which subsection covers assistance (Sec 5(3)/6(5)) and third-party (Sec 11)."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "12",
+    "title": "First appeal",
+    "summary": "An applicant who has not received a reply within the prescribed time, or is aggrieved by a reply (or by a fee/deficiency decision), may file a first appeal to the officer senior in rank to the PIO, within thirty days of the expiry of the time limit or of receipt of the reply.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Deadline tracker: first appeal within 30 days, condonation of delay possible; appellate authority must decide within 30 (extendable by 15) days."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "19(1)",
+    "title": "Revised first appeal provision",
+    "summary": "The first appeal is filed to the officer senior in rank to the PIO; the appellant need not pay a fee, and the appellate authority must hear the appeal and decide within thirty days, extendable by a further thirty days for reasons recorded in writing.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rti.gov.in/",
+    "verified": false,
+    "note": "Sections 12 and 19 are often conflated; 19 is the operative appeal chapter in practice. Verify before citing."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "19(3)",
+    "title": "Second appeal to the Information Commission",
+    "summary": "A person aggrieved by the first appellate order (or where no order was passed) may prefer a second appeal to the Central Information Commission or the State Information Commission within ninety days of the date on which the decision should have been made or was actually received.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://dic.gov.in/",
+    "verified": false,
+    "note": "90-day clock for the deadline tracker. Second appeal is free for the applicant."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "18",
+    "title": "Penalties for denying or delaying information",
+    "summary": "The Information Commission may impose a penalty of two hundred and fifty rupees for each day of continued non-compliance, or on each instance of specific defaults, up to a maximum of twenty-five thousand rupees, on the PIO.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://dic.gov.in/",
+    "verified": false,
+    "note": "Ask for the penalty and disciplinary recommendation in the second appeal - it is the standard relief."
+  },
+  {
+    "act": "Right to Information Act, 2005",
+    "section": "20",
+    "title": "Disciplinary action",
+    "summary": "The Commission may also recommend disciplinary action against the PIO for repeatedly violating the Act.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://dic.gov.in/",
+    "verified": false,
+    "note": "Verify: penalty and disciplinary provisions are in Sec 19/20 area of the Act."
+  },
+  {
+    "act": "Right to Information Rules, 2012 (Central)",
+    "section": "Rule 3",
+    "title": "Application fee for central public authorities",
+    "summary": "Ten rupees, payable by cash, demand draft, banker's cheque, postal receipt, or electronic means (online payment on rtionline.gov.in); a person below the poverty line is exempt on producing proof.",
+    "category": "RTI",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/1922",
+    "alternate_url": "https://rtionline.gov.in/",
+    "verified": false,
+    "note": "State rules differ (many states keep Rs. 10; some are free for the first page). Attach the fee proof or the application can be rejected."
+  }
+]
