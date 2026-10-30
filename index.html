@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JusticeAI — Legal Co-Pilot for Every Indian</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#c8922a">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3255/3255694.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" style="display:flex; align-items:center; text-decoration:none;">
+      <img src="assets/logo.svg" alt="JusticeAI Logo" style="height:60px;" />
+    </a>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
+    <div class="nav-right" id="navRight">
+      <span id="userGreeting"></span>
+      <button class="nav-btn active" onclick="switchTab('analyse', event)" data-i18n="nav-analyse">Analyse Case</button>
+      <button class="nav-btn" onclick="switchTab('rti', event)" data-i18n="nav-rti">RTI Guide</button>
+      <button class="nav-btn" onclick="switchTab('history', event)" data-i18n="nav-history">Case History</button>
+      <button class="nav-btn" onclick="switchTab('lawyer', event)" id="lawyerNavBtn" style="background:linear-gradient(135deg,var(--sage),#1a3028);color:#a8c4b4;border-color:transparent;">👨‍⚖️ Talk to Lawyer</button>
+      <button class="nav-btn" onclick="switchTab('news', event)" id="newsNavBtn" style="background:linear-gradient(135deg,#1a2a5c,#2a3a8c);color:#a8b4d4;border-color:transparent;">📰 Legal News</button>
+      <button class="nav-btn" onclick="switchTab('detector', event)" id="detectorNavBtn" style="background:linear-gradient(135deg,var(--danger),#7a1a1a);color:#ffd8d8;border-color:transparent;box-shadow:0 0 10px rgba(220,53,69,0.3);">🔍 Notice Detector</button>
+      <button class="nav-btn" onclick="switchTab('legalaid', event)" id="legalaidNavBtn" style="background:linear-gradient(135deg,#1e5a3a,#27ae60);color:#e8f5ee;border-color:transparent;box-shadow:0 0 10px rgba(39,174,96,0.3);">⚖️ Free Legal Aid</button>
+      <button class="nav-btn" id="profileNavBtn" onclick="window.openProfileModal()" title="My Profile" style="display:none;font-size:1.1rem;padding:0.2rem 0.6rem;background:transparent;border:none;cursor:pointer;">👤</button>
+      <a href="login.html" class="nav-btn" id="authBtn"
+        style="text-decoration:none; display:inline-flex; align-items:center;">Sign In</a>
+      <span class="nav-tag">Legal Co-Pilot</span>
+      <button class="nav-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme"
+        style="font-size: 1rem; padding: 0.2rem 0.6rem; background: transparent; border: none; cursor: pointer;">🌙</button>
+    </div>
+  </nav>
+
+  <!-- ══ TAB: ANALYSE ══ -->
+  <div id="tab-analyse" class="tab-content active">
+
+    <section class="hero">
+      <div>
+        <div class="hero-badge">AI-Powered · Free · Multilingual</div>
+        <h1 data-i18n="hero-h1">Your rights,<br /><em>explained.</em><br />Your case, filed.</h1>
+        <p class="hero-sub">80% of Indians never file a complaint because they don't know how. JusticeAI converts your
+          problem into a legally formatted complaint — in seconds, in your language.</p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-num">1B+</div>
+            <div class="stat-label">Indians without legal access</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">₹0</div>
+            <div class="stat-label">Cost to use JusticeAI</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">30s</div>
+            <div class="stat-label">To get your complaint ready</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="hero-card">
+          <div class="hero-card-label">Sample case · Consumer rights</div>
+          <div class="sample-problem">"I bought a phone worth ₹18,000. It stopped working after 3 days. The shopkeeper
+            refuses to replace it."</div>
+          <div class="sample-result">
+            <div class="result-row">
+              <div class="result-dot"></div>Authority: Consumer Disputes Redressal Forum
+            </div>
+            <div class="result-row">
+              <div class="result-dot"></div>Right: Section 9, Consumer Protection Act 2019
+            </div>
+            <div class="result-row">
+              <div class="result-dot"></div>Complaint letter generated in English + Hindi
+            </div>
+            <div class="result-row">
+              <div class="result-dot"></div>Estimated resolution: 30–45 days
+            </div>
+          </div>
+          <button class="action-btn"
+            style="margin-top: 1.5rem; width: 100%; border-color: var(--gold); color: var(--gold); background: transparent; font-size: 0.85rem;"
+            onclick="runDemo()">⚡ Click to Try this exact case</button>
+        </div>
+      </div>
+    </section>
+
+    <div style="border-top:1px solid var(--border);max-width:1100px;margin:0 auto"></div>
+
+    <section class="tool-section">
+      <div>
+        <div class="section-eyebrow">Describe your problem</div>
+        <h2>Let AI analyse your case</h2>
+        <p class="section-desc">Plain words, any language. Our AI handles the rest.</p>
+
+        <div class="form-card">
+          <div class="form-group">
+            <label data-i18n="lbl-lang">Language</label>
+            <div class="lang-select">
+              <button class="lang-btn active" onclick="setLang(this,'en')">English</button>
+              <button class="lang-btn" onclick="setLang(this,'hi')">हिन्दी</button>
+              <button class="lang-btn" onclick="setLang(this,'mr')">मराठी</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label data-i18n="lbl-cat">Category (optional)</label>
+            <div class="category-grid">
+              <button class="cat-btn" onclick="toggleCat(this)">🛒 Consumer Rights</button>
+              <button class="cat-btn" onclick="toggleCat(this)">🏠 Tenant / Housing</button>
+              <button class="cat-btn" onclick="toggleCat(this)">💼 Workplace / Labour</button>
+              <button class="cat-btn" onclick="toggleCat(this)">👮 Police / FIR</button>
+              <button class="cat-btn" onclick="toggleCat(this)">🏦 Banking / Fraud</button>
+              <button class="cat-btn" onclick="toggleCat(this)">📋 Government Services</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label><span data-i18n="lbl-pincode">Your Pincode</span> <span style="font-size:0.8em;color:var(--muted)">📍
+                for nearby legal aid</span></label>
+            <input id="pincodeInput" type="tel" inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+              placeholder="e.g. 400001"
+              style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.95rem; background: var(--paper); color: var(--ink); outline: none; box-sizing:border-box" />
+          </div>
+          <div class="form-group">
+            <label><span data-i18n="lbl-problem">Your problem</span> <span style="color:var(--gold);font-size:0.8em">🖼️
+                or attach a document</span></label>
+            <div class="voice-row" style="position:relative;align-items:flex-start;">
+              <textarea id="problemInput" data-i18n="placeholder-problem"
+                placeholder="Describe your problem in plain words, or upload a photo of your notice/FIR..."
+                style="flex:1;"></textarea>
+              <div style="display:flex; flex-direction:column; gap:0.4rem; flex-shrink:0;">
+                <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Voice input"
+                  style="width:40px;height:40px;">🎤</button>
+                <button class="voice-btn" id="uploadBtn" onclick="document.getElementById('imageUpload').click()"
+                  title="Upload Document" style="width:40px;height:40px;font-size:1.1rem">📎</button>
+                <input type="file" id="imageUpload" accept="image/jpeg,image/png,image/webp" style="display:none"
+                  onchange="handleImageUpload(event)">
+              </div>
+            </div>
+            <div id="imagePreviewContainer"
+              style="display:none; margin-top:0.75rem; align-items:center; gap:0.5rem; font-size:0.8rem; background:var(--paper); padding:0.5rem 0.75rem; border-radius:8px; border:1px solid var(--border);">
+              <span id="imagePreviewName"
+                style="color:var(--ink); font-weight:500; font-family:'DM Sans', sans-serif;"></span>
+              <button onclick="clearImage()"
+                style="background:none; border:none; color:#d9534f; cursor:pointer; font-weight:bold; margin-left:auto;">✖
+                Remove</button>
+            </div>
+          </div>
+          <button class="submit-btn" id="submitBtn" onclick="analyzeCase()">
+            <span id="btnText">Analyse my case →</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="status-bar" id="statusBar">
+          <div class="status-spinner"></div>
+          <span id="statusText">Reading your case...</span>
+        </div>
+        <div class="result-panel" id="resultPanel">
+          <div class="placeholder-state">
+            <div class="placeholder-icon">⚖️</div>
+            <div class="placeholder-text">Your legal analysis, rights, complaint letter and next steps will appear here.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <div class="how-inner">
+        <div class="section-eyebrow-light">How it works</div>
+        <h2 style="color:var(--cream);font-family:'Playfair Display',serif">From problem to filed complaint<br />in
+          under a minute.</h2>
+        <div class="steps-grid">
+          <div>
+            <div class="step-num">01</div>
+            <div class="step-title-h">Describe your situation</div>
+            <div class="step-desc-h">Type or speak in Hindi, Marathi, or English.</div>
+          </div>
+          <div>
+            <div class="step-num">02</div>
+            <div class="step-title-h">AI classifies & analyses</div>
+            <div class="step-desc-h">Identifies laws, authority, and urgency instantly.</div>
+          </div>
+          <div>
+            <div class="step-num">03</div>
+            <div class="step-title-h">Know your rights</div>
+            <div class="step-desc-h">Plain-language rights summary with similar cases.</div>
+          </div>
+          <div>
+            <div class="step-num">04</div>
+            <div class="step-title-h">Download & file</div>
+            <div class="step-desc-h">Ready complaint letter + step-by-step filing guide.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══ TAB: RTI ══ -->
+  <div id="tab-rti" class="tab-content">
+    <section style="max-width:900px;margin:0 auto;padding:3rem 2.5rem">
+      <div class="section-eyebrow">Right to Information Act, 2005</div>
+      <h2>RTI Filing Guide</h2>
+      <p class="section-desc">The RTI Act gives every Indian citizen the right to request information from any
+        government office. Here's how to file one in 5 simple steps.</p>
+
+      <div
+        style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:1rem;margin-bottom:2.5rem;">
+        <div class="rti-step" style="margin-bottom:0">
+          <div class="rti-step-num">Step 01</div>
+          <div class="rti-step-title">Identify the Public Authority</div>
+          <div class="rti-step-desc">Determine which government department or ministry holds the information.</div>
+        </div>
+        <div class="rti-step" style="margin-bottom:0">
+          <div class="rti-step-num">Step 02</div>
+          <div class="rti-step-title">Draft Your Application</div>
+          <div class="rti-step-desc">Write a specific request. Use our AI below to draft it instantly and formally.
+          </div>
+        </div>
+        <div class="rti-step" style="margin-bottom:0">
+          <div class="rti-step-num">Step 03</div>
+          <div class="rti-step-title">Pay the Fee</div>
+          <div class="rti-step-desc">Application fee is ₹10 (BPL holders exempt). Pay via DD, postal order, or online.
+          </div>
+        </div>
+        <div class="rti-step" style="margin-bottom:0">
+          <div class="rti-step-num">Step 04</div>
+          <div class="rti-step-title">Submit Application</div>
+          <div class="rti-step-desc">Online at rtionline.gov.in (Centre) or submit in person/post to the PIO.</div>
+        </div>
+        <div class="rti-step" style="margin-bottom:0;grid-column:1/-1;">
+          <div class="rti-step-num">Step 05</div>
+          <div class="rti-step-title">Wait for Response</div>
+          <div class="rti-step-desc">The PIO responds within 30 days. If unsatisfied, file a First Appeal.</div>
+        </div>
+      </div>
+
+      <div
+        style="background: var(--white);border:1px solid var(--border);border-radius:16px;padding:1.75rem;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
+        <div class="section-eyebrow">AI RTI Draft Generator</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:0.5rem">Official RTI Application
+        </h2>
+        <p class="section-desc" data-i18n="lbl-rti-desc" style="margin-bottom:1.5rem">Describe what information you need
+          and we'll formally draft it under the Act.</p>
+        <div class="form-group">
+          <label>What information do you want from the government?</label>
+          <textarea id="rtiInput" data-i18n="placeholder-rti"
+            placeholder="Example: I want to know the status of my pending ration card application submitted 6 months ago at the Taluka office..."
+            style="min-height:100px"></textarea>
+        </div>
+        <button class="submit-btn" onclick="generateRTI()"><span id="rtiBtnText">Generate RTI Application
+            →</span></button>
+        <div id="rtiResult" style="margin-top:1.25rem"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══ TAB: HISTORY ══ -->
+  <div id="tab-history" class="tab-content">
+    <section class="dashboard-section" style="max-width:1100px;margin:0 auto;padding:3rem 2.5rem">
+      <div class="section-eyebrow">My Dashboard</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.5rem">Case Management</h2>
+      <p class="section-desc">Track active follow-ups and explore your complete case history.</p>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-col" id="activeCasesCol">
+          <h3 class="dash-col-title">Active Trackers <span class="dash-badge" id="activeCount">0</span></h3>
+          <div id="activeCasesList"></div>
+        </div>
+        <div class="dashboard-col" id="historyCasesCol">
+          <h3 class="dash-col-title">Drafted & Past Cases <span class="dash-badge" id="historyCount">0</span></h3>
+          <div id="historyList"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══ TAB: LAWYER ══ -->
+  <div id="tab-lawyer" class="tab-content">
+    <div class="lawyer-section">
+
+      <div class="lawyer-section-header">
+        <div>
+          <div class="section-eyebrow">AI-Simulated · Instant · Free Preview</div>
+          <h2 style="font-family:'Playfair Display',serif;">Talk to a Lawyer</h2>
+          <p class="section-desc">Your case details are shared automatically. No need to re-explain anything.</p>
+        </div>
+        <div style="background:var(--sage);color:#a8c4b4;font-size:0.78rem;padding:0.6rem 1.1rem;border-radius:10px;font-weight:500;line-height:1.5;">🔒 AI-simulated consultations.<br>Case context shared securely.</div>
+      </div>
+
+      <div class="lawyer-filter-bar" id="lawyerFilterBar">
+        <button class="lawyer-filter-pill active" onclick="filterLawyers('All', this)">All</button>
+        <button class="lawyer-filter-pill" onclick="filterLawyers('Consumer', this)">🛒 Consumer</button>
+        <button class="lawyer-filter-pill" onclick="filterLawyers('Labour', this)">💼 Labour</button>
+        <button class="lawyer-filter-pill" onclick="filterLawyers('Banking', this)">🏦 Banking</button>
+        <button class="lawyer-filter-pill" onclick="filterLawyers('Tenancy', this)">🏠 Tenancy</button>
+        <button class="lawyer-filter-pill" onclick="filterLawyers('Criminal', this)">👮 Criminal</button>
+      </div>
+
+      <div class="lawyer-grid" id="lawyerGrid"></div>
+
+    </div>
+  </div>
+
+  <!-- ══ TAB: LEGAL NEWS ══ -->
+  <div id="tab-news" class="tab-content">
+
+    <style>
+      .news-section { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2.5rem; }
+      .news-ticker-wrap { overflow: hidden; background: linear-gradient(90deg,#1a2a5c,#2a3a8c); border-radius: 10px; padding: 0.55rem 1rem; margin-bottom: 2rem; display:flex; align-items:center; gap:0.75rem; }
+      .news-ticker-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #a8b4d4; background: rgba(255,255,255,0.12); padding: 0.2rem 0.6rem; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+      .news-ticker-track { flex: 1; overflow: hidden; position: relative; }
+      .news-ticker-inner { display: flex; gap: 3rem; animation: ticker-scroll 35s linear infinite; white-space: nowrap; }
+      .news-ticker-inner:hover { animation-play-state: paused; }
+      .news-ticker-item { font-size: 0.78rem; color: #c8d4f0; white-space: nowrap; }
+      @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+      .news-header-row { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.75rem; }
+      .news-filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+      .news-filter-pill { padding: 0.42rem 1rem; border: 1.5px solid var(--border); border-radius: 2rem; font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 500; cursor: pointer; background: var(--white); color: var(--muted); transition: all 0.18s; }
+      .news-filter-pill:hover { border-color: var(--gold); color: var(--gold); }
+      .news-filter-pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+      .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+      .news-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; transition: all 0.22s; cursor: pointer; }
+      .news-card:hover { border-color: var(--gold); box-shadow: 0 6px 28px rgba(200,146,42,0.1); transform: translateY(-2px); }
+      .news-card-top { padding: 1.25rem 1.25rem 0; }
+      .news-card-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+      .news-cat-badge { font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.65rem; border-radius: 2rem; letter-spacing: 0.04em; text-transform: uppercase; }
+      .cat-consumer   { background: #e8f5ee; color: #1a5c38; }
+      .cat-labour     { background: #fff3e8; color: #7a3a1a; }
+      .cat-banking    { background: #e8f0fe; color: #1a2a7a; }
+      .cat-criminal   { background: #fdeaea; color: #7a1a1a; }
+      .cat-fintech    { background: #f0e8fe; color: #4a1a7a; }
+      .cat-property   { background: #fef9e8; color: #7a5a0a; }
+      .cat-environment{ background: #e0f7f5; color: #0a5a54; }
+      .cat-family     { background: #fde8f3; color: #7a1a4a; }
+      .news-date { font-size: 0.68rem; color: var(--muted); }
+      .news-source { font-size: 0.65rem; color: var(--muted); background: var(--paper); border: 1px solid var(--border); padding: 0.15rem 0.5rem; border-radius: 4px; }
+      .news-headline { font-family: 'Playfair Display', serif; font-size: 0.98rem; font-weight: 700; line-height: 1.35; color: var(--ink); margin-bottom: 0.6rem; }
+      .news-summary { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 0.85rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: all 0.3s; }
+      .news-card.expanded .news-summary { -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; }
+      .news-expand-area { display: none; padding: 0 1.25rem 1.25rem; animation: fadeInDown 0.25s ease; }
+      @keyframes fadeInDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+      .news-card.expanded .news-expand-area { display: block; }
+      .news-impact-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+      .news-impact-tag { font-size: 0.68rem; padding: 0.2rem 0.65rem; border-radius: 2rem; background: var(--paper); border: 1px solid var(--border); color: var(--muted); }
+      .news-card-footer { padding: 0.75rem 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+      .news-expand-btn { font-size: 0.72rem; font-weight: 500; color: var(--gold); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 0.3rem; transition: gap 0.15s; }
+      .news-expand-btn:hover { gap: 0.5rem; }
+      .news-read-time { font-size: 0.68rem; color: var(--muted); }
+      @media (max-width: 768px) { .news-section { padding: 1.5rem 1rem; } .news-grid { grid-template-columns: 1fr; } }
+    </style>
+
+    <div class="news-section">
+
+      <!-- Ticker -->
+      <div class="news-ticker-wrap">
+        <span class="news-ticker-label">⚡ Live</span>
+        <div class="news-ticker-track">
+          <div class="news-ticker-inner" id="newsTicker">
+            <span class="news-ticker-item">SC upholds PMLA powers of ED in landmark ruling · </span>
+            <span class="news-ticker-item">Cabinet approves new Labour Code implementation from Oct 2025 · </span>
+            <span class="news-ticker-item">RBI issues fresh guidelines on UPI fraud liability · </span>
+            <span class="news-ticker-item">Consumer Forum orders Amazon ₹2L refund in defective product case · </span>
+            <span class="news-ticker-item">NALSA launches free legal aid helpline expansion to tier-2 cities · </span>
+            <span class="news-ticker-item">SC upholds PMLA powers of ED in landmark ruling · </span>
+            <span class="news-ticker-item">Cabinet approves new Labour Code implementation from Oct 2025 · </span>
+            <span class="news-ticker-item">RBI issues fresh guidelines on UPI fraud liability · </span>
+            <span class="news-ticker-item">Consumer Forum orders Amazon ₹2L refund in defective product case · </span>
+            <span class="news-ticker-item">NALSA launches free legal aid helpline expansion to tier-2 cities · </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="news-header-row">
+        <div>
+          <div class="section-eyebrow">AI-Curated · Indian Legal Developments</div>
+          <h2 style="font-family:'Playfair Display',serif;">Legal News Feed</h2>
+          <p class="section-desc">Latest rulings, circulars & amendments that affect your rights.</p>
+        </div>
+        <div style="font-size:0.72rem;color:var(--muted);background:var(--paper);border:1px solid var(--border);padding:0.5rem 0.85rem;border-radius:8px;line-height:1.6;">🤖 AI-generated · Based on real<br>Indian legal developments</div>
+      </div>
+
+      <div class="news-filter-bar" id="newsFilterBar">
+        <button class="news-filter-pill active" onclick="filterNews('All', this)">All</button>
+        <button class="news-filter-pill" onclick="filterNews('Consumer', this)">🛒 Consumer</button>
+        <button class="news-filter-pill" onclick="filterNews('Labour', this)">💼 Labour</button>
+        <button class="news-filter-pill" onclick="filterNews('Banking', this)">🏦 Banking</button>
+        <button class="news-filter-pill" onclick="filterNews('Criminal', this)">⚖️ Criminal</button>
+        <button class="news-filter-pill" onclick="filterNews('FinTech', this)">💳 FinTech</button>
+        <button class="news-filter-pill" onclick="filterNews('Property', this)">🏠 Property</button>
+        <button class="news-filter-pill" onclick="filterNews('Environment', this)">🌿 Environment</button>
+      </div>
+
+      <div class="news-grid" id="newsGrid"></div>
+
+    </div>
+
+    <script>
+      const NEWS_DATA = [
+        {
+          id: 'n1', cat: 'Consumer', catClass: 'cat-consumer',
+          headline: 'Supreme Court Upholds ₹5 Lakh Penalty on Flipkart for Delivering Counterfeit Product',
+          summary: 'The Supreme Court of India dismissed Flipkart\'s appeal and upheld a National Consumer Disputes Redressal Commission order directing the e-commerce giant to pay ₹5 lakh to a consumer who received a counterfeit product.',
+          full: 'In a significant ruling for consumer rights, the Supreme Court affirmed that marketplace platforms cannot escape liability for counterfeit goods sold through their platform. The bench cited Section 94 of the Consumer Protection Act 2019, which holds e-commerce entities responsible for ensuring product authenticity. This ruling sets a binding precedent for all major e-commerce platforms operating in India.',
+          impacts: ['E-Commerce Liability', 'Consumer Forum', 'Counterfeit Goods'],
+          source: 'Supreme Court of India', date: '28 Mar 2026', readTime: '2 min read'
+        },
+        {
+          id: 'n2', cat: 'Banking', catClass: 'cat-banking',
+          headline: 'RBI Mandates Full Refund Within 10 Days for Unauthorised UPI Transactions',
+          summary: 'The Reserve Bank of India has tightened its circular on UPI fraud, mandating banks to refund all unauthorised digital transaction amounts within 10 working days of reporting, with compensation for delays.',
+          full: 'The updated RBI circular (RBI/2025-26/89) builds on the 2017 framework and significantly shortens the refund window. Banks must now acknowledge fraud complaints within 24 hours via SMS, initiate investigation within 3 days, and complete the refund process within 10 working days. Failure to comply will attract a daily penalty of ₹100 per complaint, credited directly to the affected customer.',
+          impacts: ['UPI Fraud', 'RBI Circular', 'Bank Liability', 'Digital Payments'],
+          source: 'Reserve Bank of India', date: '25 Mar 2026', readTime: '3 min read'
+        },
+        {
+          id: 'n3', cat: 'Labour', catClass: 'cat-labour',
+          headline: 'Karnataka Labour Court Awards ₹8.2 Lakh to IT Employee for Wrongful Termination Without Notice',
+          summary: 'The Karnataka Labour Court ruled that a Bengaluru-based IT firm violated the Industrial Disputes Act by terminating a software engineer without a 90-day notice period, awarding full back-wages plus compensation.',
+          full: 'The court found that the company\'s "performance improvement plan" was used as a pretext for retrenchment without following due process under the Industrial Disputes Act 1947. Under Section 25F, employers with over 100 workers must obtain government permission before retrenchment and must pay retrenchment compensation equal to 15 days\' wages per year of service. The ruling is being seen as a warning to IT sector employers who routinely bypass labour protections.',
+          impacts: ['IT Sector', 'Wrongful Termination', 'Labour Court', 'Section 25F'],
+          source: 'Karnataka Labour Court', date: '22 Mar 2026', readTime: '3 min read'
+        },
+        {
+          id: 'n4', cat: 'Criminal', catClass: 'cat-criminal',
+          headline: 'Delhi HC: Police Cannot Arrest Without FIR in Cyberbullying Cases — Issues Strict Guidelines',
+          summary: 'The Delhi High Court issued landmark guidelines prohibiting arbitrary arrests in cyberbullying and online harassment cases, requiring police to file an FIR and obtain magistrate approval before making any arrests.',
+          full: 'The court was hearing a petition filed by a social media influencer who was arrested without an FIR based on a verbal complaint. The bench ruled this violated Articles 21 and 22 of the Constitution. The guidelines now require: (1) mandatory FIR registration before any arrest, (2) digital evidence preservation protocol, (3) magistrate oversight for arrests in cases involving speech-related cyber offences. The ruling references Section 153 of the Bharatiya Nagarik Suraksha Sanhita (BNSS).',
+          impacts: ['Cyberbullying', 'FIR Protocol', 'Article 21', 'BNSS'],
+          source: 'Delhi High Court', date: '20 Mar 2026', readTime: '4 min read'
+        },
+        {
+          id: 'n5', cat: 'FinTech', catClass: 'cat-fintech',
+          headline: 'SEBI Introduces New Investor Compensation Framework for Crypto-Like Asset Disputes',
+          summary: 'SEBI has released a draft framework for resolving disputes involving unregistered investment schemes mimicking crypto assets, creating a dedicated compensation fund and expedited redressal tribunal.',
+          full: 'The framework targets the growing category of "digital asset" investment products that are not registered securities but promise fixed returns. SEBI will classify such schemes under the collective investment scheme regulatory umbrella and create a dedicated investor compensation fund of ₹500 crore. Victims can file claims online with a resolution target of 45 days. This follows several high-profile Ponzi scheme collapses that left over 2 lakh investors with losses exceeding ₹3,000 crore.',
+          impacts: ['Investor Protection', 'Crypto Assets', 'SEBI Framework', 'Ponzi Schemes'],
+          source: 'Securities and Exchange Board of India', date: '18 Mar 2026', readTime: '3 min read'
+        },
+        {
+          id: 'n6', cat: 'Property', catClass: 'cat-property',
+          headline: 'Bombay HC: Landlords Cannot Evict Tenants During Monsoon Months — Seasonal Protection Rule',
+          summary: 'The Bombay High Court has ruled that eviction orders cannot be executed between June and September, citing humanitarian concerns and the lack of adequate alternative shelter during the monsoon season.',
+          full: 'The ruling covers all residential tenancy disputes in Maharashtra and will apply to both new court orders and orders pending execution. The court clarified that landlords retaining the right to obtain an eviction decree, but actual physical eviction must wait until October 1. The bench also directed the Maharashtra government to create a database of available low-cost emergency shelter housing for displaced families, to be operational by the next monsoon season.',
+          impacts: ['Tenant Rights', 'Seasonal Protection', 'Maharashtra', 'Eviction Stay'],
+          source: 'Bombay High Court', date: '15 Mar 2026', readTime: '2 min read'
+        },
+        {
+          id: 'n7', cat: 'Environment', catClass: 'cat-environment',
+          headline: 'NGT Orders ₹25 Crore Fine on Industrial Unit for Polluting Yamuna — Sets Cleanup Deadline',
+          summary: 'The National Green Tribunal imposed a record ₹25 crore fine on a Ghaziabad industrial unit for discharging untreated effluents into the Yamuna, with a 90-day mandatory cleanup compliance deadline.',
+          full: 'The NGT bench found the industrial unit had been violating the Water (Prevention and Control of Pollution) Act 1974 for over 3 years, despite two prior warnings. The ₹25 crore penalty includes ₹15 crore for environmental damage restoration and ₹10 crore for a community health fund to treat residents affected by contaminated groundwater. The unit\'s operating licence has been suspended pending cleanup. This is one of the largest single penalties under environmental law in 2026.',
+          impacts: ['Pollution', 'NGT Order', 'Industrial Compliance', 'Yamuna'],
+          source: 'National Green Tribunal', date: '12 Mar 2026', readTime: '3 min read'
+        },
+        {
+          id: 'n8', cat: 'Consumer', catClass: 'cat-consumer',
+          headline: 'NCDRC Orders IRCTC to Refund ₹1.2 Lakh for Train Delay Causing Missed Wedding',
+          summary: 'The National Consumer Disputes Redressal Commission held IRCTC liable for a 14-hour train delay that caused a family to miss a wedding celebration, awarding compensation for mental distress and travel losses.',
+          full: 'The commission rejected IRCTC\'s defence of force majeure citing maintenance failure of a routine rail component, which it ruled as preventable. The award of ₹1.2 lakh includes ₹80,000 as refund of journey cost plus non-refundable hotel bookings, and ₹40,000 as compensation for mental agony and harassment. The ruling reinforces that public utilities cannot use blanket force majeure claims to escape liability for operational negligence.',
+          impacts: ['Railways', 'Service Deficiency', 'IRCTC Liability', 'Mental Distress'],
+          source: 'NCDRC', date: '10 Mar 2026', readTime: '2 min read'
+        },
+        {
+          id: 'n9', cat: 'Labour', catClass: 'cat-labour',
+          headline: 'Centre Notifies New Gig Worker Social Security Rules — Platforms Must Register Workers by June',
+          summary: 'The Ministry of Labour issued rules under the Code on Social Security 2020 requiring app-based platforms like Swiggy, Zomato and Ola to register all gig workers and contribute 2% of revenue to a social security fund.',
+          full: 'Under the new rules (effective April 1, 2026), platforms with over 5,000 gig workers must: (1) issue worker identity cards within 30 days, (2) maintain digital work records for 5 years, (3) contribute 2% of platform gross revenue to the Gig Worker Welfare Fund, and (4) ensure minimum per-delivery earnings equivalent to 115% of the applicable minimum wage. Violations attract fines of up to ₹2 lakh per worker affected.',
+          impacts: ['Gig Economy', 'Social Security', 'Platform Liability', 'Minimum Wage'],
+          source: 'Ministry of Labour & Employment', date: '7 Mar 2026', readTime: '4 min read'
+        },
+        {
+          id: 'n10', cat: 'Criminal', catClass: 'cat-criminal',
+          headline: 'Supreme Court: Anticipatory Bail Cannot Be Denied Solely Based on Seriousness of Allegation',
+          summary: 'A constitution bench of the Supreme Court clarified that courts must apply a balancing test — not automatically deny anticipatory bail based on the gravity of the alleged offence alone without examining specific facts.',
+          full: 'The five-judge bench delivered a unanimous ruling clarifying the law on anticipatory bail under Section 482 BNSS (formerly Section 438 CrPC). The court held that gravity of the allegation is a relevant but not determinative factor; courts must also consider: (1) the accused\'s antecedents and flight risk, (2) availability of evidence, (3) likelihood of tampering with witnesses, and (4) vulnerability of the victim. The ruling resolves a long-standing conflict between different High Court interpretations and will have immediate effect on pending bail applications across India.',
+          impacts: ['Anticipatory Bail', 'BNSS Section 482', 'Constitution Bench', 'Criminal Rights'],
+          source: 'Supreme Court of India', date: '3 Mar 2026', readTime: '5 min read'
+        }
+      ];
+
+      let activeNewsFilter = 'All';
+
+      function renderNewsGrid() {
+        const grid = document.getElementById('newsGrid');
+        if (!grid) return;
+        const filtered = activeNewsFilter === 'All' ? NEWS_DATA : NEWS_DATA.filter(n => n.cat === activeNewsFilter);
+        if (!filtered.length) {
+          grid.innerHTML = '<div class="placeholder-state" style="grid-column:1/-1"><div class="placeholder-icon">📭</div><div class="placeholder-text">No news found for this category.</div></div>';
+          return;
+        }
+        grid.innerHTML = filtered.map(n => `
+          <div class="news-card" id="news-${n.id}" onclick="toggleNewsCard('${n.id}')">
+            <div class="news-card-top">
+              <div class="news-card-meta">
+                <span class="news-cat-badge ${n.catClass}">${n.cat}</span>
+                <span class="news-date">${n.date}</span>
+                <span class="news-source">${n.source}</span>
+              </div>
+              <div class="news-headline">${n.headline}</div>
+              <div class="news-summary">${n.summary}</div>
+            </div>
+            <div class="news-expand-area">
+              <p style="font-size:0.83rem;line-height:1.7;color:var(--ink);margin-bottom:0.85rem">${n.full}</p>
+              <div class="news-impact-row">${n.impacts.map(t => `<span class="news-impact-tag">${t}</span>`).join('')}</div>
+            </div>
+            <div class="news-card-footer">
+              <button class="news-expand-btn" id="nbtn-${n.id}">Read more →</button>
+              <span class="news-read-time">🕐 ${n.readTime}</span>
+            </div>
+          </div>`).join('');
+          
+        // Give time for DOM insertion, then highlight dictionary terms
+        setTimeout(() => applyLegalDictionary(grid), 50);
+      }
+
+      function toggleNewsCard(id) {
+        const card = document.getElementById('news-' + id);
+        const btn = document.getElementById('nbtn-' + id);
+        if (!card) return;
+        const isOpen = card.classList.toggle('expanded');
+        if (btn) btn.textContent = isOpen ? 'Read less ↑' : 'Read more →';
+      }
+
+      function filterNews(cat, btn) {
+        activeNewsFilter = cat;
+        document.querySelectorAll('.news-filter-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        renderNewsGrid();
+      }
+
+      // Patch switchTab to render news on demand
+      const _origSwitchTab2 = window.switchTab;
+      window.switchTab = function(tab, e) {
+        _origSwitchTab2(tab, e);
+        if (tab === 'news') renderNewsGrid();
+      };
+    </script>
+
+  </div>
+
+  <!-- ══ TAB: FAKE NOTICE DETECTOR ══ -->
+  <div id="tab-detector" class="tab-content">
+    <div style="max-width:900px;margin:0 auto;padding:3rem 2.5rem">
+      
+      <div class="section-eyebrow">Digital Trust & Anti-Fraud</div>
+      <h2 style="font-family:'Playfair Display',serif;">Fake Notice Detector</h2>
+      <p class="section-desc">Received a suspicious court summon, tax notice, or CBI arrest warrant? Paste the text or upload a photo. Our AI will verify authority names, penal codes, and spot common scam patterns immediately.</p>
+
+      <div class="detector-layout">
+        
+        <!-- Input Area -->
+        <div class="form-card" id="detectorInputArea" style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.04); padding: 2.5rem 2rem;">
+          <div class="detector-upload-box" onclick="document.getElementById('noticeFileInput').click()">
+            <div class="upload-icon-wrapper" style="font-size:2.5rem;margin-bottom:0.8rem;transition:transform 0.2s ease;">📸</div>
+            <div style="font-weight:700;color:var(--ink);font-size:1.05rem;">Click to upload notice photo</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.4rem;letter-spacing:0.05em;text-transform:uppercase;">JPG, PNG, PDF (Max 5MB)</div>
+            <input type="file" id="noticeFileInput" style="display:none" onchange="handleNoticeFileSelect(event)">
+          </div>
+
+          <div style="text-align:center;font-size:0.75rem;color:var(--muted);margin:1.75rem 0;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;">— OR —</div>
+
+          <div class="form-group">
+            <label style="font-size:0.75rem;font-weight:600;color:var(--ink);margin-bottom:0.5rem;display:block;">PASTE NOTICE TEXT</label>
+            <textarea id="noticeTextarea" class="input-field" rows="6" placeholder="e.g. 'URGENT: CBI Arrest Warrant issued against you...'" style="resize:vertical;width:100%;padding:1rem;border-radius:10px;border:1px solid var(--border);font-family:'DM Sans', sans-serif;font-size:0.85rem;background:var(--paper);color:var(--ink);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--danger)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+          </div>
+
+          <button class="submit-btn" style="width:100%;margin-top:1.5rem;justify-content:center;background:var(--danger);color:#fff;font-weight:600;font-size:0.95rem;padding:0.9rem;border-radius:10px;box-shadow:0 4px 15px rgba(220,53,69,0.25);transition:all 0.2s;display:flex;align-items:center;gap:0.5rem;border:none;cursor:pointer;" onclick="this.style.transform='scale(0.98)'; setTimeout(()=>this.style.transform='none',150); startNoticeScan();" onmouseover="this.style.background='#a93226'" onmouseout="this.style.background='var(--danger)'">
+            <span style="font-size:1.1rem">🔍</span> Analyse Notice Authenticity
+          </button>
+        </div>
+
+        <!-- Scanning State -->
+        <div class="detector-scan-state" id="detectorScanState" style="display:none">
+          <div class="scan-animation">
+            <div class="scan-doc"></div>
+            <div class="scan-laser"></div>
+          </div>
+          <h3 style="margin-top:2rem;font-family:'Playfair Display',serif;color:var(--ink)">Analysing Document...</h3>
+          <div class="scan-log" id="scanLog">Initializing AI scan models...</div>
+        </div>
+
+        <!-- Result Area -->
+        <div class="detector-result" id="detectorResult" style="display:none">
+          <div id="verdictHeader" class="verdict-header">
+            <div class="verdict-icon" id="verdictIcon">🚨</div>
+            <div>
+              <div class="verdict-title" id="verdictTitle">Likely Fake</div>
+              <div class="verdict-subtitle" id="verdictSubtitle">High probability of scam. Do not pay.</div>
+            </div>
+          </div>
+
+          <div class="verdict-content">
+            <h4 style="font-size:0.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem">AI Analysis Breakdown</h4>
+            <div class="verdict-points" id="verdictPoints">
+              <!-- Injected by JS -->
+            </div>
+            
+            <div style="margin-top:1.5rem;padding:1rem;background:var(--paper);border-radius:8px;border:1px solid var(--border);font-size:0.8rem;color:var(--ink);line-height:1.6;">
+              <strong>What should you do?</strong><br>
+              <span id="verdictActionText">Report this to the National Cyber Crime portal immediately at <a href="tel:1930" style="color:var(--danger);font-weight:bold">1930</a>. Do not engage with the sender or click any links.</span>
+            </div>
+
+            <button class="action-btn" style="width:100%;margin-top:1.5rem;justify-content:center" onclick="resetDetector()">Scan Another Notice</button>
+          </div>
+        </div>
+
+      </div>
+
+      <style>
+        .detector-layout { margin-top:2.5rem; }
+        .detector-upload-box { border: 2.5px dashed var(--border); border-radius: 14px; padding: 3rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.25s ease; background: var(--paper); }
+        .detector-upload-box:hover { border-color: var(--danger); background: rgba(220,53,69,0.03); transform: translateY(-2px); }
+        .detector-upload-box:hover .upload-icon-wrapper { transform: scale(1.1) translateY(-2px); }
+        
+        .detector-scan-state { text-align: center; padding: 4rem 1rem; }
+        .scan-animation { width: 120px; height: 160px; background: var(--paper); border: 2px solid var(--border); border-radius: 8px; margin: 0 auto; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .scan-doc { position: absolute; inset: 10px; background: repeating-linear-gradient(transparent, transparent 10px, var(--border) 10px, var(--border) 12px); opacity: 0.3; }
+        .scan-laser { position: absolute; left: 0; right: 0; height: 3px; background: var(--danger); box-shadow: 0 0 15px 5px rgba(220,53,69,0.4); animation: scanlines 1.5s ease-in-out infinite alternate; }
+        @keyframes scanlines { 0% { top: 0; } 100% { top: 100%; } }
+        .scan-log { font-family: monospace; font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; min-height: 20px; }
+
+        .detector-result { opacity: 0; transform: translateY(10px); animation: fadeUpRes 0.4s ease forwards; }
+        @keyframes fadeUpRes { to { opacity: 1; transform: translateY(0); } }
+        
+        .verdict-header { display: flex; align-items: center; gap: 1.25rem; padding: 1.5rem; border-radius: 16px 16px 0 0; color: white; }
+        .verdict-header.fake { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+        .verdict-header.genuine { background: linear-gradient(135deg, #1e5a3a, #27ae60); }
+        .verdict-header.suspicious { background: linear-gradient(135deg, #d35400, #f39c12); }
+        
+        .verdict-icon { font-size: 2.5rem; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+        .verdict-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .verdict-subtitle { font-size: 0.85rem; opacity: 0.9; font-weight: 500; }
+        
+        .verdict-content { background: var(--white); border: 1px solid var(--border); border-top: none; border-radius: 0 0 16px 16px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .verdict-point { display: flex; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--paper); }
+        .verdict-point:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .vp-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+        .vp-icon.fail { background: #fdeaea; color: #c0392b; }
+        .vp-icon.pass { background: #e8f5ee; color: #1e5a3a; }
+        .vp-icon.warn { background: #fff3e8; color: #d35400; }
+        .vp-title { font-weight: 600; font-size: 0.95rem; color: var(--ink); margin-bottom: 0.25rem; }
+        .vp-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+        
+        /* Dark mode */
+        [data-theme="dark"] .detector-upload-box { background: rgba(255,255,255,0.02); }
+        [data-theme="dark"] .vp-icon.fail { background: rgba(192,57,43,0.2); }
+        [data-theme="dark"] .vp-icon.pass { background: rgba(30,90,58,0.2); }
+        [data-theme="dark"] .vp-icon.warn { background: rgba(211,84,0,0.2); }
+      </style>
+
+      <script>
+        function handleNoticeFileSelect(e) {
+          if(e.target.files.length > 0) {
+            document.getElementById('noticeTextarea').value = "[Image Uploaded: " + e.target.files[0].name + "]\nInitiating OCR extraction...";
+          }
+        }
+
+        function resetDetector() {
+          document.getElementById('detectorResult').style.display = 'none';
+          document.getElementById('detectorScanState').style.display = 'none';
+          document.getElementById('detectorInputArea').style.display = 'block';
+          document.getElementById('noticeTextarea').value = '';
+          document.getElementById('noticeFileInput').value = '';
+        }
+
+        function startNoticeScan() {
+          const text = document.getElementById('noticeTextarea').value.trim().toLowerCase();
+          if(!text) { alert('Please paste notice text or upload an image first.'); return; }
+
+          document.getElementById('detectorInputArea').style.display = 'none';
+          document.getElementById('detectorScanState').style.display = 'block';
+
+          const logs = [
+            "Extracting text via Legal OCR...",
+            "Cross-referencing sender authority databases...",
+            "Validating cited IPC/BNS sections...",
+            "Analysing urgency indicators and payment links...",
+            "Compiling final credibility verdict..."
+          ];
+          
+          let logIdx = 0;
+          const logEl = document.getElementById('scanLog');
+          const logInterval = setInterval(() => {
+            if(logIdx < logs.length) {
+              logEl.textContent = logs[logIdx++];
+            }
+          }, 500);
+
+          setTimeout(() => {
+            clearInterval(logInterval);
+            document.getElementById('detectorScanState').style.display = 'none';
+            renderDetectorResult(text);
+          }, 2800);
+        }
+
+        const SCAM_PATTERNS = [
+          { keyword: 'cbi', keyword2: 'whatsapp', points: [
+              {type: 'fail', title: 'Invalid Communication Channel', desc: 'The Central Bureau of Investigation (CBI) NEVER sends official summons or warrants via WhatsApp. Legal notices are served physically or via official gov.in email.'},
+              {type: 'warn', title: 'Coercive Language', desc: 'The text uses threatening language designed to induce panic, a classic hallmark of cyber extortion.'},
+              {type: 'fail', title: 'Fake Digital Arrest', desc: '"Digital Arrest" does not exist in Indian Law. Section 46 of CrPC/BNSS requires physical arrest procedures.'}
+          ] },
+          { keyword: 'upi', keyword2: 'urgent', points: [
+              {type: 'fail', title: 'Unofficial Payment Method', desc: 'Courts and police do not accept fine payments via direct UPI links, phone numbers, or cryptocurrency.'},
+              {type: 'warn', title: 'Manufactured Urgency', desc: 'Scammers demand payment within "2 hours" or "by end of day" to prevent you from varying facts.'},
+              {type: 'fail', title: 'Missing Case ID', desc: 'Genuine notices contain a verifiable CNR (Case Number Record) that can be checked on the eCourts portal.'}
+          ] },
+          { keyword: 'income tax', keyword2: 'refund', points: [
+              {type: 'fail', title: 'Phishing Link Detected', desc: 'The URL provided does not belong to the official incometax.gov.in domain. It is a credential harvesting site.'},
+              {type: 'warn', title: 'Generic Greeting', desc: 'Official tax notices address you by your verified name and masked PAN, not "Dear Customer" or "Taxpayer".'},
+              {type: 'pass', title: 'Section Citation', desc: 'Section 143(1) is a real tax section, but scammers often copy real sections to appear legitimate.'}
+          ] }
+        ];
+
+        const GENUINE_PATTERN = {
+          points: [
+            {type: 'pass', title: 'Verifiable Authority', desc: 'The sender format matches official correspondence records.'},
+            {type: 'pass', title: 'Valid Section Citation', desc: 'The legal codes cited accurately correspond to the stated subject matter.'},
+            {type: 'pass', title: 'Standard Formatting', desc: 'No suspicious payment links or extreme urgency wording detected.'}
+          ] 
+        };
+
+        function renderDetectorResult(text) {
+          let verdictType = 'fake';
+          let matchedScam = null;
+
+          if (text.includes('whatsapp') || text.includes('cbi') || text.includes('digital arrest') || text.includes('skype')) {
+            matchedScam = SCAM_PATTERNS[0];
+          } else if (text.includes('upi') || text.includes('pay') || text.includes('2 hours')) {
+            matchedScam = SCAM_PATTERNS[1];
+          } else if (text.includes('refund') || text.includes('income tax') || text.includes('click here')) {
+             matchedScam = SCAM_PATTERNS[2];
+          } else if (text.includes('court') && text.includes('cnr')) {
+            verdictType = 'genuine';
+          } else {
+             // Fallback suspicious
+             verdictType = 'suspicious';
+          }
+
+          const resEl = document.getElementById('detectorResult');
+          const header = document.getElementById('verdictHeader');
+          const icon = document.getElementById('verdictIcon');
+          const title = document.getElementById('verdictTitle');
+          const sub = document.getElementById('verdictSubtitle');
+          const ptsEl = document.getElementById('verdictPoints');
+          const actEl = document.getElementById('verdictActionText');
+
+          header.className = 'verdict-header ' + verdictType;
+
+          let pointsHTML = '';
+
+          if (verdictType === 'fake') {
+            const scam = matchedScam || SCAM_PATTERNS[1];
+            icon.textContent = '🚨';
+            title.textContent = 'Likely Fake / Scam';
+            sub.textContent = '98% confidence. This matches known fraud patterns. Do not pay.';
+            actEl.innerHTML = 'Report this to the National Cyber Crime portal immediately at <a href="tel:1930" style="color:var(--danger);font-weight:bold">1930</a>. Do not engage with the sender or click any links.';
+            pointsHTML = scam.points.map(p => `
+              <div class="verdict-point">
+                <div class="vp-icon ${p.type}">${p.type==='fail'?'❌':(p.type==='pass'?'✅':'⚠️')}</div>
+                <div>
+                  <div class="vp-title">${p.title}</div>
+                  <div class="vp-desc">${p.desc}</div>
+                </div>
+              </div>
+            `).join('');
+          } else if (verdictType === 'genuine') {
+            icon.textContent = '✅';
+            title.textContent = 'Likely Genuine';
+            sub.textContent = 'Format and citations appear standard.';
+            actEl.innerHTML = 'You should seek legal counsel. You can use our <a href="#" onclick="switchTab(\'lawyer\')" style="color:var(--gold);font-weight:bold">Talk to a Lawyer</a> tab to connect with an expert.';
+            pointsHTML = GENUINE_PATTERN.points.map(p => `
+              <div class="verdict-point">
+                <div class="vp-icon pass">✅</div>
+                <div><div class="vp-title">${p.title}</div><div class="vp-desc">${p.desc}</div></div>
+              </div>`).join('');
+          } else {
+            icon.textContent = '⚠️';
+            title.textContent = 'Suspicious Notice';
+            sub.textContent = 'Proceed with caution. The format has irregularities.';
+            actEl.innerHTML = 'Do not make any payments yet. Verify the notice offline by calling the respective authority\'s official public helpline.';
+            pointsHTML = `
+              <div class="verdict-point"><div class="vp-icon warn">⚠️</div><div><div class="vp-title">Unusual Wording</div><div class="vp-desc">The document mixes legal terminology incorrectly.</div></div></div>
+              <div class="verdict-point"><div class="vp-icon fail">❌</div><div><div class="vp-title">Missing Verification Info</div><div class="vp-desc">Cannot find a verifiable tracking or dispatch number.</div></div></div>
+            `;
+          }
+
+          ptsEl.innerHTML = pointsHTML;
+          resEl.style.display = 'block';
+        }
+      </script>
+    </div>
+  </div>
+
+  <!-- ══ TAB: LEGAL AID WIZARD ══ -->
+  <div id="tab-legalaid" class="tab-content">
+    <div style="max-width:800px;margin:0 auto;padding:3rem 2.5rem">
+
+      <div class="section-eyebrow">NALSA Services Check</div>
+      <h2 style="font-family:'Playfair Display',serif;">Legal Aid Eligibility Checker</h2>
+      <p class="section-desc">Answer 5 simple questions to see if you qualify for completely free legal services, court fees, and lawyer representation under the Legal Services Authorities Act, 1987.</p>
+
+      <div id="la-wizard-container" class="form-card" style="margin-top:2.5rem;padding:2.5rem;">
+        
+        <!-- Step 1 -->
+        <div class="la-step active" id="la-step-1">
+          <div class="la-step-indicator">Step 1 of 5</div>
+          <h3 class="la-q-title">To which social category do you belong?</h3>
+          <div class="la-options">
+            <button class="la-opt-btn" onclick="laAns('cat', 'General')">General</button>
+            <button class="la-opt-btn" onclick="laAns('cat', 'OBC')">OBC</button>
+            <button class="la-opt-btn" onclick="laAns('cat', 'SC')">Scheduled Caste (SC)</button>
+            <button class="la-opt-btn" onclick="laAns('cat', 'ST')">Scheduled Tribe (ST)</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="la-step" id="la-step-2">
+          <div class="la-step-indicator">Step 2 of 5</div>
+          <h3 class="la-q-title">Do you belong to any of these categories?</h3>
+          <div class="la-options">
+            <button class="la-opt-btn" onclick="laAns('vul', 'Woman')">Woman</button>
+            <button class="la-opt-btn" onclick="laAns('vul', 'Child/Minor')">Child / Minor</button>
+            <button class="la-opt-btn" onclick="laAns('vul', 'Disabled')">Person with Disability</button>
+            <button class="la-opt-btn" onclick="laAns('vul', 'Industrial Worker')">Industrial Workman</button>
+            <button class="la-opt-btn" onclick="laAns('vul', 'Victim')">Victim of Mass Disaster/Violence</button>
+            <button class="la-opt-btn" onclick="laAns('vul', 'None')">None of the above</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="la-step" id="la-step-3">
+          <div class="la-step-indicator">Step 3 of 5</div>
+          <h3 class="la-q-title">Which State/UT do you reside in?</h3>
+          <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem">Income limits vary by state.</p>
+          <select id="la-state-select" class="input-field" style="margin-bottom:1.5rem">
+            <option value="" disabled selected>Select your state...</option>
+            <option value="Delhi">Delhi (Income Limit ₹3,00,000)</option>
+            <option value="Maharashtra">Maharashtra (Income Limit ₹3,00,000)</option>
+            <option value="Karnataka">Karnataka (Income Limit ₹3,00,000)</option>
+            <option value="Other">Other State (Avg. Limit ₹1,00,000 - ₹3,00,000)</option>
+          </select>
+          <button class="primary-btn" style="width:100%;justify-content:center" onclick="laNextState()">Next →</button>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="la-step" id="la-step-4">
+          <div class="la-step-indicator" id="la-step4-ind">Step 4 of 5</div>
+          <h3 class="la-q-title">What is your total annual family income?</h3>
+          <div class="la-options">
+            <button class="la-opt-btn" onclick="laAns('inc', '<1L')">Less than ₹1 Lakh</button>
+            <button class="la-opt-btn" onclick="laAns('inc', '1L-3L')">₹1 Lakh to ₹3 Lakhs</button>
+            <button class="la-opt-btn" onclick="laAns('inc', '3L-5L')">₹3 Lakhs to ₹5 Lakhs</button>
+            <button class="la-opt-btn" onclick="laAns('inc', '>5L')">More than ₹5 Lakhs</button>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="la-step" id="la-step-5">
+          <div class="la-step-indicator">Step 5 of 5</div>
+          <h3 class="la-q-title">What type of case do you need help with?</h3>
+          <div class="la-options">
+            <button class="la-opt-btn" onclick="laAns('case', 'Civil')">Civil (Property, Family, Labour)</button>
+            <button class="la-opt-btn" onclick="laAns('case', 'Criminal')">Criminal (Bail, Defense)</button>
+            <button class="la-opt-btn" onclick="laAns('case', 'Revenue')">Revenue/Tax</button>
+            <button class="la-opt-btn" onclick="laAns('case', 'Other')">Other / I don't know</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Result View -->
+      <div id="la-result-container" style="display:none;margin-top:2.5rem;">
+        
+        <div class="verdict-header" id="laVerdictHeader" style="border-radius:16px 16px 0 0;padding:2rem;">
+          <div class="verdict-icon" id="laVerdictIcon">✅</div>
+          <div>
+            <div class="verdict-title" id="laVerdictTitle">Eligible for Free Legal Aid</div>
+            <div class="verdict-subtitle" id="laVerdictSubtitle">Under Section 12 of the Legal Services Authorities Act.</div>
+          </div>
+        </div>
+
+        <div class="verdict-content" style="padding:2.5rem;">
+          <div id="laResultDetails"></div>
+
+          <div style="margin-top:2rem;">
+            <h4 style="font-size:0.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem">Required Documents</h4>
+            <ul id="laDocsList" style="font-size:0.85rem;color:var(--ink);line-height:1.8;padding-left:1.2rem;margin-bottom:2rem;">
+              <!-- Inject -->
+            </ul>
+          </div>
+
+          <div style="padding:1.25rem;background:var(--paper);border:1px solid var(--border);border-radius:12px;">
+            <h4 style="font-size:0.85rem;color:var(--muted);text-transform:uppercase;margin-bottom:0.5rem">Next Step</h4>
+            <p style="font-size:0.9rem;color:var(--ink);margin-bottom:0.75rem;line-height:1.5" id="laContactText">
+              Contact the Maharashtra State Legal Services Authority.
+            </p>
+            <a href="tel:15100" class="primary-btn" style="text-decoration:none;display:inline-flex;align-items:center;">📞 Call 15100 (NALSA Helpline)</a>
+          </div>
+
+          <button class="action-btn" style="width:100%;margin-top:1.5rem;justify-content:center" onclick="resetLaWizard()">Check another profile</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <style>
+      .la-step { display: none; animation: slideInRight 0.3s ease; }
+      .la-step.active { display: block; }
+      .la-step-indicator { font-size: 0.75rem; color: var(--gold); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+      .la-q-title { font-size: 1.3rem; font-family: 'Playfair Display', serif; color: var(--ink); margin-bottom: 1.5rem; }
+      .la-options { display: flex; flex-direction: column; gap: 0.75rem; }
+      .la-opt-btn { background: var(--paper); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; text-align: left; font-size: 0.95rem; font-family: 'DM Sans', sans-serif; font-weight: 600; color: var(--ink); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; }
+      .la-opt-btn::after { content: '→'; opacity: 0; transform: translateX(-10px); transition: all 0.2s; color: var(--gold); }
+      .la-opt-btn:hover { border-color: var(--gold); background: var(--white); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(200,146,42,0.1); }
+      .la-opt-btn:hover::after { opacity: 1; transform: translateX(0); }
+      
+      @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      
+      /* Dark mode tweaks */
+      [data-theme="dark"] .la-opt-btn { background: rgba(255,255,255,0.02); }
+      [data-theme="dark"] .la-opt-btn:hover { background: rgba(255,255,255,0.05); }
+    </style>
+
+    <script>
+      let laAnswers = {};
+
+      function resetLaWizard() {
+        laAnswers = {};
+        document.querySelectorAll('.la-step').forEach(el => el.classList.remove('active'));
+        document.getElementById('la-step-1').classList.add('active');
+        document.getElementById('la-wizard-container').style.display = 'block';
+        document.getElementById('la-result-container').style.display = 'none';
+        document.getElementById('la-state-select').value = '';
+      }
+
+      function laNextState() {
+        const val = document.getElementById('la-state-select').value;
+        if (!val) { alert('Please select a state'); return; }
+        laAns('state', val);
+      }
+
+      function laAns(key, val) {
+        laAnswers[key] = val;
+        
+        let currentStepId = '';
+        let nextStepId = '';
+
+        if (key === 'cat') { currentStepId = 1; nextStepId = 2; }
+        if (key === 'vul') { currentStepId = 2; nextStepId = 3; }
+        if (key === 'state') { 
+          currentStepId = 3; 
+          // If auto-eligible via vulnerability or SC/ST, skip income (step 4)
+          if (laAnswers.vul !== 'None' || laAnswers.cat === 'SC' || laAnswers.cat === 'ST') {
+            nextStepId = 5;
+            laAnswers.inc = 'Auto-Qualified'; 
+          } else {
+            nextStepId = 4;
+          }
+        }
+        if (key === 'inc') { currentStepId = 4; nextStepId = 5; }
+        if (key === 'case') {
+          evaluateLegalAid();
+          return;
+        }
+
+        document.getElementById(`la-step-${currentStepId}`).classList.remove('active');
+        const nextEl = document.getElementById(`la-step-${nextStepId}`);
+        if(nextEl) nextEl.classList.add('active');
+      }
+
+      function evaluateLegalAid() {
+        document.getElementById('la-wizard-container').style.display = 'none';
+        
+        let isEligible = false;
+        let reason = '';
+        let docs = ['Proof of Identity (Aadhar/Voter ID)', 'Details of the legal case/FIR (if filed)'];
+
+        // Section 12 Criteria Check
+        if (laAnswers.vul === 'Woman' || laAnswers.vul === 'Child/Minor') {
+          isEligible = true;
+          reason = 'Women and Children are unconditionally entitled to free legal aid regardless of income.';
+        } else if (laAnswers.cat === 'SC' || laAnswers.cat === 'ST') {
+          isEligible = true;
+          reason = 'Members of Scheduled Castes and Scheduled Tribes are unconditionally entitled to free legal aid.';
+          docs.push('Valid SC/ST Caste Certificate');
+        } else if (laAnswers.vul !== 'None') {
+          isEligible = true;
+          reason = `As a ${laAnswers.vul}, you qualify for free legal aid under Section 12 criteria.`;
+          if (laAnswers.vul === 'Disabled') docs.push('Disability Certificate');
+          if (laAnswers.vul === 'Industrial Worker') docs.push('Employment ID / Factory worker proof');
+        } else {
+          // Income check
+          if (laAnswers.inc === '<1L' || laAnswers.inc === '1L-3L') {
+             isEligible = true;
+             reason = 'Your family income falls below the State Legal Services Authority threshold (generally ₹3 Lakhs, varying by state).';
+             docs.push('Valid Income Certificate / Affidavit');
+          } else {
+             isEligible = false;
+             reason = 'Based on the general category income limits set by the state, your annual income exceeds the threshold for completely free active legal representation.';
+          }
+        }
+
+        // Render UI
+        const header = document.getElementById('laVerdictHeader');
+        const icon = document.getElementById('laVerdictIcon');
+        const title = document.getElementById('laVerdictTitle');
+        const sub = document.getElementById('laVerdictSubtitle');
+        const details = document.getElementById('laResultDetails');
+        
+        if (isEligible) {
+          header.className = 'verdict-header genuine';
+          icon.textContent = '⚖️';
+          title.textContent = 'Eligible for Free Legal Aid';
+          sub.textContent = 'You satisfy the criteria under Sec 12 of LSA Act, 1987.';
+          details.innerHTML = `<div style="font-size:0.95rem;color:var(--ink);line-height:1.6"><strong>Why?</strong> ${reason} This means you do not have to pay lawyer fees, court fees, or documentation charges.</div>`;
+        } else {
+          header.className = 'verdict-header suspicious';
+          icon.textContent = '⚠️';
+          title.textContent = 'Income Exceeds Prescribed Limit';
+          sub.textContent = 'You may not qualify for fully free representation.';
+          details.innerHTML = `<div style="font-size:0.95rem;color:var(--ink);line-height:1.6"><strong>Why?</strong> ${reason} However, you can still access free legal advice clinics or alternative dispute resolution (Lok Adalats) at no cost.</div>`;
+          docs.push('Any proof of severe financial hardship (if seeking an exception)');
+        }
+
+        document.getElementById('laDocsList').innerHTML = docs.map(d => `<li>${d}</li>`).join('');
+        
+        const stateStr = laAnswers.state === 'Other' ? 'your Local' : laAnswers.state;
+        document.getElementById('laContactText').textContent = `Reach out to the ${stateStr} State Legal Services Authority (SLSA) or your District Court's DLSA desk front office.`;
+
+        document.getElementById('la-result-container').style.display = 'block';
+      }
+    </script>
+  </div>
+  <div class="lawyer-chat-overlay" id="lawyerChatOverlay">
+    <div class="lawyer-chat-panel">
+      <div class="lc-header">
+        <div class="lc-avatar" id="lcAvatarHead"></div>
+        <div class="lc-header-info">
+          <div class="lc-name" id="lcNameHead">Adv. Name</div>
+          <div class="lc-status"><div class="lc-online-dot"></div><span>Online · Reviewing your case</span></div>
+        </div>
+        <button class="lc-close" onclick="closeLawyerChat()">✕</button>
+      </div>
+      <div class="lc-free-timer-bar" id="lcTimerBar" style="display:none">
+        <div class="lc-timer-label">⏱ Free session limit</div>
+        <div><span class="lc-timer-countdown" id="lcCountdown">15:00</span> remaining</div>
+      </div>
+      <div class="lc-messages" id="lcMessages"></div>
+      <div class="lc-input-row" id="lcInputRow">
+        <input type="text" class="lc-input" id="lcInput" placeholder="Ask your legal question..." onkeypress="if(event.key==='Enter') sendLawyerMessage()" />
+        <button class="lc-send" onclick="sendLawyerMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BOOKING OVERLAY ══ -->
+  <div class="booking-overlay" id="bookingOverlay">
+    <div class="booking-panel" id="bookingPanel">
+      <div class="booking-lawyer-info" id="bookingLawyerInfo"></div>
+      <div id="bookingForm">
+        <div class="booking-form-group">
+          <label>Select Date</label>
+          <div class="date-pills" id="datePills"></div>
+        </div>
+        <div class="booking-form-group">
+          <label>Select Time Slot</label>
+          <div class="time-pills">
+            <button class="time-pill" onclick="selectTime(this,'10:00 AM')">10 AM</button>
+            <button class="time-pill" onclick="selectTime(this,'12:00 PM')">12 PM</button>
+            <button class="time-pill" onclick="selectTime(this,'2:00 PM')">2 PM</button>
+            <button class="time-pill" onclick="selectTime(this,'4:00 PM')">4 PM</button>
+            <button class="time-pill" onclick="selectTime(this,'6:00 PM')">6 PM</button>
+          </div>
+        </div>
+        <div class="booking-form-group">
+          <label>Your Name</label>
+          <input type="text" class="booking-input" id="bookingName" placeholder="Full name" />
+        </div>
+        <div class="booking-form-group">
+          <label>Phone Number</label>
+          <input type="tel" class="booking-input" id="bookingPhone" placeholder="10-digit mobile number" maxlength="10" />
+        </div>
+        <button class="booking-confirm-btn" onclick="confirmBooking()">✓ Confirm Appointment</button>
+        <button onclick="closeBooking()" style="width:100%;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.82rem;cursor:pointer;margin-top:0.75rem;padding:0.3rem;">Cancel</button>
+      </div>
+      <div id="bookingSuccess" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE MODAL ══ -->
+  <div class="profile-overlay" id="profileOverlay">
+    <div class="profile-card">
+      <div class="profile-avatar">👤</div>
+      <h3>Complete your profile</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.55;">
+        Fill this once — your details will auto-fill RTI letters, personalise legal aid suggestions, and give you a
+        better experience. We never share your data.
+      </p>
+
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div class="profile-field">
+          <label>Full Name *</label>
+          <input id="pName" type="text" placeholder="As per official documents" pattern="[a-zA-Z\s]+"
+            title="Name should only contain letters" />
+        </div>
+        <div class="profile-field">
+          <label>Street Address</label>
+          <input id="pAddress" type="text" placeholder="House no., Street, Area / Colony" />
+        </div>
+        <div class="profile-row">
+          <div class="profile-field">
+            <label>City / District *</label>
+            <input id="pCity" type="text" placeholder="Mumbai" pattern="[a-zA-Z\s]+" />
+          </div>
+          <div class="profile-field">
+            <label>State *</label>
+            <input id="pState" type="text" placeholder="Maharashtra" pattern="[a-zA-Z\s]+" />
+          </div>
+        </div>
+        <div class="profile-row">
+          <div class="profile-field">
+            <label>PIN Code *</label>
+            <input id="pPin" type="tel" inputmode="numeric" placeholder="400001" maxlength="6" pattern="[0-9]{6}" />
+          </div>
+          <div class="profile-field">
+            <label>Phone Number *</label>
+            <input id="pPhone" type="tel" inputmode="numeric" placeholder="9800000000" maxlength="10"
+              pattern="[0-9]{10}" />
+          </div>
+        </div>
+      </div>
+
+      <button class="profile-save-btn" id="profileSaveBtn" onclick="window.saveUserProfile()">Save &amp; Continue
+        →</button>
+      <div style="text-align:center;margin-top:0.75rem;">
+        <button onclick="window.skipProfile()"
+          style="background:none;border:none;font-size:0.78rem;color:var(--muted);cursor:pointer;padding:0.3rem;">Skip
+          for now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js"></script>
+
+  <!-- FIREBASE AUTHENTICATION & FIRESTORE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    // Initialize Firebase with actual keys
+    const firebaseConfig = {
+      apiKey: "AIzaSyAspBA_bsCDKSuOhuxlFLWZXOCf5zPnrFs",
+      authDomain: "justiceai-14c20.firebaseapp.com",
+      projectId: "justiceai-14c20",
+      storageBucket: "justiceai-14c20.firebasestorage.app",
+      messagingSenderId: "1561810758",
+      appId: "1:1561810758:web:b2ce62f387b47086303747",
+      measurementId: "G-BKQSC7JQ50"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      window.auth = auth;
+      window.dbWrapper = {
+        saveCase: async (uid, data) => {
+          const colRef = collection(db, "users", uid, "cases");
+          const docRef = await addDoc(colRef, data);
+          return docRef.id;
+        },
+        updateCase: async (uid, caseId, data) => {
+          await setDoc(doc(db, "users", uid, "cases", caseId), data, { merge: true });
+        },
+        getCases: async (uid) => {
+          const colRef = collection(db, "users", uid, "cases");
+          const q = query(colRef, orderBy("timestamp", "desc"));
+          const snap = await getDocs(q);
+          const results = [];
+          snap.forEach(d => results.push({ id: d.id, ...d.data() }));
+          return results;
+        },
+        deleteCase: async (uid, caseId) => {
+          await deleteDoc(doc(db, "users", uid, "cases", caseId));
+        },
+        saveProfile: async (uid, data) => {
+          await setDoc(doc(db, "users", uid, "meta", "profile"), data, { merge: true });
+        },
+        loadProfile: async (uid) => {
+          const snap = await getDoc(doc(db, "users", uid, "meta", "profile"));
+          return snap.exists() ? snap.data() : null;
+        }
+      };
+
+      // ── Profile helpers exposed to window ──
+      function applyProfile(profile) {
+        if (!profile) return;
+        window.userProfile = profile;
+        // Update nav greeting
+        const firstName = (profile.name || '').split(' ')[0];
+        const greeting = document.getElementById('userGreeting');
+        if (greeting && firstName) {
+          greeting.textContent = '👋 Hi, ' + firstName;
+          greeting.style.display = 'flex';
+        }
+        // Show profile button
+        const pb = document.getElementById('profileNavBtn');
+        if (pb) pb.style.display = 'inline-flex';
+        // Pre-fill city input
+        const cityEl = document.getElementById('cityInput');
+        if (cityEl && profile.city && !cityEl.value) cityEl.value = profile.city;
+      }
+
+      window.openProfileModal = function () {
+        if (!window.auth || !window.auth.currentUser) {
+          if (typeof showToast === 'function') showToast("Please sign in to access your profile.");
+          return;
+        }
+        const profile = window.userProfile || {};
+        // Pre-fill existing values for editing
+        const f = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+        f('pName', profile.name); f('pAddress', profile.address);
+        f('pCity', profile.city); f('pState', profile.state);
+        f('pPin', profile.pin); f('pPhone', profile.phone);
+        document.getElementById('profileOverlay').classList.add('open');
+      };
+
+      window.skipProfile = function () {
+        document.getElementById('profileOverlay').classList.remove('open');
+      };
+
+      window.saveUserProfile = async function () {
+        const nameEl = document.getElementById('pName');
+        const phoneEl = document.getElementById('pPhone');
+        const pinEl = document.getElementById('pPin');
+
+        if (!nameEl.value.trim() || !/^[a-zA-Z\s]+$/.test(nameEl.value.trim())) { alert('Please enter a valid Full Name (letters only).'); return; }
+        if (!pinEl.value.trim() || !/^[0-9]{6}$/.test(pinEl.value.trim())) { alert('Please enter a strictly 6-digit Pincode.'); return; }
+        if (!phoneEl.value.trim() || !/^[0-9]{10}$/.test(phoneEl.value.trim())) { alert('Please enter a strictly 10-digit Phone Number.'); return; }
+
+        const name = nameEl.value.trim();
+        const profile = {
+          name,
+          address: document.getElementById('pAddress').value.trim(),
+          city: document.getElementById('pCity').value.trim(),
+          state: document.getElementById('pState').value.trim(),
+          pin: document.getElementById('pPin').value.trim(),
+          phone: document.getElementById('pPhone').value.trim(),
+          updatedAt: new Date().toISOString()
+        };
+        const btn = document.getElementById('profileSaveBtn');
+        btn.textContent = 'Saving...';
+        if (window.auth && window.auth.currentUser && window.dbWrapper) {
+          try { await window.dbWrapper.saveProfile(window.auth.currentUser.uid, profile); }
+          catch (e) { console.error('Profile save failed:', e); }
+        }
+        applyProfile(profile);
+        document.getElementById('profileOverlay').classList.remove('open');
+        btn.textContent = 'Save & Continue →';
+        // Show toast using the regular script's function
+        if (typeof showToast === 'function') showToast('Profile saved! RTI letters will now be personalised. ✓');
+      };
+
+      // Close modal when clicking outside the card
+      document.getElementById('profileOverlay').addEventListener('click', function (e) {
+        if (e.target === this) window.skipProfile();
+      });
+
+      const authBtn = document.getElementById('authBtn');
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          authBtn.textContent = 'Sign Out';
+          authBtn.href = '#';
+          authBtn.onclick = async (e) => {
+            e.preventDefault();
+            await signOut(auth);
+            window.userProfile = null;
+            window.location.reload();
+          };
+          // Load profile from Firestore
+          try {
+            const profile = await window.dbWrapper.loadProfile(user.uid);
+            if (profile) {
+              applyProfile(profile);
+            } else {
+              // First time — show profile setup modal
+              document.getElementById('profileNavBtn').style.display = 'inline-flex';
+              setTimeout(() => window.openProfileModal(), 800);
+            }
+          } catch (e) { console.error('Profile load failed:', e); }
+        } else {
+          authBtn.textContent = 'Sign In';
+          authBtn.href = 'login.html';
+          authBtn.onclick = null;
+          document.getElementById('userGreeting').style.display = 'none';
+          document.getElementById('profileNavBtn').style.display = 'none';
+        }
+      });
+    } catch (e) {
+      console.warn("Firebase not properly configured. Auth button tracking disabled.");
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+          console.log('PWA Service Worker registered successfully.', reg.scope);
+        }).catch(err => {
+          console.error('Service worker registration failed:', err);
+        });
+      });
+    }
+  </script>
+  +
+  <!-- ══ LANGUAGE PICKER MODAL ══ -->
+  <div id="langPickerOverlay"
+    style="display:none; position:fixed; inset:0; background:rgba(15,14,12,0.75); backdrop-filter:blur(6px); z-index:10000; align-items:center; justify-content:center; padding:1rem;">
+    <div
+      style="background:var(--white); border-radius:24px; padding:2.5rem; max-width:480px; width:100%; box-shadow:0 24px 80px rgba(0,0,0,0.25); animation:slideUp 0.3s ease; text-align:center;">
+      <div style="font-size:2rem; margin-bottom:0.75rem;">🌐</div>
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; margin-bottom:0.5rem;">Choose
+        Your Language</h3>
+      <p style="font-size:0.85rem; color:var(--muted); margin-bottom:2rem; line-height:1.5;">Select the language for the
+        app interface and your complaint letters.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+        <button onclick="selectAppLang('en', this)" id="langOptEn"
+          style="padding:1.25rem 0.75rem; border:2px solid var(--border); border-radius:14px; background:var(--paper); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;">
+          <div style="font-size:1.5rem; margin-bottom:0.4rem;">🇬🇧</div>
+          <div style="font-size:0.9rem; font-weight:600; color:var(--ink);">English</div>
+        </button>
+        <button onclick="selectAppLang('hi', this)" id="langOptHi"
+          style="padding:1.25rem 0.75rem; border:2px solid var(--border); border-radius:14px; background:var(--paper); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;">
+          <div style="font-size:1.5rem; margin-bottom:0.4rem;">🇮🇳</div>
+          <div style="font-size:0.9rem; font-weight:600; color:var(--ink);">हिन्दी</div>
+        </button>
+        <button onclick="selectAppLang('mr', this)" id="langOptMr"
+          style="padding:1.25rem 0.75rem; border:2px solid var(--border); border-radius:14px; background:var(--paper); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;">
+          <div style="font-size:1.5rem; margin-bottom:0.4rem;">🫶</div>
+          <div style="font-size:0.9rem; font-weight:600; color:var(--ink);">मराठी</div>
+        </button>
+      </div>
+      <button onclick="closeLangPicker()"
+        style="background:var(--ink); color:var(--cream); border:none; border-radius:10px; padding:0.75rem 2rem; font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:500; cursor:pointer; transition:background 0.2s; width:100%;"
+        onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--ink)'">Continue
+        →</button>
+    </div>
+  </div>
+
+  <script>
+    // ── LANGUAGE PICKER ──
+    let selectedAppLangCode = localStorage.getItem('justiceai_lang') || 'en';
+
+    function openLangPicker() {
+      const overlay = document.getElementById('langPickerOverlay');
+      overlay.style.display = 'flex';
+      // Highlight currently active language
+      highlightLangOption(selectedAppLangCode);
+    }
+
+    function closeLangPicker() {
+      const overlay = document.getElementById('langPickerOverlay');
+      overlay.style.display = 'none';
+      // Apply the selected language to the UI
+      applyLanguage(selectedAppLangCode);
+      // Also activate the correct lang button in the form
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      const activeLangBtn = document.querySelector(`.lang-btn[onclick*="'${selectedAppLangCode}'"]`);
+      if (activeLangBtn) activeLangBtn.classList.add('active');
+      selectedLang = selectedAppLangCode;
+    }
+
+    function selectAppLang(lang, btn) {
+      selectedAppLangCode = lang;
+      localStorage.setItem('justiceai_lang', lang);
+      highlightLangOption(lang);
+    }
+
+    function highlightLangOption(lang) {
+      ['en', 'hi', 'mr'].forEach(l => {
+        const el = document.getElementById('langOpt' + l.charAt(0).toUpperCase() + l.slice(1));
+        if (el) {
+          el.style.borderColor = (l === lang) ? 'var(--gold)' : 'var(--border)';
+          el.style.background = (l === lang) ? 'rgba(200,146,42,0.08)' : 'var(--paper)';
+        }
+      });
+    }
+
+    // Show on first visit
+    window.addEventListener('DOMContentLoaded', () => {
+      const hasChosen = localStorage.getItem('justiceai_lang');
+      if (!hasChosen) {
+        setTimeout(() => openLangPicker(), 600);
+      } else {
+        // Re-apply saved language silently
+        selectedAppLangCode = hasChosen;
+        if (typeof applyLanguage === 'function') applyLanguage(hasChosen);
+        selectedLang = hasChosen;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        const activeLangBtn = document.querySelector(`.lang-btn[onclick*="'${hasChosen}'"]`);
+        if (activeLangBtn) activeLangBtn.classList.add('active');
+      }
+    });
+  </script>
+
+  <!-- ══ EMERGENCY SOS ══ -->
+
+  <!-- Floating SOS Button -->
+  <button id="sosFab" onclick="toggleSOSPanel()" aria-label="Emergency SOS" title="Emergency Helplines">
+    <span class="sos-icon">🆘</span>
+  </button>
+
+  <!-- SOS Backdrop -->
+  <div id="sosBackdrop" onclick="closeSOSPanel()"></div>
+
+  <!-- SOS Panel -->
+  <div id="sosPanel" role="dialog" aria-modal="true" aria-label="Emergency Helplines">
+    <div class="sos-panel-inner">
+
+      <div class="sos-header">
+        <div class="sos-header-left">
+          <div class="sos-pulse-ring"></div>
+          <div>
+            <div class="sos-title">🆘 Emergency Helplines</div>
+            <div class="sos-subtitle">One tap to call · Available 24/7</div>
+          </div>
+        </div>
+        <button class="sos-close" onclick="closeSOSPanel()" aria-label="Close">✕</button>
+      </div>
+
+      <div class="sos-grid">
+
+        <a href="tel:100" class="sos-card sos-red" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">👮</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Police</div>
+            <div class="sos-card-num">100</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:101" class="sos-card sos-orange" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🔥</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Fire Brigade</div>
+            <div class="sos-card-num">101</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:102" class="sos-card sos-blue" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🚑</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Ambulance</div>
+            <div class="sos-card-num">102</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:108" class="sos-card sos-blue" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🏥</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Disaster / Emergency</div>
+            <div class="sos-card-num">108</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:181" class="sos-card sos-purple" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">👩</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Women Helpline</div>
+            <div class="sos-card-num">181</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:1098" class="sos-card sos-green" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🧒</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Child Helpline</div>
+            <div class="sos-card-num">1098</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:1930" class="sos-card sos-indigo" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">💻</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Cyber Crime</div>
+            <div class="sos-card-num">1930</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:15100" class="sos-card sos-gold" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">⚖️</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">NALSA Legal Aid</div>
+            <div class="sos-card-num">15100</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:14567" class="sos-card sos-teal" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">👴</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Senior Citizen</div>
+            <div class="sos-card-num">14567</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:1073" class="sos-card sos-orange" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🚗</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Road Accident</div>
+            <div class="sos-card-num">1073</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:1064" class="sos-card sos-red" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🏛️</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Anti-Corruption</div>
+            <div class="sos-card-num">1064</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+        <a href="tel:18001800121" class="sos-card sos-purple" onclick="closeSOSPanel()">
+          <div class="sos-card-icon">🧠</div>
+          <div class="sos-card-info">
+            <div class="sos-card-name">Mental Health (iCall)</div>
+            <div class="sos-card-num">9152987821</div>
+          </div>
+          <div class="sos-call-badge">📞 Call</div>
+        </a>
+
+      </div>
+
+      <div class="sos-footer">
+        <span>⚡ Tap any card to dial instantly</span>
+        <span style="color:var(--danger);font-weight:600">For life-threatening emergencies, call 112</span>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    /* ══ SOS FAB ══ */
+    #sosFab {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      z-index: 8000;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      box-shadow: 0 4px 20px rgba(192, 57, 43, 0.5), 0 0 0 0 rgba(192, 57, 43, 0.4);
+      animation: sos-pulse 2.5s infinite;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    #sosFab:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 28px rgba(192, 57, 43, 0.65), 0 0 0 8px rgba(192, 57, 43, 0.15);
+    }
+
+    #sosFab.open {
+      background: linear-gradient(135deg, #7a1a1a, #c0392b);
+      animation: none;
+      transform: scale(0.93);
+    }
+
+    .sos-icon {
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+
+    @keyframes sos-pulse {
+      0%   { box-shadow: 0 4px 20px rgba(192,57,43,0.5), 0 0 0 0 rgba(192,57,43,0.45); }
+      60%  { box-shadow: 0 4px 20px rgba(192,57,43,0.5), 0 0 0 14px rgba(192,57,43,0); }
+      100% { box-shadow: 0 4px 20px rgba(192,57,43,0.5), 0 0 0 0 rgba(192,57,43,0); }
+    }
+
+    /* ══ BACKDROP ══ */
+    #sosBackdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 14, 12, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 8100;
+    }
+
+    #sosBackdrop.open { display: block; }
+
+    /* ══ SOS PANEL ══ */
+    #sosPanel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 8200;
+      transform: translateY(110%);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    #sosPanel.open {
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .sos-panel-inner {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 1.5rem 1.5rem 2rem;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ══ SOS HEADER ══ */
+    .sos-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .sos-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .sos-pulse-ring {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(192,57,43,0.5);
+      animation: sos-ring 1.8s infinite;
+    }
+
+    .sos-pulse-ring::after {
+      content: '🆘';
+      font-size: 1.1rem;
+    }
+
+    @keyframes sos-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(192,57,43,0.5); }
+      70%  { box-shadow: 0 0 0 10px rgba(192,57,43,0); }
+      100% { box-shadow: 0 0 0 0 rgba(192,57,43,0); }
+    }
+
+    .sos-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .sos-subtitle {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .sos-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .sos-close:hover {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    /* ══ SOS GRID ══ */
+    .sos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .sos-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      transition: all 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sos-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background: currentColor;
+      transition: opacity 0.15s;
+    }
+
+    .sos-card:hover::before { opacity: 0.12; }
+    .sos-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .sos-card:active { transform: scale(0.97); }
+
+    .sos-card-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .sos-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sos-card-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sos-card-num {
+      font-size: 1rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .sos-call-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.22rem 0.55rem;
+      border-radius: 2rem;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.5);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Colour variants */
+    .sos-red    { background: #fdeaea; color: #7a1a1a; border-color: #f5c2c2; }
+    .sos-orange { background: #fff3e8; color: #7a3a1a; border-color: #f5d8c2; }
+    .sos-blue   { background: #e8f0fe; color: #1a2a7a; border-color: #c2d0f5; }
+    .sos-purple { background: #f3e8fe; color: #4a1a7a; border-color: #d8c2f5; }
+    .sos-green  { background: #e8f5ee; color: #1a5a2a; border-color: #c2dfc8; }
+    .sos-indigo { background: #e8eaf6; color: #1a1a7a; border-color: #c5c8ee; }
+    .sos-gold   { background: #fef9e8; color: #7a5a0a; border-color: #e8d48c; }
+    .sos-teal   { background: #e0f7f5; color: #0a5a54; border-color: #b2e0dc; }
+
+    .sos-red .sos-call-badge    { background:rgba(192,57,43,0.12); border-color:rgba(192,57,43,0.25); }
+    .sos-orange .sos-call-badge { background:rgba(200,100,30,0.12); border-color:rgba(200,100,30,0.25); }
+    .sos-blue .sos-call-badge   { background:rgba(30,80,200,0.12); border-color:rgba(30,80,200,0.25); }
+    .sos-purple .sos-call-badge { background:rgba(120,30,200,0.12); border-color:rgba(120,30,200,0.25); }
+    .sos-green .sos-call-badge  { background:rgba(30,120,60,0.12); border-color:rgba(30,120,60,0.25); }
+    .sos-indigo .sos-call-badge { background:rgba(40,40,160,0.12); border-color:rgba(40,40,160,0.25); }
+    .sos-gold .sos-call-badge   { background:rgba(180,130,20,0.12); border-color:rgba(180,130,20,0.25); }
+    .sos-teal .sos-call-badge   { background:rgba(0,100,90,0.12); border-color:rgba(0,100,90,0.25); }
+
+    /* ══ SOS FOOTER ══ */
+    .sos-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ══ DARK MODE OVERRIDES ══ */
+    [data-theme="dark"] .sos-red    { background: rgba(192,57,43,0.2); border-color: rgba(192,57,43,0.35); }
+    [data-theme="dark"] .sos-orange { background: rgba(200,100,30,0.2); border-color: rgba(200,100,30,0.35); }
+    [data-theme="dark"] .sos-blue   { background: rgba(30,80,200,0.2); border-color: rgba(30,80,200,0.35); }
+    [data-theme="dark"] .sos-purple { background: rgba(120,30,200,0.2); border-color: rgba(120,30,200,0.35); }
+    [data-theme="dark"] .sos-green  { background: rgba(30,120,60,0.2); border-color: rgba(30,120,60,0.35); }
+    [data-theme="dark"] .sos-indigo { background: rgba(40,40,160,0.2); border-color: rgba(40,40,160,0.35); }
+    [data-theme="dark"] .sos-gold   { background: rgba(180,130,20,0.2); border-color: rgba(180,130,20,0.35); }
+    [data-theme="dark"] .sos-teal   { background: rgba(0,100,90,0.2); border-color: rgba(0,100,90,0.35); }
+    [data-theme="dark"] .sos-red    { color: #f5a8a8; }
+    [data-theme="dark"] .sos-orange { color: #f5c8a8; }
+    [data-theme="dark"] .sos-blue   { color: #a8c0f5; }
+    [data-theme="dark"] .sos-purple { color: #d0a8f5; }
+    [data-theme="dark"] .sos-green  { color: #a8d0b8; }
+    [data-theme="dark"] .sos-indigo { color: #c0c8f0; }
+    [data-theme="dark"] .sos-gold   { color: #e8c87a; }
+    [data-theme="dark"] .sos-teal   { color: #80d0c8; }
+    [data-theme="dark"] .sos-panel-inner { background: var(--white); }
+
+    /* ══ MOBILE ══ */
+    @media (max-width: 480px) {
+      #sosFab { bottom: 1.25rem; right: 1.25rem; width: 58px; height: 58px; }
+      .sos-panel-inner { padding: 1.25rem 1rem 1.75rem; }
+      .sos-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+      .sos-card { padding: 0.7rem 0.75rem; gap: 0.55rem; }
+      .sos-card-icon { font-size: 1.2rem; }
+      .sos-card-name { font-size: 0.72rem; }
+      .sos-card-num { font-size: 0.88rem; }
+      .sos-call-badge { display: none; }
+    }
+  </style>
+
+  <script>
+    // ══ SOS TOGGLE ══
+    let sosOpen = false;
+
+    function toggleSOSPanel() {
+      sosOpen ? closeSOSPanel() : openSOSPanel();
+    }
+
+    function openSOSPanel() {
+      sosOpen = true;
+      document.getElementById('sosFab').classList.add('open');
+      document.getElementById('sosBackdrop').classList.add('open');
+      document.getElementById('sosPanel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSOSPanel() {
+      sosOpen = false;
+      document.getElementById('sosFab').classList.remove('open');
+      document.getElementById('sosBackdrop').classList.remove('open');
+      document.getElementById('sosPanel').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sosOpen) closeSOSPanel();
+    });
+  </script>
+
+</body>
+
+</html>

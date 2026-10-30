@@ -1,0 +1,16 @@
+{
+  "name": "JusticeAI - Legal Copilot",
+  "short_name": "JusticeAI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0e0c",
+  "theme_color": "#c8922a",
+  "description": "Your ultimate Indian legal copilot.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3255/3255694.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

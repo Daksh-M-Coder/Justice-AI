@@ -1,0 +1,158 @@
+{
+  "Consumer": [
+    {
+      "title": "Defective Samsung Phone — Consumer Forum Delhi, 2023",
+      "authority": "District Consumer Disputes Redressal Forum, Delhi",
+      "outcome": "Won",
+      "amount": "₹32,000 + ₹5,000 compensation",
+      "days": 42,
+      "desc": "Buyer received a phone with motherboard defect. Forum ruled defect was manufacturing fault and ordered full replacement + compensation."
+    },
+    {
+      "title": "IRCTC Train Delay — NCDRC, 2022",
+      "authority": "National Consumer Disputes Redressal Commission",
+      "outcome": "Won",
+      "amount": "₹1.2 lakh",
+      "days": 90,
+      "desc": "14-hour train delay caused a family to miss a wedding. NCDRC held IRCTC liable for deficiency in service and awarded full compensation."
+    },
+    {
+      "title": "Insurance Claim Rejection — State Commission Maharashtra, 2023",
+      "authority": "Maharashtra State Consumer Commission",
+      "outcome": "Won",
+      "amount": "₹8.5 lakh",
+      "days": 65,
+      "desc": "Insurance company wrongly rejected a cashless medical claim citing pre-existing condition. Commission ruled rejection was mala fide."
+    },
+    {
+      "title": "Builder Flat Delay — NCDRC, 2021",
+      "authority": "National Consumer Disputes Redressal Commission",
+      "outcome": "Won",
+      "amount": "₹15 lakh + interest",
+      "days": 180,
+      "desc": "Builder delayed possession by 4 years. NCDRC awarded full refund with compound interest at 10% p.a. and litigation costs."
+    },
+    {
+      "title": "Online Shopping Fraud — Consumer Forum Bangalore, 2022",
+      "authority": "District Consumer Forum, Bangalore",
+      "outcome": "Won",
+      "amount": "₹18,500 + ₹3,000 costs",
+      "days": 38,
+      "desc": "Flipkart seller sent a counterfeit product. Forum ordered full refund plus compensation for mental harassment."
+    }
+  ],
+  "RTI": [
+    {
+      "title": "PDS Beneficiary List RTI — CIC, 2022",
+      "authority": "Central Information Commission",
+      "outcome": "Won",
+      "amount": "₹25,000 penalty on PIO",
+      "days": 55,
+      "desc": "PIO failed to provide BPL ration card list within 30 days. CIC imposed maximum penalty and ordered disclosure."
+    },
+    {
+      "title": "Road Construction Fund RTI — State IC Gujarat, 2023",
+      "authority": "Gujarat State Information Commission",
+      "outcome": "Won",
+      "amount": "Information disclosed + ₹10,000 penalty",
+      "days": 40,
+      "desc": "Municipal corporation refused to share ward-level expense details. Commission ordered full disclosure with penalty on officer."
+    },
+    {
+      "title": "Government Job Selection RTI — CIC, 2021",
+      "authority": "Central Information Commission",
+      "outcome": "Won",
+      "amount": "Disclosure ordered",
+      "days": 30,
+      "desc": "UPSC refused to share answer sheets. Supreme Court upheld CIC and ruled candidates have right to access their own evaluated sheets."
+    }
+  ],
+  "Tenant / Housing": [
+    {
+      "title": "Illegal Eviction Injunction — Delhi HC, 2022",
+      "authority": "Delhi High Court",
+      "outcome": "Won",
+      "amount": "Eviction stayed",
+      "days": 7,
+      "desc": "Landlord attempted forcible eviction without proper notice. Court granted interim injunction within a week and awarded litigation costs."
+    },
+    {
+      "title": "Security Deposit Refund — Rent Court Mumbai, 2023",
+      "authority": "Small Causes Court, Mumbai",
+      "outcome": "Won",
+      "amount": "₹2.4 lakh returned",
+      "days": 45,
+      "desc": "Landlord withheld 10-month security deposit without justification. Court ordered full refund with 9% interest."
+    },
+    {
+      "title": "Unlawful Rent Hike — Rent Control Appellate, Pune, 2022",
+      "authority": "Rent Control Appellate Authority, Pune",
+      "outcome": "Won",
+      "amount": "Excess rent recovered",
+      "days": 60,
+      "desc": "Landlord raised rent by 40% in violation of Rent Control Act cap. Appellate authority reversed hike and ordered refund of excess paid."
+    }
+  ],
+  "Labour": [
+    {
+      "title": "Unlawful Termination — Labour Court Mumbai, 2023",
+      "authority": "Industrial Tribunal, Mumbai",
+      "outcome": "Won",
+      "amount": "Full back wages + reinstatement",
+      "days": 120,
+      "desc": "Employee terminated without chargesheet or domestic inquiry. Tribunal ruled termination void and ordered reinstatement with back wages."
+    },
+    {
+      "title": "PF Deduction Fraud — EPFO Appellate, 2022",
+      "authority": "EPFO Appellate Authority",
+      "outcome": "Won",
+      "amount": "₹1.8 lakh PF released",
+      "days": 35,
+      "desc": "Employer was deducting PF but not depositing. Appellate authority penalised employer and directed full PF transfer to employee."
+    },
+    {
+      "title": "Maternity Leave Denial — High Court Karnataka, 2022",
+      "authority": "Karnataka High Court",
+      "outcome": "Won",
+      "amount": "Full maternity pay + damages",
+      "days": 80,
+      "desc": "Private employer refused to grant 26-week maternity leave under Maternity Benefit Act 2017. Court ruled denial was illegal."
+    }
+  ],
+  "Criminal": [
+    {
+      "title": "Bail Grant in Cheque Bounce — Magistrate Court, 2023",
+      "authority": "Chief Judicial Magistrate, Ahmedabad",
+      "outcome": "Won",
+      "amount": "Bail granted",
+      "days": 3,
+      "desc": "Accused arrested in Section 138 NI Act case. Immediate bail was granted as offence is compoundable and no flight risk was shown."
+    },
+    {
+      "title": "FIR Quashing — Bombay HC, 2022",
+      "authority": "Bombay High Court",
+      "outcome": "Won",
+      "amount": "FIR quashed",
+      "days": 45,
+      "desc": "FIR filed for civil property dispute disguised as criminal matter. High Court quashed it invoking Section 482 CrPC as abuse of process."
+    }
+  ],
+  "General": [
+    {
+      "title": "Credit Card Fraud Recovery — Consumer Forum Chennai, 2022",
+      "authority": "District Consumer Forum, Chennai",
+      "outcome": "Won",
+      "amount": "₹92,000 refunded",
+      "days": 50,
+      "desc": "Unauthorized transactions on credit card. Bank initially refused. Forum ordered full reversal plus ₹10,000 for mental harassment."
+    },
+    {
+      "title": "Hospital Medical Negligence — NCDRC, 2022",
+      "authority": "National Consumer Disputes Redressal Commission",
+      "outcome": "Won",
+      "amount": "₹25 lakh compensation",
+      "days": 210,
+      "desc": "Hospital performed wrong surgery on patient. NCDRC held hospital and surgeon jointly liable and awarded comprehensive compensation."
+    }
+  ]
+}

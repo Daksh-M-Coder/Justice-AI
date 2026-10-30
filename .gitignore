@@ -1,0 +1,13 @@
+.vercel
+node_modules
+.env
+index.html.backup
+*.backup
+extract_blocks.py
+extract_assets.js
+fix_theme.py
+deploy_setup.py
+/backend
+/public
+/scripts
+/data

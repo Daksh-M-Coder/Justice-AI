@@ -1,0 +1,25 @@
+{
+  "Consumer Rights": [
+    "Consumer Protection Act 2019, Section 35: Right to file a complaint for defective goods or deficient services.",
+    "Section 2(9), Consumer Protection Act: Right to be informed about quality, quantity, potency, purity, standard, and price of goods.",
+    "Section 39, Consumer Protection Act: Power of the District Commission to order removal of defects, replacement, or refund the price."
+  ],
+  "Tenant / Housing": [
+    "Rent Control Acts (State-specific, e.g., Maharashtra Rent Control Act 1999): A landlord cannot evict a tenant without due process of law and a valid reason (e.g., non-payment of rent).",
+    "Section 108 of the Transfer of Property Act, 1882: The lessee is bound to pay or tender the premium or rent to the lessor or his agent.",
+    "Indian Penal Code (BNS Section 329): It is illegal for a landlord to cut off essential services like electricity or water supply to force an eviction without a court order."
+  ],
+  "Workplace / Labour": [
+    "Payment of Wages Act, 1936, Section 15: Claims arising out of deductions from wages or delay in payment of wages can be filed.",
+    "Industrial Disputes Act, 1947, Section 2A: Dismissal, discharge, retrenchment, or termination of an individual workman is deemed to be an industrial dispute.",
+    "Maternity Benefit Act, 1961: Female employees are entitled to 26 weeks of paid maternity leave."
+  ],
+  "Police / FIR": [
+    "Section 154 Code of Criminal Procedure (CrPC) / BNSS: Any person can give information setting the law in motion regarding the commission of a cognizable offence.",
+    "If police refuse to register FIR: Complainant can send substance of information to the SP/DCP under Section 154(3) CrPC, or file a complaint before the Magistrate under Section 156(3) CrPC."
+  ],
+  "Banking / Fraud": [
+    "RBI Circular on Customer Protection (2017): Zero Liability of a Customer in case of Third Party Breaches where the customer notifies the bank within 3 working days.",
+    "Banking Ombudsman Scheme, 2006: Customers can file complaints for deficiency in banking services if the bank fails to reply within 30 days."
+  ]
+}
