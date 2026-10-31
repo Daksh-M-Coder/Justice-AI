@@ -9,6 +9,20 @@ import { useWorkMode } from "@/lib/providers";
 import type { DetectionResult } from "@/lib/types";
 import { Badge, Btn, Card, Disclaimer, SectionTitle, SkeletonBlock, Trace } from "@/components/ui";
 
+/** Plain-language renderings of the machine enums. "LikelyFraud" / "mismatch" are answers for
+ *  the schema, not sentences a person in a police-station corridor should have to decode. */
+const VERDICT_LABEL: Record<string, string> = {
+  LikelyGenuine: "Looks like a real notice",
+  Suspicious: "Needs checking before you act",
+  LikelyFraud: "Has the marks of a fraud",
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  ok: "matches a real notice",
+  mismatch: "does not match",
+  unknown: "cannot confirm",
+};
+
 export function DetectorTab() {
   const { t } = useI18n();
   const { working } = useWorkMode();
@@ -82,8 +96,10 @@ export function DetectorTab() {
       {result ? (
         <Card>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge tone={tone(result.verdict)}>{result.verdict.replace(/([A-Z])/g, " $1").trim()}</Badge>
-            <span className="text-[0.78rem] text-[var(--color-muted)]">confidence {Math.round(result.confidence * 100)}%</span>
+            <Badge tone={tone(result.verdict)}>{VERDICT_LABEL[result.verdict] ?? result.verdict}</Badge>
+            {/* a 0 confidence beside a red badge read as "0% sure, and it is fraud" - the model
+                simply did not state one, so say nothing rather than contradict the badge */}
+            {result.confidence > 0 ? <span className="text-[0.78rem] text-[var(--color-muted)]">model confidence {Math.round(result.confidence * 100)}%</span> : null}
             {result.law ? <span className="chip border">{result.law}</span> : null}
           </div>
 
@@ -108,7 +124,7 @@ export function DetectorTab() {
               <ul className="space-y-1.5">
                 {result.checks.map((c, i) => (
                   <li key={i} className="flex flex-wrap gap-2 text-[0.84rem]">
-                    <Badge tone={c.status === "ok" ? "ok" : c.status === "mismatch" ? "danger" : "neutral"}>{c.status}</Badge>
+                    <Badge tone={c.status === "ok" ? "ok" : c.status === "mismatch" ? "danger" : "neutral"}>{STATUS_LABEL[c.status] ?? c.status}</Badge>
                     <span>{c.claim}</span>
                     {c.note ? <span className="text-[var(--color-muted)]">— {c.note}</span> : null}
                   </li>

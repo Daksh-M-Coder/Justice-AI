@@ -91,9 +91,14 @@ export function citationAllowList(sections: Section[]): Set<string> {
 let index: MiniSearch<Section> | null = null;
 const byId = new Map<string | number, Section>(ALL_SECTIONS.map((s) => [s.id, s]));
 
-/** MiniSearch returns ids + scores; hydrate back to our Section records. */
-function hydrate(results: { id: string | number }[]): Section[] {
-  return results.map((r) => byId.get(r.id)).filter((s): s is Section => !!s);
+/** MiniSearch returns ids + scores; hydrate back to our Section records, keeping the score. */
+function hydrate(results: { id: string | number; score: number }[]): { section: Section; score: number }[] {
+  return results
+    .map((r) => {
+      const s = byId.get(r.id);
+      return s ? { section: s, score: r.score } : null;
+    })
+    .filter((x): x is { section: Section; score: number } => !!x);
 }
 
 /** Built once per serverless warm instance - plan step 18. */
@@ -102,10 +107,15 @@ export function getIndex(opts: Opts = {}): WorkResult<MiniSearch<Section>> {
   try {
     if (!index) {
       const m = new MiniSearch<Section>({
-        fields: ["act", "section", "title", "text", "category", "note"],
+        // `category` is deliberately NOT indexed: scoping by category already happens in code,
+        // and leaving it in the index meant every "Tenant / Housing" document scored on the word
+        // "housing" from the query itself, letting three act-level entries outrank the Transfer of
+        // Property Act sections that actually govern a security deposit. `note` is out too - it is
+        // maintainer commentary ("re-read this on India Code"), not law, and it matched user words.
+        fields: ["act", "section", "title", "text"],
         storeFields: ["id", "act", "section", "skey", "title", "text", "category", "source_url", "verified", "note"],
         searchOptions: {
-          boost: { section: 6, title: 3, act: 2, text: 1, note: 0.4 },
+          boost: { section: 6, title: 3, act: 2, text: 1 },
           prefix: true,
           fuzzy: 0.15,
           combineWith: "OR",
@@ -157,9 +167,41 @@ export async function retrieve(
     if (!idx) return p.done(null, built.error ?? "search index unavailable");
 
     const terms = query.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 4).slice(0, 24);
-    p.check(`query normalised to ${terms.length} terms`, terms.length > 0 ? terms.join(" ").slice(0, 80) : "no usable terms - category fallback used");
+    p.check(`query normalised to ${terms.length} term(s)`, terms.length > 0 ? terms.join(" ").slice(0, 80) : "no usable terms - category fallback used");
 
-    const all = hydrate(idx.search(query));
+    // An Indic problem statement contains no Latin words at all. Keyword search can then only
+    // latch onto stray digits, so "मकान मालिक ने 10000 की जमा राशि वापस नहीं की" used to rank on
+    // the number "10000" and hand the model an electricity Act for a security-deposit dispute.
+    // Honest alternative: list the category's sections and say that is what we did.
+    const hasLatinWord = /[a-z]{4,}/i.test(query.replace(/[\u0900-\u097F]/g, " "));
+    if (!hasLatinWord) {
+      const listed = ALL_SECTIONS.filter((s) => !category || s.category === category)
+        .sort(
+          (a, b) =>
+            Number(b.verified) - Number(a.verified) ||
+            Number(/[0-9]/.test(b.section)) - Number(/[0-9]/.test(a.section)) ||
+            a.act.localeCompare(b.act),
+        )
+        .slice(0, k);
+      if (listed.length >= 2) {
+        p.check("query carries no Latin words", true, "keyword ranking cannot help an Indic query - the category's own sections are listed instead");
+        return p.done({
+          sections: listed,
+          unverified: listed.filter((s) => !s.verified).length,
+          why: `language fallback: ${listed.length} section(s) listed for "${category ?? "any"}", not keyword-ranked`,
+        });
+      }
+      p.check("language fallback had too few sections", true, `only ${listed.length} in this category - falling through to keyword search`);
+    }
+
+    const scored = hydrate(idx.search(query));
+    const floor = (scored[0]?.score ?? 0) * 0.35;
+    // combineWith:"OR" means a single shared word is a hit. A relative floor stops "mentions the
+    // number 10" from competing with a section actually about the subject, while still keeping a
+    // couple of hits so a short corpus never reads as "no law found".
+    const all = scored.filter((r, i) => r.score >= floor || i < 2).map((r) => r.section);
+    if (scored.length > all.length) p.check("low-scoring keyword matches dropped", true, `${scored.length - all.length} of ${scored.length} below 35% of the top score`);
+
     const scoped = category ? all.filter((s) => s.category === category) : [];
     const global = all.filter((s) => !scoped.some((x) => x.id === s.id));
 

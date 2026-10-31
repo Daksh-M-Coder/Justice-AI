@@ -26,6 +26,10 @@ async function main() {
     for (const c of bad) console.log(`        ! ${c.name}: ${c.detail}`);
   }
   console.log(`\nmodels: text=${j.models?.text} fast=${j.models?.fast} vision=${j.models?.vision ?? "none"} (${j.models?.note})`);
+  if (j.keys) {
+    console.log(`keys  : pool of ${j.keys.total} -> ${j.keys.available} ready, ${j.keys.cooling} cooling, ${j.keys.rejected} rejected (round-robin per request)`);
+    console.log(`        ${j.keys.slots.map((s) => `${s.label}=${s.state}${s.forHowLongMs ? ` for ${Math.ceil(s.forHowLongMs / 1000)}s` : ""}`).join("  ")}`);
+  }
   console.log(`quota : guest ${j.quota?.guestPerDay}/day, user ${j.quota?.userPerDay}/day, chat ${j.quota?.userChatPerDay}/day`);
   console.log(`\n${j.summary?.failed ?? 0} failing check(s) of ${j.summary?.total ?? 0}. Full JSON: ${BASE}/api/health?full=1`);
   process.exit(j.ok ? 0 : 1);

@@ -45,8 +45,11 @@ export async function call<T>({ path, method = "POST", body = {}, opts = {} }: A
   const isWorking = opts.is_working ?? workModeEnabled();
   try {
     const tokenRes = await currentIdToken({ is_working: isWorking });
-    const token = p.attach(tokenRes, "currentIdToken");
-    p.check("identity attached", !!token, token ? "bearer ID token" : "no token - the server will treat this as a guest call");
+    // `merge`, never `attach`: a guest legitimately has no token, and attach() would copy the
+    // child's not-ok as *our* error, invalidating a request the server actually answered fine.
+    p.merge(tokenRes.checks, "currentIdToken");
+    const token = tokenRes.data;
+    p.check("identity for this call", true, token ? "bearer ID token attached" : "no token - the server treats this as a guest call");
 
     const payload = { ...body, is_working: isWorking };
     const res = await fetch(path, {
@@ -83,10 +86,17 @@ export async function detect(payload: Record<string, unknown>, opts: Opts = {}):
 
 export async function health(opts: Opts = {}): Promise<WorkResult<Envelope<Record<string, unknown>>>> {
   const p = track<Envelope<Record<string, unknown>>>("api.health", opts);
+  const isWorking = opts.is_working ?? workModeEnabled();
   try {
-    const res = await fetch(`/api/health?full=1&is_working=${opts.is_working === true ? "1" : "1"}`, { headers: { accept: "application/json" } });
+    // was a dead ternary (`? "1" : "1"`), so the mode the UI asked for and the mode the
+    // server ran could disagree without anyone noticing
+    const res = await fetch(`/api/health?full=1&is_working=${isWorking ? "1" : "0"}`, { headers: { accept: "application/json" } });
     const json = (await res.json()) as Envelope<Record<string, unknown>>;
-    p.check(`HTTP ${res.status}`, res.ok || res.status === 503, res.ok ? "all required services green" : "one or more required services are red");
+    // Reachability and health are two different assertions: 503 means "reachable but
+    // degraded". Collapsing them into one passing check meant a red board always read green.
+    p.check(`probe reached the server (HTTP ${res.status})`, res.status === 200 || res.status === 503, res.status === 503 ? "reachable, reporting degraded" : "reachable");
+    const requiredRed = ((json.services ?? []) as { name: string; ok: boolean }[]).filter((s) => s.ok === false && !/^firebaseAdmin\.|^db\.|^groq\.vision$|^reminders\./.test(s.name));
+    p.check("all required services green", requiredRed.length === 0, requiredRed.length ? requiredRed.map((s) => s.name).join(", ") : "no required service is red");
     return p.done(json, undefined);
   } catch (e) {
     return p.caught(e);

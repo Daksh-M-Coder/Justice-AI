@@ -26,6 +26,8 @@ export async function GET(req: Request) {
         summary: report.summary,
         corpus: report.corpus,
         models: report.models,
+        // pool counts and slot labels only - keypool.status() never returns a secret
+        keys: report.keys,
         quota: report.quota,
         services: report.services.map((s) => ({
           name: s.name,
@@ -38,6 +40,11 @@ export async function GET(req: Request) {
       { status: report.ok ? 200 : 503, headers: { "cache-control": "no-store" } },
     );
   } catch (e) {
-    return Response.json({ ok: false, error: e instanceof Error ? e.message : String(e) }, { status: 500 });
+    // A probe that itself threw is an outage signal, not a caller error: /api/health must
+    // answer 200 or 503 so monitoring can keep using one rule ("503 means degraded").
+    return Response.json(
+      { ok: false, error: e instanceof Error ? e.message : String(e), degraded: ["health probe threw"], services: [] },
+      { status: 503, headers: { "cache-control": "no-store" } },
+    );
   }
 }

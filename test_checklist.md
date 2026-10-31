@@ -8,11 +8,13 @@ Baseline measured on 2026-10-31 (update these numbers when you add tests on purp
 | Check | Expected |
 |---|---|
 | `npm run typecheck` | 0 errors |
-| `npm test` | **7 files, 92 tests passed** |
+| `npm test` | **9 files, 126 tests passed** |
 | `npm run build` | succeeds, 16 routes listed |
 | `node scripts/accept.mjs` (dummy key, no Firebase) | **33 passed, 0 failed** (1 WARN about guest quota is normal locally) |
-| `node scripts/variants.mjs` | **21 passed, 0 failed** |
-| `npm run lint` | currently **2 errors + 10 warnings** (known, both in `lib/groq.ts`, see T0.2). Goal: 0 errors. Never let the count go UP. |
+| `node scripts/variants.mjs` | **21 passed, 0 failed** (`scripts/variants.mjs` now exists) |
+| `npm run probe:rag` | **19 passed, 0 failed** - retrieval shape per language, spends nothing |
+| `npm run lint` | **0 errors, 10 warnings** (the two old `lib/groq.ts` errors are fixed: the helper is `wantsJsonMode()`, `raw` is `const`) |
+| `node scripts/live_check.mjs` (real keys) | 41 checks; see T3 for the token budget |
 
 ---
 
@@ -61,8 +63,8 @@ Wait until `curl http://localhost:3111/api/health` answers (any status) before t
 | ID | Command | Expect | If it fails, look at |
 |---|---|---|---|
 | T0.1 | `npm run typecheck` | exit 0, no output | The file named in the error. A changed type in `lib/types.ts` or `lib/schema.ts` breaks many files — fix the type, not each caller. |
-| T0.2 | `npm run lint` | **0 errors** is the goal; today there are 2, both easy: (a) `lib/groq.ts:~201` function named `useJsonForBody` is mistaken for a React hook → rename it (e.g. `shouldUseJson`) and its callers; (b) `lib/groq.ts:~295` `let raw` never reassigned → `const raw`. Warnings (10, mostly `react-hooks/set-state-in-effect`) are tolerated; do not chase them in a test loop. | `eslint.config.mjs`. Fix (a)+(b) once, then lint must stay at 0 errors. |
-| T0.3 | `npm test` | 7 files / 92 tests pass, ~4 s | See per-file hints below. |
+| T0.2 | `npm run lint` | **0 errors, 10 warnings.** The two errors that used to be here are gone (`useJsonForBody` → `wantsJsonMode`, `let raw` → `const raw`). The 10 remaining warnings are the documented `react-hooks/set-state-in-effect` / read-localStorage-after-mount pattern in `eslint.config.mjs`; do not chase them in a test loop. | `eslint.config.mjs`. Never let the error count go above 0. |
+| T0.3 | `npm test` | 9 files / 126 tests pass, ~3 s | See per-file hints below. |
 | T0.4 | `npm run build` | "Generating static pages 7/7", routes list incl. `/api/analyze`, `/api/chat`, `/api/detect`, `/api/health`, `/api/cases*`, `/api/profile`, `/api/reminders`, `/login`, `/signup` | Build errors are almost always a TS error missed by T0.1 or a `"use client"` / server-only import mix-up (`lib/firebaseAdmin.ts` must never be imported from `components/`). |
 | T0.5 | `grep -rnE "gsk_[A-Za-z0-9]{20,}" . --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=.git --exclude=.env` | **no matches** (only `.env`, which is git-ignored, may hold the key) | A hard-coded Groq key in source/docs/logs. Remove it and rotate the key. Also never zip/share the folder with `.env`/`.env.local` inside. |
 | T0.6 | `git check-ignore .env .env.local` (`.gitignore` already has `.env*`) | both ignored | Add to `.gitignore`. **Never commit `.env`.** |
@@ -75,6 +77,11 @@ Wait until `curl http://localhost:3111/api/health` answers (any status) before t
 - `guidance.test.ts` fails → `lib/guidance.ts` / `data/guidance.json` (deadline clocks, escalation ladder).
 - `i18n.test.ts` fails → `lib/i18n.tsx`: a key exists in `en` but not in `hi`/`mr`.
 - `diag.test.ts` fails → `lib/diag.ts` (Probe/WorkResult contract).
+- `http.test.ts` fails → `lib/http.ts` (`readBody` / `ApiError.status` / `errorResponse`), or a route
+  that went back to hard-coding a status in its own `catch` instead of calling `errorResponse(e)`.
+- `keypool.test.ts` fails → `lib/keypool.ts` (env parsing, the round-robin cursor, the 401-vs-429
+  penalty boxes). Never "fix" it by putting key material into a trace - the file's last block
+  exists precisely to catch that, because these traces are returned to the browser.
 
 ---
 
@@ -87,6 +94,7 @@ Server from section 1 must be running on 3111.
 | T1.1 | `node scripts/probe_health.mjs` with `BASE=http://localhost:3111` | prints service table; `overall` may be NOT OK **only** because of Firebase (503) | `lib/health.ts` (`OPTIONAL` set decides what degrades vs breaks). Required services = everything except `firebaseAdmin.selfTest`, `db.selfTest`, `groq.vision`, `reminders.selfTest`. A failing *required* service names its module: open `lib/<module>.ts`. |
 | T1.2 | `node scripts/accept.mjs http://localhost:3111` | **33 passed, 0 failed** | The failing line names the area: health → `app/api/health/route.ts`; analyze → `app/api/analyze/route.ts`, `lib/analyze.ts`; auth boundaries → `lib/identity.ts`; image guards → `lib/schema.ts` `ImageBase64Schema`, `lib/analyze.ts`; app shell → `app/page.tsx`, `app/layout.tsx`, `public/sw.js`, `app/manifest.ts`. |
 | T1.3 | `node scripts/variants.mjs http://localhost:3111` | **21 passed, 0 failed** | See variation table below. |
+| T1.5 | `node scripts/rag_probe.mjs http://localhost:3111` | **19 passed, 0 failed** | Which sections retrieval actually picked, per language, for free (the fixture echoes them). A FAIL naming an Indic query means the category-listing fallback in `lib/rag.ts` stopped working - the usual cause is someone putting the category label back into the query string, or re-adding `category`/`note` to the MiniSearch `fields`, which makes every document in a category match its own label. |
 | T1.4 | `curl -s http://localhost:3111/api/health?full=1` | JSON with `corpus.sections >= 101`, `models.text` = `openai/gpt-oss-20b` (or your chosen model) | `data/laws/*.json` for corpus; `.env.local` for model. |
 
 ### T1 variation table (all with `is_working:true`; `variants.mjs` automates them)
@@ -101,7 +109,7 @@ Server from section 1 must be running on 3111.
 | unknown lang (`fr`) | 200 (falls back to en) | deliberate |
 | `<script>` inside problem | 200 | server stores text; **the UI must escape it** — see T2.9 |
 | Devanagari problem | 200 | |
-| malformed JSON body | **400 expected; currently 500 = KNOWN DEFECT** | Root cause: `readBody` in `lib/http.ts` correctly throws `ApiError(…, 400)`, but no route's `catch` looks at `ApiError.status` (each route does `failResponse(msg, [], false, 500)`). Fix: in the `catch` of every `app/api/**/route.ts`, use `e instanceof ApiError ? e.status : 500` (or centralise in `failResponse`). Fixing this is allowed; then change the script's `[400, 500]` to `400`. |
+| malformed JSON body | **400** (fixed: routes now call `errorResponse(e)`, which keeps `ApiError.status` instead of hard-coding 500; pinned by `tests/http.test.ts`) | |
 | chat: 0 msgs / 21 msgs / 6001-char msg | 400 each | `ChatRequestSchema` |
 | chat: 1 msg | 200, `checks` contain skipped completion | |
 | detect: 9 chars / 10 chars | 400 / 200 | |
@@ -222,6 +230,17 @@ Setup: restart the server **without** clearing the Firebase vars. Use a throw-aw
 
 ## 8. KNOWN, EXPECTED BEHAVIOUR (do not "fix" in a test loop)
 
+- **Groq keys are a pool, and that is deliberate.** `GROQ_API_KEY`, `GROQ_API_KEY2..20` and
+  `GROQ_API_KEYS` are merged, deduplicated and used round-robin, so two consecutive requests
+  never share a key; a `429`/`401` inside one request moves to the next key. Rationale: each key
+  has its own tokens-per-minute AND tokens-per-day allowance, and one key's daily cap is what
+  used to kill the app mid-afternoon. `/api/health` prints `keys : pool of N -> ready/cooling/rejected`.
+  A `401` key leaves rotation for the process - so "one key expired today" is not a code bug, and
+  `git grep gsk_` over the history proves the keys were never committed.
+- **Indic queries deliberately skip keyword ranking.** A Hindi/Marathi problem has no Latin words,
+  so `lib/rag.ts` lists that category's own sections instead of ranking on stray digits. Proven
+  by `npm run probe:rag` (T1.5). This is honest degradation, not a bug: the fix before this note
+  retrieved the Indian Electricity Act for a security-deposit dispute.
 - `/api/health` returns **503** whenever Firebase Admin is not configured. T1/T2 treat that as correct.
 - `vision` is empty: Groq hosts no vision model on this key. Photo input must degrade gracefully (T2.8).
 - Local quotas are raised (`GUEST_MAX_ANALYSES_PER_DAY=50` etc.). **Before production set 3 / 20 / 100** in the deploy environment, not in tests.
@@ -232,6 +251,12 @@ Setup: restart the server **without** clearing the Firebase vars. Use a throw-aw
 - Hindi/Marathi PDF uses the browser print dialog, not jsPDF.
 - Guest chats and cases live only in the browser (`localStorage`).
 - Live tests are slow under throttling: a single call can take minutes (65 s waits). Slow ≠ broken.
+- **Long-form UI copy in six tabs is English-only.** The dictionary is complete and enforced
+  (`i18n coverage 93+ keys × 3 locales`, and no raw `key.name` ever reaches the screen), but
+  headings/paragraphs hardcoded in JSX are not translated: measured Devanagari share of body
+  text in हिन्दी was RTI 26%, History 20%, Published cases 11%, Find help 0%, Detector 26%,
+  Sources 1%, Vitals 11% (Analyse was 86%). Translating those strings is an open content task,
+  not a test failure - add the strings as dictionary keys so the coverage test protects them.
 
 ## 9. QUICK DECISION TABLE
 

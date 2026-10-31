@@ -91,6 +91,20 @@ export function failResponse(error: string, checks: unknown[] = [], isWorking = 
   );
 }
 
+/**
+ * The one catch handler every route uses.
+ *
+ * `readBody` throws `ApiError(..., 400)` for a malformed JSON body and 413 for an
+ * oversized one. Hard-coding 500 in each route's catch threw that status away, so a
+ * client sending broken JSON was told *the server broke* - which is what the T1.3
+ * variants check caught. An ApiError keeps its own status; anything unexpected still
+ * goes through `classify()` so a known upstream condition cannot masquerade as a crash.
+ */
+export function errorResponse(e: unknown): Response {
+  if (e instanceof ApiError) return failResponse(e.message, [], false, e.status);
+  return failResponse(e instanceof Error ? e.message : String(e), [], false);
+}
+
 /** Zod issues -> one readable line for a non-technical user. */
 export function issueText(issues: readonly { path: readonly unknown[]; message: string }[]): string {
   return issues.map((i) => `${i.path.join(".") || "request"}: ${i.message}`).join("; ");

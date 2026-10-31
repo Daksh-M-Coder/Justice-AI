@@ -5,6 +5,7 @@
  * -> server-side precedents -> guidance enrichment.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { resetPool, status as poolStatus, syncPool } from "@/lib/keypool";
 import { analyzeCase, detectNotice, sanitizeContact, validateImage } from "@/lib/analyze";
 import { AnalyzeRequestSchema, DetectRequestSchema, type Analysis } from "@/lib/schema";
 import { FIXTURE_ANALYSIS } from "@/lib/prompts";
@@ -26,9 +27,10 @@ let answers: unknown[] = [];
 
 beforeEach(() => {
   answers = [];
+  (globalThis as unknown as { __authLog?: string[] }).__authLog = [];
   vi.stubGlobal(
     "fetch",
-    vi.fn(async (url: string, init?: { body?: string }) => {
+    vi.fn(async (url: string, init?: { body?: string; headers?: Record<string, string> }) => {
       const called = url.startsWith(GROQ);
       expect(called).toBe(true);
       if (url.endsWith("/models")) {
@@ -44,14 +46,23 @@ beforeEach(() => {
       }
       if (typeof answer === "object" && answer !== null && "__status" in (answer as object)) {
         const a = answer as { __status: number; __msg?: string };
+        logAuth(init);
         return groqReply(null, a.__status, a.__msg);
       }
       // record what the prompt looked like so we can assert on it
+      logAuth(init);
       (globalThis as unknown as { __lastBody?: string }).__lastBody = init?.body ?? "";
       return groqReply(answer);
     }),
   );
 });
+
+/** Which Authorization values did this test actually send? Used to prove key rotation. */
+function logAuth(init?: { headers?: Record<string, string> }) {
+  const g = globalThis as unknown as { __authLog?: string[] };
+  g.__authLog = g.__authLog ?? [];
+  g.__authLog.push(String(init?.headers?.Authorization ?? ""));
+}
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -151,7 +162,7 @@ describe("analyzeCase against a mocked model", () => {
     expect(r.ok).toBe(false);
     expect(r.error).toMatch(/rate-limited|try again/i);
     // the client retried the throttled call once instead of failing the user immediately
-    expect(r.checks.some((c) => /transient upstream limit, retried once/.test(c.name))).toBe(true);
+    expect(r.checks.some((c) => /waited and retried once|every key was limited/.test(c.name))).toBe(true);
     expect(r.checks.some((c) => /retried once/.test(c.name) && c.ok)).toBe(true);
   });
 
@@ -253,5 +264,132 @@ describe("guards around the model call", () => {
   it("refuses an empty detection request before spending anything", async () => {
     const parsed = DetectRequestSchema.safeParse({ text: "" });
     expect(parsed.success).toBe(false);
+  });
+
+  it("removes an instruction that tells the user to pay, and replaces it", async () => {
+    answers.push({
+      verdict: "LikelyFraud",
+      confidence: 0.9,
+      red_flags: ["demand for payment to a personal UPI ID"],
+      checks: [],
+      what_to_do: [
+        "Pay Rs 5000 to this UPI ID immediately to avoid the warrant",
+        "Transfer the amount to the account given in the notice",
+        "Call the officer on the number in the letter",
+      ],
+      law: "IT Act 66D",
+    });
+    const req = DetectRequestSchema.parse({ text: "URGENT pay Rs 5000 to this UPI ID or arrest warrant will be issued today" });
+    const r = await detectNotice(req);
+    const advice = r.data!.what_to_do;
+    expect(advice.some((line) => /pay rs 5000|transfer the amount/i.test(line))).toBe(false);
+    expect(advice[0]).toMatch(/do not pay anything/i);
+    // a real step is kept, not blanked
+    expect(advice.length).toBeGreaterThan(1);
+    expect(r.checks.some((c) => /removed \d+ instruction that told the user to pay/.test(c.name))).toBe(true);
+  });
+});
+
+describe("the self-test fixture is shaped like a real response (browser-testability)", () => {
+  it("carries citations, the applicant and the subject instead of an empty shell", async () => {
+    const req = AnalyzeRequestSchema.parse({
+      problem: "copies of the file notes on my passport application",
+      category: "RTI",
+      lang: "en",
+      city: "Pune",
+      applicant: { name: "Ramesh Yadav", address: "12 Model Street", city: "Pune", state: "Maharashtra", pin: "411038", phone: "9876543210" },
+    });
+    const r = await analyzeCase(req, { is_working: true });
+    expect(r.ok).toBe(true);
+    const letter = r.data!.rti!.letter;
+    // the old fixture was one static string: no name, no subject, no citations, so T2.10
+    // could not be verified at all and the chip row read "0 sections used"
+    expect(letter).toContain("Ramesh Yadav");
+    expect(letter).toContain("9876543210");
+    expect(letter).toContain("passport application");
+    expect(letter).not.toContain("[Full Name]");
+    expect(r.data!.citations.length).toBeGreaterThan(0);
+    for (const c of r.data!.citations) {
+      expect(c.source_url).toMatch(/^https?:\/\//);
+      expect(typeof c.verified).toBe("boolean");
+    }
+  });
+
+  it("fills the place and date in a complaint letter too", async () => {
+    const req = AnalyzeRequestSchema.parse({ problem: "washing machine failed within warranty and the shop refuses a refund", category: "Consumer", lang: "en", city: "Nagpur" });
+    const r = await analyzeCase(req, { is_working: true });
+    expect(r.data!.analysis!.letter).toContain("Nagpur");
+    expect(r.data!.analysis!.letter).not.toContain("[Place]");
+  });
+});
+
+describe("key-pool rotation under real failure shapes", () => {
+  const KA = "gsk_rotationtestkeyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  const KB = "gsk_rotationtestkeybbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+
+  function twoKeys() {
+    process.env.GROQ_API_KEY = KA;
+    process.env.GROQ_API_KEY2 = KB;
+    delete process.env.GROQ_API_KEYS;
+    resetPool();
+    syncPool();
+  }
+
+  afterEach(() => {
+    process.env.GROQ_API_KEY = "test-key-not-a-real-secret";
+    delete process.env.GROQ_API_KEY2;
+    resetPool();
+  });
+
+  it("a 429 on the first key continues on the second instead of failing the user", async () => {
+    twoKeys();
+    answers.push({ __status: 429, __msg: "Rate limit reached for model openai/gpt-oss-20b on tokens per minute. Please try again." });
+    answers.push(validAnalysis());
+    const req = AnalyzeRequestSchema.parse({ problem: "Defective washing machine, the shop in Pune refuses a refund", category: "Consumer", lang: "en" });
+    const r = await analyzeCase(req);
+    expect(r.ok, r.error ?? "should have succeeded on the second key").toBe(true);
+    const log = (globalThis as unknown as { __authLog?: string[] }).__authLog ?? [];
+    expect(log.length).toBeGreaterThanOrEqual(2);
+    expect(new Set(log).size).toBe(2); // two DIFFERENT Authorization headers were sent
+    expect(log.join(" | ")).toContain(KA.slice(0, 12));
+    expect(log.join(" | ")).toContain(KB.slice(0, 12));
+    expect(r.checks.some((c) => /key pool: used key 2 of 2/.test(c.name))).toBe(true);
+    expect(r.checks.some((c) => /2 key\(s\) tried/.test(c.detail))).toBe(true);
+  });
+
+  it("a 401 on the first key is not retried on it again, ever", async () => {
+    twoKeys();
+    answers.push({ __status: 401, __msg: "invalid api key" });
+    answers.push(validAnalysis());
+    const req = AnalyzeRequestSchema.parse({ problem: "Landlord refuses to return the security deposit in Pune", category: "Tenant / Housing", lang: "en" });
+    const r = await analyzeCase(req);
+    expect(r.ok, r.error ?? "second key should answer").toBe(true);
+    const after = poolStatus();
+    expect(after.rejected).toBe(1);
+    expect(after.available).toBe(1);
+  });
+
+  it("does not walk the pool for a payload error - it stops and reports it", async () => {
+    twoKeys();
+    answers.push({ __status: 413, __msg: "Request too large for model openai/gpt-oss-20b on tokens per minute" });
+    const req = AnalyzeRequestSchema.parse({ problem: "Electricity connection has been pending for months", category: "General", lang: "en" });
+    const r = await analyzeCase(req);
+    expect(r.ok).toBe(false);
+    expect(r.error).toMatch(/too large/i);
+    // one attempt only: rotating four keys over a 413 would burn the pool for nothing
+    const log = (globalThis as unknown as { __authLog?: string[] }).__authLog ?? [];
+    expect(log.length).toBe(1);
+  });
+
+  it("names the pool in the failure text when every key is spent", async () => {
+    twoKeys();
+    // two attempts inside the request budget, plus the one patience retry after the wait
+    answers.push({ __status: 429, __msg: "on tokens per minute" });
+    answers.push({ __status: 429, __msg: "on tokens per minute" });
+    answers.push({ __status: 429, __msg: "on tokens per minute" });
+    const req = AnalyzeRequestSchema.parse({ problem: "Bank refused to reverse an unauthorised UPI debit", category: "Banking / Fraud", lang: "en" });
+    const r = await analyzeCase(req);
+    expect(r.ok).toBe(false);
+    expect(r.error).toMatch(/all 2 groq keys/i);
   });
 });

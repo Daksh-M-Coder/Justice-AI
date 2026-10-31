@@ -193,7 +193,10 @@ export async function analyzeCase(req: AnalyzeRequest, opts: Opts = {}): Promise
   const img = validateImage(req.imageBase64, opts);
   if (!img.ok && req.imageBase64) return p.done(null, img.error ?? "image rejected");
   const category = (req.category || "General") as Category;
-  const retrieved = await retrieve(req.problem + " " + category, category, opts);
+  // the category is passed as a SCOPE, never glued onto the query: adding "Tenant / Housing" to
+  // the text made every document in that category match the query on its own label, and it also
+  // defeated the "does this query contain any Latin words?" test for Hindi and Marathi problems
+  const retrieved = await retrieve(req.problem, category, opts);
   const sections = p.attach(retrieved, "retrieve")?.sections ?? [];
   p.check(`context has ${sections.length} section(s)`, sections.length > 0 ? sections.map((s) => s.section).join(", ").slice(0, 120) : "empty context - the model will be told to say it is unsure");
 
@@ -360,6 +363,40 @@ function rtiUserBody(req: AnalyzeRequest, category: Category, sections: Section[
   });
 }
 
+/**
+ * A self-test response must be indistinguishable from a real one IN SHAPE, otherwise the UI
+ * cannot be tested against it. The old fixture was one static string carrying no citations and
+ * none of the applicant details, so the chip row read "0 sections used", the RTI letter had no
+ * name in it, and the browser tier could not check any of it.
+ */
+function fixtureCitations(sections: Section[]): EnrichedCitation[] {
+  return sections.slice(0, 3).map((s) => ({
+    act: s.act,
+    section: s.section,
+    title: s.title,
+    verified: s.verified,
+    source_url: s.source_url,
+    note: s.note,
+    act_level: !/[0-9]/.test(s.section),
+  }));
+}
+
+/** Fill the template's placeholders from what the caller actually sent. */
+function fillPlaceholders(letter: string, req: AnalyzeRequest, isRti: boolean): string {
+  const a = req.applicant;
+  const place = req.city || a?.city || "[Place]";
+  let out = letter.replace(/\[Date\]/g, new Date().toLocaleDateString("en-IN")).replace(/\[Place\]/g, place);
+  if (a?.name) out = out.replace(/\[(?:Full Name|Name)\]/, a.name);
+  if (a?.phone) out = out.replace(/\[Phone\]/, a.phone);
+  if (isRti) {
+    const addr = [a?.address, [a?.city, a?.state].filter(Boolean).join(", "), a?.pin].filter((x) => x && String(x).trim()).join("\n");
+    if (addr) out = out.replace(/\[Address\]/, addr);
+    const subject = String(req.problem ?? "").trim().slice(0, 200);
+    if (subject) out = out.replace(/- self-test fixture\./, "- " + subject + ".");
+  }
+  return out;
+}
+
 function fixtureResponse(isRti: boolean, sections: Section[], req: AnalyzeRequest, warnings: string[], startedAt: number, tag: string): AnalyzeResponse {
   const precSet = { cases: [], empty: true, pending: 0, label: "Similar published cases (self-test)" };
   const cat = (req.category || "General") as Category;
@@ -367,9 +404,9 @@ function fixtureResponse(isRti: boolean, sections: Section[], req: AnalyzeReques
   const deadlines = computeDeadlines(cat, startedAt, { is_working: true }).data ?? [];
   return {
     kind: isRti ? "rti" : "analysis",
-    analysis: isRti ? null : { ...FIXTURE_ANALYSIS, citations: [], precedents: [] },
-    rti: isRti ? FIXTURE_RTI : null,
-    citations: [],
+    analysis: isRti ? null : { ...FIXTURE_ANALYSIS, letter: fillPlaceholders(FIXTURE_ANALYSIS.letter, req, false), citations: fixtureCitations(sections).map((c) => ({ act: c.act, section: c.section, title: c.title })), precedents: [] },
+    rti: isRti ? { ...FIXTURE_RTI, letter: fillPlaceholders(FIXTURE_RTI.letter, req, true), citations: fixtureCitations(sections).map((c) => ({ act: c.act, section: c.section, title: c.title })) } : null,
+    citations: fixtureCitations(sections),
     strippedCitations: [],
     precedents: precSet,
     guidance: { deadlines, checklist: guidanceFor(cat).checklist, escalation: guidanceFor(cat).escalation, review: LETTER_REVIEW_CHECKLIST },
@@ -406,10 +443,46 @@ export async function detectNotice(req: DetectRequest, opts: Opts = {}): Promise
     opts,
   );
   const d = p.attach(out, "chatJson#detect");
-  if (!d) return opts.is_working ? p.fixture({ verdict: "Suspicious", confidence: 0, red_flags: ["self-test fixture"], checks: [], what_to_do: ["Verify at the counter of the issuing office"], law: "" } as unknown as Detection) : p.done(null, out.error ?? "detection failed");
+  if (!d)
+    return opts.is_working
+      ? p.fixture({
+          verdict: "Suspicious",
+          confidence: 0.5,
+          red_flags: ["self-test fixture: no completion was issued, so nothing was read"],
+          checks: [{ claim: "fixture", status: "unknown", note: "self-test mode" }],
+          what_to_do: [SAFE_FIRST_STEP, "Verify at the counter of the issuing office"],
+          law: "",
+        } as unknown as Detection)
+      : p.done(null, out.error ?? "detection failed");
   p.check("verdict is one of the three allowed labels", true, d.verdict);
-  p.check("never tells the user to pay", !/pay now|click the link and pay/i.test(JSON.stringify(d)), "checked");
-  return p.done(d);
+  const guarded = p.attach(stripPaymentInstructions(d, opts), "stripPaymentInstructions");
+  return p.done(guarded ?? d);
+}
+
+/**
+ * Advice that tells a person to pay because of a notice they just asked us about. The old
+ * guard matched `/pay now|click the link and pay/` only, so the very sentence this feature
+ * exists to catch - "Pay Rs 5000 to this UPI ID" - slipped past it, and it never acted on the
+ * text anyway, it just recorded a note. This one removes the line and replaces it.
+ */
+const PAY_ADVICE =
+  /\b(pay|deposit|transfer|send|remit)\b[^.\n]{0,70}\b(upi|qr|account|wallet|link|amount|money|rs\.?\s?\d|fine|due|demand|fee|balaji|token|advance)|\bpay (the |this )?(demanded|stated|said|mentioned|required) (amount|money|fine|sum)\b/i;
+
+const SAFE_FIRST_STEP = "Do not pay anything because of this message. Do not click any link in it.";
+
+function stripPaymentInstructions(d: Detection, opts: Opts = {}): WorkResult<Detection> {
+  const p = track<Detection>("analyze.stripPaymentInstructions", opts);
+  const advice = Array.isArray(d.what_to_do) ? d.what_to_do : [];
+  const kept = advice.filter((line) => !PAY_ADVICE.test(String(line)));
+  const dropped = advice.length - kept.length;
+  if (dropped > 0) {
+    p.check(`removed ${dropped} instruction that told the user to pay`, true, "replaced with a do-not-pay step");
+    return p.done({ ...d, what_to_do: [SAFE_FIRST_STEP, ...kept] });
+  }
+  // also inspect the free-text fields: a red flag like "you must pay within 2 hours" is a
+  // description of the scam, not advice, so it is left alone - but say so in the trace
+  p.check("no payment instruction in the advice list", true, `${advice.length} step(s) checked`);
+  return p.done({ ...d, what_to_do: kept.length ? kept : [SAFE_FIRST_STEP, "Verify at the counter of the issuing office or on the department's own portal."] });
 }
 
 export async function selfTest(opts: Opts = {}): Promise<WorkResult<AnalyzeResponse>> {

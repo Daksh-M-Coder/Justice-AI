@@ -25,8 +25,19 @@ const KEY = "justiceai_rti_filings";
 
 const DAY = 86_400_000;
 
+/** English fallbacks for the applicant fields. The real labels come from the locale
+ *  dictionary (field.*), so a missing translation degrades to English, never to "pin". */
+const FIELD_LABELS: Record<string, string> = {
+  name: "Full name",
+  address: "Address",
+  city: "City",
+  state: "State",
+  pin: "PIN code",
+  phone: "Phone",
+};
+
 export function RtiTab() {
-  const { t, lang } = useI18n();
+  const { t, tOr, lang } = useI18n();
   const { working } = useWorkMode();
   const { user } = useAuth();
   const [subject, setSubject] = useState("");
@@ -134,7 +145,9 @@ export function RtiTab() {
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {(Object.keys(profile) as (keyof typeof profile)[]).map((k) => (
               <label key={k} className="block">
-                <span className="mb-1 block text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">{k}</span>
+                {/* the object key was rendered straight as the label, so every language showed
+                    "name" / "address" / "pin" - now a translated label with a safe fallback */}
+                <span className="mb-1 block text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">{tOr(`field.${k}`, FIELD_LABELS[k] ?? k)}</span>
                 <input
                   className="field"
                   value={profile[k]}
@@ -148,8 +161,8 @@ export function RtiTab() {
         </details>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Btn onClick={generate} disabled={busy || working}>
-            {busy ? t("btn.analysing") : working ? "turn off is_working to draft" : t("btn.rti")}
+          <Btn onClick={generate} disabled={busy}>
+            {busy ? t("btn.analysing") : working ? `${t("btn.rti")} · self-test` : t("btn.rti")}
           </Btn>
           {error ? <p className="text-[0.8rem] font-semibold text-[var(--color-danger)]">{error}</p> : null}
         </div>

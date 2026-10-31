@@ -10,6 +10,7 @@ import { selfTest as analyzeSelfTest } from "./analyze";
 import { selfTest as chatSelfTest } from "./chat";
 import { selfTest as dbSelfTest } from "./db";
 import { config as groqConfig, listModels, resolveVisionModel } from "./groq";
+import { selfTest as keyPoolSelfTest, status as keyPoolStatus } from "./keypool";
 import { selfTest as firebaseSelfTest } from "./firebaseAdmin";
 import { corpusStats, selfTest as ragSelfTest } from "./rag";
 import { selfTest as guidanceSelfTest } from "./guidance";
@@ -37,6 +38,7 @@ export interface HealthReport {
   services: ServiceReport[];
   corpus: ReturnType<typeof corpusStats>;
   models: { text: string; fast: string; vision: string | null; active: string[]; note: string };
+  keys: { total: number; available: number; cooling: number; rejected: number; slots: { label: string; state: string; forHowLongMs?: number }[] };
   quota: { guestPerDay: number; userPerDay: number; userChatPerDay: number };
 }
 
@@ -56,6 +58,7 @@ export async function runSelfTests(opts: Opts = {}): Promise<HealthReport> {
 
   const services = await Promise.all([
     one("groq.config", async () => groqConfig(w)),
+    one("keypool.selfTest", async () => keyPoolSelfTest(w)),
     one("groq.listModels", () => listModels(w)),
     one("groq.vision", () => resolveVisionModel(w)),
     one("rag.selfTest", () => ragSelfTest(w)),
@@ -88,12 +91,14 @@ export async function runSelfTests(opts: Opts = {}): Promise<HealthReport> {
     services,
     corpus: corpusStats(),
     models: {
-      text: cfg?.textModel ?? "llama-3.3-70b-versatile",
-      fast: cfg?.fastModel ?? "llama-3.1-8b-instant",
+      text: cfg?.textModel ?? "openai/gpt-oss-20b",
+      fast: cfg?.fastModel ?? "openai/gpt-oss-20b",
       vision: visionData ?? cfg?.visionModel ?? null,
       active: modelsData?.ids ?? [],
       note: cfgProbe.ok ? "Groq reachable" : cfgProbe.error ?? "Groq not configured",
     },
+    // pool state, never pool contents: this object is served to the browser
+    keys: keyPoolStatus(),
     quota: {
       guestPerDay: Number(process.env.GUEST_MAX_ANALYSES_PER_DAY ?? 3),
       userPerDay: Number(process.env.USER_MAX_ANALYSES_PER_DAY ?? 20),

@@ -26,6 +26,14 @@ export function HistoryTab() {
   const [rows, setRows] = useState<CaseListItem[]>([]);
   const [open, setOpen] = useState<CaseListItem | null>(null);
   const [note, setNote] = useState<string | null>(null);
+
+  // a stale "Status saved." line hanging in the header (through a language switch and a
+  // reload) reads like the page is broken, so any note fades on its own
+  useEffect(() => {
+    if (!note) return;
+    const id = setTimeout(() => setNote(null), 7000);
+    return () => clearTimeout(id);
+  }, [note]);
   const [checks, setChecks] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -71,23 +79,27 @@ export function HistoryTab() {
     if (row.guest || !user) {
       const existing = (listLocal({ is_working: true }).data ?? []).find((c) => c.id === row.id);
       if (existing) saveLocal({ ...existing, status, updatedAt: Date.now() }, { is_working: working });
-      setOpen(null);
-      setNote("Status saved on this device.");
+      // deliberately NOT setOpen(null): closing the result the person is reading, every time
+      // they tick a status, lost their place in the letter and the chat
+      setNote(t("history.note.statusLocal"));
       void load();
       return;
     }
     const r = await casesApi.patch(row.id, { status }, { is_working: working });
-    setNote(r.ok ? `Status set to ${status}.` : r.error ?? "Could not update the status.");
+    setNote(r.ok ? t("history.note.statusSynced") : r.error ?? "Could not update the status.");
     void load();
   };
 
   const remove = async (row: CaseListItem) => {
+    // deleting a case deletes the letter, the clocks and the chat history for it
+    if (!window.confirm(t("history.confirmDelete"))) return;
     if (row.guest || !user) {
       removeLocal(row.id, { is_working: working });
     } else {
       await casesApi.remove(row.id, { is_working: working });
     }
     setOpen(null);
+    setNote(t("history.note.deleted"));
     void load();
   };
 
@@ -122,9 +134,13 @@ export function HistoryTab() {
         {rows.map((r) => {
           const res = r.result;
           const nextDeadline = res?.guidance?.deadlines?.filter((d) => !d.lapsed)[0];
+          // min-w-0 is what stops the whole page scrolling sideways: a grid item's automatic
+          // minimum is its content's min-content width, and the truncated problem line below
+          // is one long unbreakable line (white-space:nowrap) that measured 1015px and pushed
+          // the 375px layout out to 1203px.
           return (
-            <Card key={r.id} className="!p-4">
-              <div className="flex flex-wrap items-start gap-3">
+            <Card key={r.id} className="!p-4 min-w-0">
+              <div className="flex min-w-0 flex-wrap items-start gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{r.problem}</p>
                   <p className="mt-1 flex flex-wrap items-center gap-2 text-[0.76rem] text-[var(--color-muted)]">

@@ -5,7 +5,7 @@
  */
 import { continueCase } from "@/lib/chat";
 import { appendMessage, listMessages } from "@/lib/db";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { identify } from "@/lib/identity";
 import { consume } from "@/lib/ratelimit";
 import { ChatRequestSchema } from "@/lib/schema";
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
     return respond(result, 200, { persisted, caseId: parsed.data.caseId ?? null, checks });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }
 

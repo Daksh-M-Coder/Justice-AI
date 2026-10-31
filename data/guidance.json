@@ -24,7 +24,7 @@
       "escalation": [
         { "step": 1, "where": "Public Information Officer of the office that holds the record", "portal": "https://rtionline.gov.in/", "note": "Central bodies can be filed online; state bodies usually need the state portal or paper." },
         { "step": 2, "where": "First Appellate Authority (officer senior to the PIO)", "portal": "", "note": "No fee. Within 30 days." },
-        { "step": 3, "where": "Central Information Commission", "portal": "https://dic.gov.in/", "note": "Second appeal within 90 days, free; penalty and disciplinary action can be sought." },
+        { "step": 3, "where": "Central Information Commission", "portal": "https://cic.gov.in/", "note": "Second appeal within 90 days, free; penalty and disciplinary action can be sought." },
         { "step": 4, "where": "State Information Commission (for state subjects)", "portal": "", "note": "Name of the state commission varies; search '<State> State Information Commission'." },
         { "step": 5, "where": "High Court writ (Article 226) where the Commission itself is non-functional or the order is being ignored", "portal": "https://ecourts.gov.in/", "note": "Get a lawyer before this step." }
       ]

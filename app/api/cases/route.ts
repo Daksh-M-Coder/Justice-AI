@@ -4,7 +4,7 @@
  * and POST it to /api/cases/migrate.
  */
 import { listCases, saveCase } from "@/lib/db";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 import { CaseStatusSchema } from "@/lib/schema";
 
@@ -45,6 +45,6 @@ export async function POST(req: Request) {
     const r = await saveCase(who.data.uid, rec, opts);
     return respond(r, r.ok ? 201 : undefined, { case: rec });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

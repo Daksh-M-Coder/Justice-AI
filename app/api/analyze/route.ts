@@ -9,7 +9,7 @@
 import { analyzeCase } from "@/lib/analyze";
 import { saveArtifact, saveCase } from "@/lib/db";
 import { track } from "@/lib/diag";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { identify } from "@/lib/identity";
 import { consume } from "@/lib/ratelimit";
 import { AnalyzeRequestSchema } from "@/lib/schema";
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
       quota: quota.data && { remaining: quota.data.remaining, limit: quota.data.limit, resetsInHours: Math.ceil(quota.data.resetInMs / 3_600_000) },
     });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }
 

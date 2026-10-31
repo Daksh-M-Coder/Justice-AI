@@ -7,6 +7,7 @@
  */
 import { z } from "zod";
 import { envCheck, track, type Opts, type WorkResult } from "./diag";
+import { acquire, attemptBudget, peek, reportFailure, reportSuccess, status as poolStatus, syncPool } from "./keypool";
 import { extractJson, isParseError, parseWith } from "./schema";
 
 const GROQ_URL = "https://api.groq.com/openai/v1";
@@ -19,6 +20,9 @@ export interface ChatTurn {
 
 export interface GroqConfig {
   apiKey: string;
+  /** pool size and how many are currently usable - never the secrets */
+  keyTotal: number;
+  keyAvailable: number;
   textModel: string;
   fastModel: string;
   visionModel: string;
@@ -28,7 +32,13 @@ export interface GroqConfig {
 
 export function config(opts: Opts = {}): WorkResult<GroqConfig> {
   const p = track<GroqConfig>("groq.config", opts);
-  const apiKey = envCheck(p, "GROQ_API_KEY");
+  // Pool first: GROQ_API_KEY is one valid shape, but GROQ_API_KEYS and the numbered
+  // GROQ_API_KEY2..20 style are what this deployment uses, and requiring the single variable
+  // by name would call a healthy 4-key setup "not configured".
+  const pool = syncPool();
+  const st = poolStatus();
+  p.check(`Groq key pool`, pool > 0, pool ? `${st.available}/${st.total} ready, ${st.cooling} cooling, ${st.rejected} rejected - rotating per request` : "no usable key: set GROQ_API_KEY (and GROQ_API_KEY2, ... or GROQ_API_KEYS)");
+  if (pool > 1) p.check(`scaling note: ${pool} independent Groq allowances`, true, "each key carries its own tokens-per-minute and tokens-per-day budget");
   // Defaults are what this account actually serves. Groq no longer hosts any Llama model on
   // this key (verified live: GET /models returns gpt-oss-20b/120b, qwen3.8-27b, whisper,
   // prompt-guard, orpheus, allam) and asking for llama-* returns HTTP 404 "does not exist or
@@ -37,9 +47,14 @@ export function config(opts: Opts = {}): WorkResult<GroqConfig> {
   const fastModel = envCheck(p, "GROQ_FAST_MODEL", false) ?? "openai/gpt-oss-20b";
   const visionModel = (process.env.GROQ_VISION_MODEL ?? "").trim();
   p.check(`vision model configured`, visionModel ? visionModel : "none set - image input will degrade gracefully (Groq currently hosts no vision model)");
-  if (!apiKey) return p.done(null, "GROQ_API_KEY is not configured on the server");
+  if (!pool) return p.done(null, "No Groq API key is configured on the server (set GROQ_API_KEY, GROQ_API_KEY2..., or GROQ_API_KEYS)");
+  const first = peek();
   return p.done({
-    apiKey,
+    // a representative key for callers that only need "is it configured"; the real send path
+    // re-acquires per attempt so rotation is never short-circuited by this value
+    apiKey: first?.value ?? "",
+    keyTotal: st.total,
+    keyAvailable: st.available,
     textModel,
     fastModel,
     visionModel,
@@ -67,11 +82,32 @@ export async function listModels(opts: Opts = {}): Promise<WorkResult<ModelList>
   }
   if (!cfg.data) return p.done(null, cfg.error ?? "Groq not configured");
   try {
-    const res = await fetchWithTimeout(`${GROQ_URL}/models`, {
-      headers: { Authorization: `Bearer ${cfg.data.apiKey}`, "Content-Type": "application/json" },
-      timeoutMs: 10_000,
-    });
-    p.check(`GET /models returned ${res.status}`, res.ok);
+    // /models is free, so it may rotate too: if one key is expired the pool still answers
+    let res: Response | null = null;
+    let lastError = "";
+    let usedKey = 0;
+    const budget = Math.max(1, attemptBudget());
+    for (let i = 0; i < budget; i += 1) {
+      const acquired = acquire();
+      if (!acquired) return p.done(null, "no Groq key configured");
+      usedKey = acquired.slot.index;
+      res = await fetchWithTimeout(`${GROQ_URL}/models`, {
+        headers: { Authorization: `Bearer ${acquired.value}`, "Content-Type": "application/json" },
+        timeoutMs: 10_000,
+      });
+      if (res.ok) {
+        reportSuccess(acquired.slot.fingerprint);
+        break;
+      }
+      lastError = `HTTP ${res.status}`;
+      if (res.status === 401 || res.status === 403 || res.status === 429) {
+        reportFailure(acquired.slot.fingerprint, res.status, await res.clone().text().catch(() => ""));
+        continue;
+      }
+      break;
+    }
+    if (!res) return p.done(null, "no attempt made");
+    p.check(`GET /models returned ${res.status} (key ${usedKey} of ${poolStatus().total})`, res.ok, lastError);
     if (!res.ok) return p.done({ ids: [], fetchedAt: Date.now(), error: `HTTP ${res.status}` }, `model list unavailable (HTTP ${res.status})`);
     const body = (await res.json()) as { data?: { id: string }[] };
     const ids = (body.data ?? []).map((m) => m.id);
@@ -204,16 +240,13 @@ export async function chat(req: ChatRequest, opts: Opts = {}): Promise<WorkResul
   p.check(`request payload within limit (${Math.round(payload.length / 1024)} KB)`, payload.length < 6_000_000);
 
   try {
-    const sent = await postCompletions(
-      `${GROQ_URL}/chat/completions`,
-      { "Content-Type": "application/json", Authorization: `Bearer ${cfg.data.apiKey}` },
-      payload,
-      cfg.data.timeoutMs,
-      opts.signal,
+    const sent = await postCompletions({ url: `${GROQ_URL}/chat/completions`, body: payload, timeoutMs: cfg.data.timeoutMs, signal: opts.signal });
+    p.check(
+      `key pool: used key ${sent.keyIndex} of ${sent.keyTotal}`,
+      true,
+      sent.keyTries > 1 ? `${sent.keyTries} key(s) tried - the earlier one was limited or expired` : "first key answered",
     );
-    if (sent.retried) {
-      p.check("transient upstream limit, retried once", true, `waited ${sent.waitedMs}ms, second attempt HTTP ${sent.res.status}`);
-    }
+    if (sent.waitedMs) p.check("every key was limited; waited and retried once", true, `slept ${sent.waitedMs}ms`);
     let res = sent.res;
     let raw = sent.raw;
 
@@ -227,13 +260,7 @@ export async function chat(req: ChatRequest, opts: Opts = {}): Promise<WorkResul
       if (emptyOrCut && requested < 8000) {
         maxTokens = Math.min(8000, Math.round(requested * 2));
         p.check("answer came back empty or cut off, retrying with more room", true, `${requested} -> ${maxTokens} completion tokens (finish_reason=${first?.finish_reason ?? "n/a"})`);
-        const bigger = await postCompletions(
-          `${GROQ_URL}/chat/completions`,
-          { "Content-Type": "application/json", Authorization: `Bearer ${cfg.data.apiKey}` },
-          payloadOf(useJson, maxTokens),
-          cfg.data.timeoutMs,
-          opts.signal,
-        );
+        const bigger = await postCompletions({ url: `${GROQ_URL}/chat/completions`, body: payloadOf(useJson, maxTokens), timeoutMs: cfg.data.timeoutMs, signal: opts.signal });
         res = bigger.res;
         raw = bigger.raw;
       }
@@ -250,13 +277,7 @@ export async function chat(req: ChatRequest, opts: Opts = {}): Promise<WorkResul
       p.check("model rejected response_format; retried as plain JSON", true, `${model}: ${raw.slice(0, 120)}`);
       useJson = false;
       payload = payloadOf(false, maxTokens);
-      const again = await postCompletions(
-        `${GROQ_URL}/chat/completions`,
-        { "Content-Type": "application/json", Authorization: `Bearer ${cfg.data.apiKey}` },
-        payload,
-        cfg.data.timeoutMs,
-        opts.signal,
-      );
+      const again = await postCompletions({ url: `${GROQ_URL}/chat/completions`, body: payload, timeoutMs: cfg.data.timeoutMs, signal: opts.signal });
       res = again.res;
       raw = again.raw;
     }
@@ -285,26 +306,132 @@ export async function chat(req: ChatRequest, opts: Opts = {}): Promise<WorkResul
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-/**
- * One bounded retry on a transient upstream problem (429 / 5xx / aborted by timeout).
- * A rejected request does not consume tokens, so retrying costs nothing except latency -
- * which is what makes a rate-limited shared key feel reliable to the person waiting.
- */
-async function postCompletions(url: string, headers: Record<string, string>, body: string, timeoutMs: number, signal?: AbortSignal) {
-  let res = await fetchWithTimeout(url, { headers, body, timeoutMs, signal });
-  const raw = await res.text();
-  const retryable = res.status === 429 || res.status >= 500;
-  if (!retryable) return { res, raw, retried: false, waitedMs: 0 };
+export interface SentResult {
+  res: Response;
+  raw: string;
+  /** which pool slot answered (or the last one tried), 1-based, for the trace */
+  keyIndex: number;
+  keyTotal: number;
+  /** how many distinct keys this one request went through */
+  keyTries: number;
+  rotated: boolean;
+  waitedMs: number;
+  /** why we stopped: the status that was not a key problem, or "budget" */
+  stop: "ok" | "not-a-key-problem" | "budget" | "no-keys";
+}
 
-  const retryAfter = Number(res.headers.get("retry-after") ?? 0);
-  // GROQ_RETRY_WAIT_MS lets a operator shorten this on platforms with a hard function
-  // timeout (and lets the test suite not sleep 6s); the upstream Retry-After wins if larger.
-  const configured = Number(process.env.GROQ_RETRY_WAIT_MS ?? 6_000) || 6_000;
-  const waitedMs = Math.min(12_000, Math.max(1_000, Math.max(retryAfter * 1000, configured)));
-  if (signal?.aborted) return { res, raw, retried: false, waitedMs: 0 };
-  await sleep(waitedMs);
-  res = await fetchWithTimeout(url, { headers, body, timeoutMs, signal });
-  return { res, raw: await res.text(), retried: true, waitedMs };
+/**
+ * A 401/403 or a 429 is a statement about ONE key. A 400/404/413/422 is a statement about the
+ * payload, so trying four keys with the same broken body only wastes four round trips - the
+ * caller is told to stop rotating in that case.
+ */
+function isKeyProblem(status: number): boolean {
+  return status === 401 || status === 403 || status === 429 || status >= 500;
+}
+
+/**
+ * Send one completion, rotating across the Groq key pool.
+ *
+ * Rotation is the whole point: `openai/gpt-oss-20b` is metered per key on tokens-per-minute AND
+ * tokens-per-day, and a single spent key used to fail the user no matter how long they waited
+ * ("... on tokens per day"). With a pool, a 429 on key 2 quietly continues on key 3.
+ *
+ * If every key in the budget is limited and none of them will free up, we fall back to the old
+ * behaviour: honour Retry-After once and try the key that cools down soonest.
+ */
+async function postCompletions(args: { url: string; body: string; timeoutMs: number; signal?: AbortSignal }): Promise<SentResult> {
+  const budget = Math.max(1, attemptBudget());
+  const status0 = poolStatus();
+  let lastRes: Response | null = null;
+  let lastRaw = "";
+  let lastSlot: KeySlotLike = { index: 0, total: status0.total };
+  let tries = 0;
+  let rotated = false;
+  let waitedMs = 0;
+
+  for (let attempt = 0; attempt < budget; attempt += 1) {
+    const acquired = acquire();
+    if (!acquired) {
+      return {
+        res: new Response(JSON.stringify({ error: { message: "no Groq API key is configured on this server" } }), { status: 503, headers: { "content-type": "application/json" } }),
+        raw: "",
+        keyIndex: 0,
+        keyTotal: status0.total,
+        keyTries: 0,
+        rotated,
+        waitedMs,
+        stop: "no-keys",
+      };
+    }
+    lastSlot = acquired.slot;
+    tries += 1;
+    const res = await fetchWithTimeout(args.url, {
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${acquired.value}` },
+      body: args.body,
+      timeoutMs: args.timeoutMs,
+      signal: args.signal,
+    });
+    const raw = await res.text();
+    lastRes = res;
+    lastRaw = raw;
+
+    if (res.ok) {
+      reportSuccess(acquired.slot.fingerprint);
+      return { res, raw, keyIndex: acquired.slot.index, keyTotal: acquired.slot.total, keyTries: tries, rotated, waitedMs, stop: "ok" };
+    }
+
+    if (!isKeyProblem(res.status)) {
+      // the body or the model name is wrong; another key would say exactly the same thing
+      return { res, raw, keyIndex: acquired.slot.index, keyTotal: acquired.slot.total, keyTries: tries, rotated, waitedMs, stop: "not-a-key-problem" };
+    }
+
+    reportFailure(acquired.slot.fingerprint, res.status, raw);
+    if (args.signal?.aborted) return { res, raw, keyIndex: acquired.slot.index, keyTotal: acquired.slot.total, keyTries: tries, rotated, waitedMs, stop: "budget" };
+    if (attempt + 1 < budget) {
+      rotated = true;
+      continue; // next key, no sleep: that is the cheap win
+    }
+  }
+
+  // Out of keys to try. One last patience attempt on the soonest-to-clear key, but ONLY for a
+  // rate limit: an expired key is not coming back inside this request.
+  const limited = lastRes && (lastRes.status === 429 || lastRes.status >= 500);
+  if (lastRes && limited && !args.signal?.aborted && poolStatus().available === 0) {
+    const retryAfter = Number(lastRes.headers.get("retry-after") ?? 0);
+    const configured = Number(process.env.GROQ_RETRY_WAIT_MS ?? 6_000) || 6_000;
+    waitedMs = Math.min(12_000, Math.max(1_000, Math.max(retryAfter * 1000, configured)));
+    await sleep(waitedMs);
+    const again = acquire();
+    if (again) {
+      tries += 1;
+      lastSlot = again.slot;
+      const res = await fetchWithTimeout(args.url, {
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${again.value}` },
+        body: args.body,
+        timeoutMs: args.timeoutMs,
+        signal: args.signal,
+      });
+      const raw = await res.text();
+      if (res.ok) reportSuccess(again.slot.fingerprint);
+      return { res, raw, keyIndex: again.slot.index, keyTotal: again.slot.total, keyTries: tries, rotated: true, waitedMs, stop: "budget" };
+    }
+  }
+
+  return {
+    res: lastRes ?? new Response('{"error":{"message":"no attempt made"}}', { status: 500 }),
+    raw: lastRaw,
+    keyIndex: lastSlot.index,
+    keyTotal: lastSlot.total,
+    keyTries: tries,
+    rotated,
+    waitedMs,
+    stop: "budget",
+  };
+}
+
+interface KeySlotLike {
+  index: number;
+  total: number;
 }
 
 function friendlyUpstream(status: number, raw: string): string {
@@ -315,9 +442,18 @@ function friendlyUpstream(status: number, raw: string): string {
     detail = raw.slice(0, 200);
   }
 
-  if (status === 401) return "Groq rejected the API key. Rotate and re-set GROQ_API_KEY.";
+  const st = poolStatus();
+  if (status === 401 || status === 403) {
+    return st.total > 1
+      ? `Every Groq key in the pool was rejected (${st.rejected} of ${st.total} marked dead). They expire today - add fresh ones as GROQ_API_KEY2, GROQ_API_KEY3 ... `
+      : "Groq rejected the only API key configured. Add a fresh key (GROQ_API_KEY, or GROQ_API_KEY2 for a second one).";
+  }
+  if (status === 429) {
+    return st.total > 1
+      ? `All ${st.total} Groq keys are at their limit right now (${detail.slice(0, 120) || "rate or daily token limit"}). Try again shortly - the pool spreads the load but today's allowances still run out.`
+      : `This Groq account is rate-limited (${detail.slice(0, 140) || "too many requests or tokens per minute"}). Wait a minute and try again - or add GROQ_API_KEY2 for a second allowance.`;
+  }
   if (status === 413) return "Your message plus attachments are too large for one request. Trim the text or the photo.";
-  if (status === 429) return `This Groq account is rate-limited (${detail.slice(0, 140) || "too many requests or tokens per minute"}). Wait a minute and try again - or raise the plan limits / switch model.`;
   if (status >= 500) return `Groq is having trouble upstream (HTTP ${status})${detail ? `: ${detail.slice(0, 120)}` : ""}. Try again shortly.`;
 
   return `Upstream error (HTTP ${status})${detail ? `: ${detail.slice(0, 200)}` : ""}`;

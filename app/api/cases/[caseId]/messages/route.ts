@@ -5,7 +5,7 @@
  */
 import { appendMessage, listMessages } from "@/lib/db";
 import type { WorkCheck } from "@/lib/diag";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 import { ChatMessageSchema } from "@/lib/schema";
 
@@ -48,6 +48,6 @@ export async function POST(req: Request, ctx: Ctx) {
     }
     return respond({ ok: true, data: { ids, caseId }, checks, is_working: opts.is_working }, 201);
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

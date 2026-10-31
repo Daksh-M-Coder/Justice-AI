@@ -86,7 +86,7 @@
     { "name": "India Code - central acts and rules", "url": "https://www.indiacode.nic.in/", "status": "needs_check", "use": "The authoritative text of every central Act. Cite from here, not from memory." },
     { "name": "Indian Kanoon - judgments", "url": "https://indiankanoon.org/", "status": "verified", "use": "Free full text of judgments; used to verify every precedent in this app." },
     { "name": "Supreme Court of India - judgments and orders", "url": "https://main.sci.gov.in/judgments", "status": "needs_check", "use": "Official reports and the SCR." },
-    { "name": "Central Information Commission", "url": "https://dic.gov.in/", "status": "needs_check", "use": "Second-appeal decisions and the RTI annual reports." },
+    { "name": "Central Information Commission", "url": "https://cic.gov.in/", "status": "needs_check", "use": "Second-appeal decisions and the RTI annual reports." },
     { "name": "Legislative Department - Constitution and bills", "url": "https://legislative.gov.in/", "status": "needs_check", "use": "Constitution text, bills and enacted amendments." },
     { "name": "PRS India - legislative tracking", "url": "https://www.prsindia.org/", "status": "needs_check", "use": "Readable summaries of pending bills and committee reports; good for the 'what changed' section." },
     { "name": "Ministry of Consumer Affairs / National Consumer Helpline", "url": "https://consumerhelpline.gov.in/", "status": "needs_check", "use": "File a complaint and track it; also shows the CCPA's actions on misleading ads." },

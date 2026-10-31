@@ -113,6 +113,17 @@ const en: Dict = {
   "cat.Cyber Fraud": "Cyber fraud",
   "cat.Family / Marriage": "Family / Marriage",
   "cat.General": "General",
+  "field.name": "Full name",
+  "field.address": "Address",
+  "field.city": "City",
+  "field.state": "State",
+  "field.pin": "PIN code",
+  "field.phone": "Phone",
+  "err.tooshort": "Please write a little more - at least a dozen characters, so the office and the dates are clear.",
+  "history.note.statusLocal": "Status saved on this device.",
+  "history.note.statusSynced": "Status saved in your account.",
+  "history.note.deleted": "Case deleted from this device's history.",
+  "history.confirmDelete": "Delete this case? Its letter, its deadlines and its follow-up questions go with it.",
 };
 
 const hi: Dict = {
@@ -152,7 +163,7 @@ const hi: Dict = {
   "btn.clearImage": "फोटो हटाएँ",
   "btn.retry": "फिर कोशिश करें",
   "btn.newCase": "नया मामला",
-  "btn.runSelfTest": "स्टील-टेस्ट चलाएँ",
+  "btn.runSelfTest": "सेल्फ़-टेस्ट चलाएँ",
   "result.authority": "पहले कहाँ जाएँ",
   "result.law": "लागू कानून",
   "result.urgency": "तात्कालिकता",
@@ -193,8 +204,8 @@ const hi: Dict = {
   "detector.sub": "समन, कर नोटिस या वारंट का पाठ यहाँ चिपकाएँ।",
   "detector.ph": "नोटिस का पाठ यहाँ चिपकाएँ…",
   "vitals.title": "सिस्टम स्थिति",
-  "vitals.sub": "हर फ़ंक्शन is_working फ़ैग लेता है और अपनी जाँच बताता है।",
-  "disclaimer": "AI द्वारा 생성ित सूचना, कानूनी सलाह नहीं। योग्य वकील से पुष्टि करें।",
+  "vitals.sub": "हर फ़ंक्शन is_working स्वीकार करता है और अपनी जाँच बताता है।",
+  "disclaimer": "AI द्वारा उत्पन्न सूचना, कानूनी सलाह नहीं। योग्य वकील से पुष्टि करें।",
   "err.empty": "कृपया पहले बताइए क्या हुआ।",
   "err.network": "सर्वर से संपर्क नहीं हो सका।",
   "ok.saved": "आपके खाते में सहेजा गया।",
@@ -209,6 +220,17 @@ const hi: Dict = {
   "cat.Cyber Fraud": "साइबर धोखाधड़ी",
   "cat.Family / Marriage": "परिवार / विवाह",
   "cat.General": "सामान्य",
+  "field.name": "पूरा नाम",
+  "field.address": "पता",
+  "field.city": "शहर",
+  "field.state": "राज्य",
+  "field.pin": "पिन कोड",
+  "field.phone": "फ़ोन",
+  "err.tooshort": "कृपया थोड़ा और लिखिए - कम से कम बारह अक्षर, ताकि दफ़्तर और तारीख़ें साफ़ हों।",
+  "history.note.statusLocal": "स्थिति इस डिवाइस पर सहेजी गई।",
+  "history.note.statusSynced": "स्थिति आपके खाते में सहेजी गई।",
+  "history.note.deleted": "यह मामला इस डिवाइस के इतिहास से हटा दिया गया।",
+  "history.confirmDelete": "यह मामला हटाएँ? इसके साथ उसका पत्र, समय-सीमाएँ और आपके सवाल भी हट जाएँगे।",
 };
 
 const mr: Dict = {
@@ -305,6 +327,17 @@ const mr: Dict = {
   "cat.Cyber Fraud": "सायबर फसवणूक",
   "cat.Family / Marriage": "कुटुंब / विवाह",
   "cat.General": "सर्वसाधारण",
+  "field.name": "पूर्ण नाव",
+  "field.address": "पत्ता",
+  "field.city": "शहर",
+  "field.state": "राज्य",
+  "field.pin": "पिन कोड",
+  "field.phone": "फोन",
+  "err.tooshort": "कृपया थोडे अधिक लिहा - किमान बारा अक्षरे, जेणेकरून कार्यालय आणि तारखा स्पष्ट राहतील.",
+  "history.note.statusLocal": "स्थिती या डिव्हाइसवर जतन केली.",
+  "history.note.statusSynced": "स्थिती तुमच्या खात्यात जतन केली.",
+  "history.note.deleted": "हे प्रकरण या डिव्हाइसच्या इतिहासातून काढून टाकले.",
+  "history.confirmDelete": "हे प्रकरण काढून टाकावे? त्यासोबत त्याचे पत्र, कालमर्यादा आणि तुमचे प्रश्नही जातील.",
 };
 
 const DICTS: Record<Lang, Dict> = { en, hi, mr };

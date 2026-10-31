@@ -109,11 +109,12 @@
       "source_to_open": "https://indiankanoon.org/search/?formInput=selvi%20v%20state%20of%20karnataka%202010%20narcoanalysis"
     },
     {
-      "title": "A verified NCDRC or High Court judgment on builder possession delay (refund + interest)",
+      "title": "Possession delay by a builder - refund and interest (needs a verified NCDRC / State Commission judgment)",
       "court": "NCDRC",
       "year": null,
-      "why_useful": "The Consumer category currently has no verified judgment, so the tab shows the honest 'coming soon' state for flat buyers.",
-      "source_to_open": "https://cdnc.org.in/?page_id=1000&file_name=Judgments (NCDRC judgment archive) - or search indiankanoon for 'possession delay interest NCDRC'"
+      "why_useful": "Flat buyers are the largest consumer category and none of them has a verified judgment yet, so the tab shows the honest 'coming soon' state.",
+      "source_to_open": "https://indiankanoon.org/search/?formInput=possession%20delay%20refund%20interest%20NCDRC",
+      "alternate_source": "https://cdnc.gov.in/"
     }
   ]
 }

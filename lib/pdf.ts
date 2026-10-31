@@ -132,11 +132,18 @@ function printDocument(doc: LetterDoc, filename: string, opts: Opts = {}): WorkR
 }
 
 function slug(s: string): string {
-  return s
+  const base = s
     .toLowerCase()
     .replace(/[^a-z0-9\u0900-\u097F]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 60) || "justiceai-letter";
+    .replace(/^-|-$/g, "");
+  if (!base) return "justiceai-letter";
+  if (base.length <= 60) return base;
+  // Never cut a filename mid-word: the previous slice produced
+  // "district-consumer-disputes-redressal-commission-self-test-fi.pdf". Back off to the last
+  // hyphen inside the window, and only if that leaves a useful name.
+  const cut = base.slice(0, 60);
+  const at = cut.lastIndexOf("-");
+  return (at >= 24 ? cut.slice(0, at) : cut).replace(/-+$/, "") || "justiceai-letter";
 }
 
 export function selfTest(opts: Opts = {}): WorkResult<{ path: string }> {

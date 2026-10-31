@@ -6,7 +6,7 @@
  */
 import { renderReminderMail, sendEmail, upcoming } from "@/lib/reminders";
 import { listCases } from "@/lib/db";
-import { failResponse, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 
 export const runtime = "nodejs";
@@ -38,6 +38,6 @@ export async function POST(req: Request) {
     const sent = await sendEmail(to, mail.subject, mail.text, opts);
     return respond(rows, 200, { email: sent.data, emailError: sent.error, subject: mail.subject });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

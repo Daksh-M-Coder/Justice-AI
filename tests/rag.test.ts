@@ -1,6 +1,26 @@
 import { describe, expect, it } from "vitest";
 import { ALL_SECTIONS, citationGuard, corpusStats, getIndex, normSection, retrieve, selfTest } from "@/lib/rag";
 
+describe("Indic-language retrieval (found by the live sweep)", () => {
+  it("a Devanagari query stays inside its own category instead of matching stray digits", async () => {
+    // Before the fix this query ranked on the number "10000" and returned the Indian
+    // Electricity Act for a security-deposit dispute.
+    const r = await retrieve("मकान मालिक ने घर खाली करने पर 10000 की जमा राशि वापस नहीं दी है", "Tenant / Housing");
+    expect(r.ok).toBe(true);
+    expect(r.data!.sections.length).toBeGreaterThan(1);
+    expect(r.data!.why).toMatch(/language fallback/);
+    for (const s of r.data!.sections) expect(s.category).toBe("Tenant / Housing");
+    // numbered provisions first, so the letter can cite a real section, not just an Act
+    expect(r.data!.sections.some((s) => /[0-9]/.test(s.section))).toBe(true);
+  });
+
+  it("an English query keeps keyword ranking and drops weak matches", async () => {
+    const r = await retrieve("landlord refuses to return the security deposit after I vacated the flat", "Tenant / Housing");
+    expect(r.data!.sections.length).toBeGreaterThan(0);
+    expect(r.data!.why).not.toMatch(/language fallback/);
+  });
+});
+
 describe("normSection - the label the model echoes vs the key we store", () => {
   it("strips the lead-in word both sides so real citations survive the guard", () => {
     // this exact mismatch made the live run strip every valid citation once

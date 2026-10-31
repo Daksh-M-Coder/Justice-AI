@@ -4,7 +4,7 @@
  * can see what the AI wrote versus what they actually sent.
  */
 import { saveArtifact } from "@/lib/db";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 import { z } from "zod";
 
@@ -39,6 +39,6 @@ export async function POST(req: Request, ctx: Ctx) {
     );
     return respond(r, r.ok ? 201 : undefined, { caseId, artifactId: id });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

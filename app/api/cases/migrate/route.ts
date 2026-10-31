@@ -4,7 +4,7 @@
  * The client's ids are ignored unless well formed; the server is the authority.
  */
 import { migrateGuestCases } from "@/lib/db";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 import { z } from "zod";
 
@@ -43,6 +43,6 @@ export async function POST(req: Request) {
       note: "Re-open Case History: these cases are now stored against your account and will appear on any device you sign in on.",
     });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

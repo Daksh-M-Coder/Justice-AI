@@ -109,18 +109,19 @@ export function HelpTab() {
         <SectionTitle eyebrow="Official directories" title="Where to actually go" sub="Every entry below is a government or statutory body. The app deliberately shows no advocate names, ratings, case counts or phone numbers, because those were fabricated before." />
         <ul className="space-y-2.5">
           {DIRECTORIES.legal_aid.map((d) => (
-            <li key={d.name} className="rounded-xl border border-[color:var(--color-line)] p-3">
+            <li key={d.name} className="min-w-0 rounded-xl border border-[color:var(--color-line)] p-3">
               <p className="font-semibold">{d.name}</p>
               <p className="mt-1 text-[0.84rem] text-[var(--color-ink-soft)]">{d.use}</p>
               {d.url ? (
-                <a className="mt-1 inline-block text-[0.78rem] font-semibold underline" href={d.url} target="_blank" rel="noopener noreferrer">
+                <a className="mt-1 inline-block max-w-full break-all text-[0.78rem] font-semibold underline" href={d.url} target="_blank" rel="noopener noreferrer">
                   {d.url.replace("https://", "")} ↗
                 </a>
               ) : (
-                <p className="mt-1 text-[0.76rem] text-[var(--color-warn)]">No single URL - this is district-specific, use the search described above.</p>
+                <p className="mt-1 text-[0.76rem] text-[var(--color-warn)]">There is no single website for this one - it is run district by district, so search for your district legal services authority.</p>
               )}
               <span className="ml-2 align-middle">
-                <Badge tone={d.status === "needs_check" ? "warn" : "neutral"}>{d.status}</Badge>
+                {/* raw enum tokens ("needs_check", "manual") were shown to users as badges */}
+                <Badge tone={d.status === "verified" ? "ok" : "warn"}>{d.status === "verified" ? "link checked by us" : "check the link before you travel"}</Badge>
               </span>
             </li>
           ))}

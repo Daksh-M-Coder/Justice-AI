@@ -94,13 +94,27 @@ const r = await analyzeCase(input, { is_working: true });
 
 ## Security measures
 
-- The **originally committed key was leaked in git history and must still be deleted in the Groq
-  console.** `.env` now holds a working key for local testing only (your choice, and it is
-  gitignored by `.env*`); production must read `GROQ_API_KEY` from Vercel's environment, never
-  from this file. Purge the old blob before publishing the repo (`git filter-repo
-  --invert-paths --path .env`) and note that `GROQ_API_KEY` must not be re-declared in
-  `.env.local` - it has higher precedence than `.env` and an empty value there silently blanks
-  the key (this actually happened during setup).
+- **Key handling, stated accurately.** `.env` holds live Groq keys for local testing and is
+  git-ignored: `.gitignore` has covered `.env*` since the first commit, `git check-ignore .env
+  .env.local` reports both ignored, and `git grep gsk_` across every commit finds no key (only
+  the grep pattern written into `test_checklist.md`). An earlier draft of this README claimed the
+  key had leaked into git history - **that was wrong and is corrected here**; do not run
+  `git filter-repo` for it. The real exposure is shipping the folder: never zip or share the
+  tree with `.env` / `.env.local` inside, and do not re-declare `GROQ_API_KEY` in `.env.local`
+  because it has higher precedence than `.env` and an empty value there silently blanks the key
+  (this did happen during setup).
+- **Multiple keys are a scaling mechanism, not a convenience.** `lib/keypool.ts` reads
+  `GROQ_API_KEY`, the numbered `GROQ_API_KEY2` … `GROQ_API_KEY20`, and/or a comma-separated
+  `GROQ_API_KEYS`, deduplicates them, and hands out the **next** key for every request, so two
+  consecutive requests never share one. Each Groq key has its own tokens-per-minute *and*
+  tokens-per-day allowance, which is the whole reason to have a pool: a spent key used to fail
+  every user until the calendar day rolled over. Inside a single request, a `429` or `401/403`
+  moves to the next key instead of failing (up to `GROQ_KEY_ATTEMPTS`, default 3); a `400/404/413`
+  is a payload problem and does **not** walk the pool. A key rejected with `401/403` leaves
+  rotation for the life of the process; a `429` cools for 60 s, or 30 min when Groq says the
+  limit is per-day. `/api/health` reports `available / cooling / rejected` counts and slot
+  labels like `key 3/4 (a1b2c3d4)` - position plus a truncated SHA-256, never key material,
+  because these traces are returned to the browser.
 - API routes verify `Authorization: Bearer <Firebase ID token>` with Admin SDK
   `verifyIdToken(token, true)`. A bearer token that does not verify is an **error**, never a
   silent downgrade to guest.
@@ -169,8 +183,12 @@ npm run check                # typecheck + vitest + build
 node scripts/accept.mjs http://localhost:3000   # live safety assertions, spends nothing
 ```
 
-**Groq** — rotate the leaked key at https://console.groq.com/keys, set `GROQ_API_KEY`, and set a
-**monthly spend cap** in the Groq billing page (the plan's hard requirement).
+**Groq** — set `GROQ_API_KEY`, and set a **monthly spend cap** in the Groq billing page (the
+plan's hard requirement). One key works, but a pool is strongly recommended: add
+`GROQ_API_KEY2`, `GROQ_API_KEY3`, … (or `GROQ_API_KEYS="a,b,c"`) and the app rotates them per
+request, which multiplies the tokens-per-day ceiling that a single free key hits within an
+afternoon of testing. Keys expiring or being deleted is normal here - a `401` key simply leaves
+rotation and `/api/health` shows how many are left.
 
 **Firebase (server)** — Project settings → Service accounts → *Generate new private key*, then:
 
@@ -238,8 +256,11 @@ Removed for truthfulness:
 - **The hardcoded "news" ticker** — replaced by links to primary records and a written policy.
 - **Dead model IDs** — `llama-3.2-90b-vision-preview` is gone from Groq; the app now lists the
   live models and degrades gracefully.
-- **Unvalidated `JSON.parse`** of the model's word, `innerHTML` of the model's word, a leaked
-  API key, and an unauthenticated `/analyze` with a 100/min limit shared by everyone.
+- **Unvalidated `JSON.parse`** of the model's word, `innerHTML` of the model's word, and an
+  unauthenticated `/analyze` with a 100/min limit shared by everyone. (The API key itself was
+  never in git or in the old front-end - checked: `git grep gsk_` over every commit and a scan of
+  `legacy/` both come back empty. It sat in a git-ignored `.env`, which is why this README's
+  earlier draft was wrong to call it a repo leak.)
 
 ## Roadmap
 

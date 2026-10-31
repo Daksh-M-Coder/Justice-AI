@@ -18,6 +18,17 @@ import { chat as apiChat } from "@/lib/apiClient";
 
 const CAT_TONE: Record<string, "ok" | "warn" | "danger"> = { Low: "ok", Medium: "warn", High: "danger" };
 
+/**
+ * One label for a citation everywhere it appears. Only a numbered provision gets the section
+ * sign - "§Rule 3" and "§Constitution of India" are both nonsense, and the letter footer, the
+ * chips and the stripped-citation line must not disagree about it.
+ */
+export function citeLabel(c: { act: string; section: string; act_level?: boolean }): string {
+  const short = c.act.replace(/,.*/, "");
+  if (c.act_level) return `${short} (whole Act)`;
+  return /^[0-9(]/.test(c.section) ? `${short} §${c.section}` : `${short} ${c.section}`;
+}
+
 function useChecklistState(caseId: string, items: string[]) {
   const key = `justiceai_checklist_${caseId}`;
   const [done, setDone] = useState<boolean[]>(() => items.map(() => false));
@@ -60,6 +71,7 @@ export function ResultView({
   const [copied, setCopied] = useState(false);
   const [reading, setReading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [note, setNote] = useState<string | null>(null);
 
   const isRti = data.kind === "rti";
   const a = data.analysis;
@@ -84,12 +96,23 @@ export function ResultView({
         title: isRti ? "RTI Application under Section 6(1), RTI Act 2005" : (a?.authority ?? "Complaint"),
         subtitle: `${data.meta.model} · generated ${new Date().toLocaleString("en-IN")} · ${t("disclaimer")}`,
         body: letter,
-        footer: `${t("disclaimer")}\nCitations used: ${citations.map((c) => `${c.act} §${c.section}`).join(", ") || "none"}`,
+        footer: `${t("disclaimer")}\nCitations used: ${citations.map((c) => citeLabel(c)).join(", ") || "none"}`,
         lang,
       },
       { is_working: working },
     );
-    if (!r.ok) setError(r.error ?? "Export failed");
+    if (!r.ok) {
+      setError(r.error ?? "Export failed");
+      return;
+    }
+    // In self-test mode exportLetter deliberately does nothing. Saying so beats a dead button.
+    setNote(
+      r.data
+        ? r.data.how === "print"
+          ? `Self-test: this letter would open the print dialog (Devanagari has no jsPDF font) and suggest ${r.data.filename}.`
+          : `Self-test: this would download ${r.data.filename}.`
+        : "Self-test: nothing was exported.",
+    );
   };
 
   const share = async () => {
@@ -126,7 +149,7 @@ export function ResultView({
 
         {a?.plain_summary ? <p className="mb-3 text-[1.02rem] font-semibold leading-relaxed">{a.plain_summary}</p> : null}
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 [&>*]:min-w-0">
           {a ? (
             <Info label={t("result.authority")} value={a.authority} />
           ) : null}
@@ -175,7 +198,7 @@ export function ResultView({
             <p className="mt-3 text-[0.75rem] leading-relaxed text-[var(--color-danger)]">
               {t("result.stripped")}:{" "}
               {data.strippedCitations
-                .map((c) => `${c.act.replace(/,.*/, "")} §${c.section}${c.in_corpus_elsewhere ? " (real section, not retrieved for this question)" : " (not in the statute set at all)"}`)
+                .map((c) => `${citeLabel(c)}${c.in_corpus_elsewhere ? " (real section, not retrieved for this question)" : " (not in the statute set at all)"}`)
                 .join(", ")}
             </p>
           ) : null}
@@ -188,7 +211,7 @@ export function ResultView({
         <Card>
           <SectionTitle eyebrow={isRti ? t("rti.title") : t("result.letter")} title={isRti ? "Your RTI application" : "Your complaint letter"} />
           <pre className="letter-body max-h-[26rem] overflow-auto rounded-xl border border-[color:var(--color-line)] bg-[var(--color-paper)] p-4">{letter}</pre>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <Btn onClick={copy} kind="ghost">
               {copied ? t("btn.copied") : t("btn.copy")}
             </Btn>
@@ -211,6 +234,8 @@ export function ResultView({
               </Btn>
             ) : null}
           </div>
+
+          {note ? <p className="mt-2 text-[0.74rem] leading-relaxed text-[var(--color-muted)]">{note}</p> : null}
 
           <div className="mt-5">
             <h3 className="mb-1.5 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">{t("result.review")}</h3>
@@ -389,12 +414,15 @@ export function ChatPanel({ caseId, caseContext, category }: { caseId: string; c
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  /** where this exchange went, told to the user instead of staying silent */
+  const [saved, setSaved] = useState<string | null>(null);
 
   const send = async (text = input) => {
     const q = text.trim();
     if (!q) return;
     setInput("");
     setErr(null);
+    setSaved(null);
     setMsgs((m) => [...m, { role: "user", content: q }]);
     setBusy(true);
     const r = await apiChat({ messages: [...msgs, { role: "user", content: q }].slice(-8), caseContext, caseId, ...(category ? { category } : {}) }, { is_working: working });
@@ -402,11 +430,16 @@ export function ChatPanel({ caseId, caseContext, category }: { caseId: string; c
     const reply = (r.data?.data as { reply?: string } | null)?.reply;
     if (reply) {
       setMsgs((m) => [...m, { role: "assistant", content: reply }]);
-      void fetch(`/api/cases/${encodeURIComponent(caseId)}/messages`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: [{ role: "user", content: q }, { role: "assistant", content: reply }] }),
-      }).catch(() => undefined);
+      // /api/chat already appends BOTH turns to users/{uid}/cases/{caseId}/messages for a
+      // signed-in user (see app/api/chat/route.ts) and returns `persisted`. The client used to
+      // fire a second, unauthenticated POST here, which duplicated every exchange for users and
+      // produced a silent 401 for guests - so it is gone, and the truth is shown instead.
+      const persisted = Boolean(r.data?.persisted);
+      setSaved(
+        persisted
+          ? "Saved to your account - it will be here on any device you sign in from."
+          : "This answer is not stored on the server. It stays in this window until you sign in.",
+      );
     } else setErr(r.error ?? "No answer received");
   };
 
@@ -420,6 +453,7 @@ export function ChatPanel({ caseId, caseContext, category }: { caseId: string; c
           </p>
         ))}
         {busy ? <p className="text-[0.8rem] text-[var(--color-muted)]">{working ? "self-test: no token spent…" : "thinking…"}</p> : null}
+        {saved ? <p className="text-[0.74rem] italic text-[var(--color-muted)]">{saved}</p> : null}
       </div>
       <div className="mt-3 flex gap-2">
         <input className="field" value={input} placeholder={t("chat.ph")} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && !busy && void send()} />

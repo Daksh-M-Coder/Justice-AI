@@ -31,6 +31,9 @@ yarn-error.log*
 .pnpm-debug.log*
 # local run captures (live_check.mjs / accept.mjs output, next dev logs)
 *.log
+# detached `next start` stdout/err used during testing
+srv.out
+srv.err
 
 # env files (can opt-in for committing if needed)
 .env*

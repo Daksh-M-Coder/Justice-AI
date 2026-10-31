@@ -4,7 +4,7 @@
  * model is actually active, otherwise the pasted text is analysed and the user is told.
  */
 import { detectNotice } from "@/lib/analyze";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { identify } from "@/lib/identity";
 import { consume } from "@/lib/ratelimit";
 import { DetectRequestSchema } from "@/lib/schema";
@@ -30,6 +30,6 @@ export async function POST(req: Request) {
       safety: "This check is heuristic. Never act on a notice purely because the assistant called it suspicious - verify at the issuing office counter.",
     });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

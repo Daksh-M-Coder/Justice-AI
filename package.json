@@ -13,6 +13,7 @@
     "check": "npm run typecheck && npm run test && npm run build",
     "selftest": "node scripts/probe_health.mjs",
     "accept": "node scripts/accept.mjs",
+    "probe:rag": "node scripts/rag_probe.mjs",
     "live:check": "node scripts/live_check.mjs",
     "verify:sources": "node scripts/verify_sources.mjs",
     "verify:laws": "node scripts/verify_sources.mjs --kind=laws",

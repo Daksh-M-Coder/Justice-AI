@@ -74,8 +74,14 @@ export function AnalyseTab({ onCaseSaved }: { onCaseSaved?: () => void }) {
   };
 
   const submit = async () => {
-    if (problem.trim().length < 12) {
+    // Two different messages: an empty box and a 5-word box need different hints. Saying
+    // "describe what happened first" to someone who wrote 11 characters is just confusing.
+    if (!problem.trim()) {
       setError(t("err.empty"));
+      return;
+    }
+    if (problem.trim().length < 12) {
+      setError(t("err.tooshort"));
       return;
     }
     setError(null);
@@ -129,6 +135,10 @@ export function AnalyseTab({ onCaseSaved }: { onCaseSaved?: () => void }) {
               key={c}
               onClick={() => setCategory(c)}
               title={c}
+              // without this the selected chip is invisible to a screen reader: the only
+              // signal was a background colour
+              aria-pressed={category === c}
+              type="button"
               className={`rounded-full border px-3 py-1 text-[0.78rem] font-semibold transition ${
                 category === c ? "border-[color:var(--color-brand)] bg-[var(--color-brand)] text-white dark:text-[var(--color-paper)]" : "border-[color:var(--color-line)] text-[var(--color-ink-soft)] hover:bg-[var(--color-brand-soft)]"
               }`}
@@ -145,7 +155,11 @@ export function AnalyseTab({ onCaseSaved }: { onCaseSaved?: () => void }) {
             value={problem}
             maxLength={4000}
             placeholder={t("ph.problem")}
-            onChange={(e) => setProblem(e.target.value)}
+            onChange={(e) => {
+              setProblem(e.target.value);
+              // the validation message used to sit there even after the user fixed the text
+              if (error === t("err.empty") || error === t("err.tooshort")) setError(null);
+            }}
           />
           <span className="mt-1 flex items-center justify-between text-[0.7rem] text-[var(--color-muted)]">
             <span>{problem.length} / 4000</span>
@@ -165,8 +179,11 @@ export function AnalyseTab({ onCaseSaved }: { onCaseSaved?: () => void }) {
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Btn onClick={submit} disabled={busy || working}>
-            {busy ? t("btn.analysing") : working ? "is_working is on — turn it off to run a real analysis" : t("btn.analyse")}
+          {/* Test mode must keep the button LIVE: the point of is_working is to exercise the
+              whole UI path against a fixture. Disabling it here made the result view
+              unreachable exactly when the checklist said to use it. */}
+          <Btn onClick={submit} disabled={busy}>
+            {busy ? t("btn.analysing") : working ? `${t("btn.analyse")} · self-test` : t("btn.analyse")}
           </Btn>
           <Btn kind="ghost" onClick={dictate} title="Voice input">
             🎙 {listening ? t("btn.stop") : t("btn.listen")}

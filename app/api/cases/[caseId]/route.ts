@@ -4,7 +4,7 @@
  * firestore.rules enforces the same thing at the database layer.
  */
 import { deleteCase, getCase, patchCase } from "@/lib/db";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 import { CaseStatusSchema } from "@/lib/schema";
 
@@ -37,7 +37,7 @@ export async function PATCH(req: Request, ctx: Ctx) {
     const r = await patchCase(who.data.uid, caseId, { status: status.data, updatedAt: Date.now() }, opts);
     return respond(r, 200, { caseId, status: status.data });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }
 
@@ -50,6 +50,6 @@ export async function DELETE(req: Request, ctx: Ctx) {
     const r = await deleteCase(who.data.uid, caseId, opts);
     return respond(r, 200, { caseId });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }

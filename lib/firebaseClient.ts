@@ -55,12 +55,16 @@ export async function currentIdToken(opts: Opts = {}): Promise<WorkResult<string
   const p = track<string | null>("firebase.currentIdToken", opts);
   const a = (await ensureAuth()) as { currentUser?: { getIdToken: (b?: boolean) => Promise<string> } | null } | null;
   if (!a) {
-    p.check("auth available", false, "Firebase not configured - the request will be sent as a guest");
+    // Being a guest is a supported mode, not a defect. This used to record a FAILING check,
+    // and because Probe.done() marks a result not-ok when any check failed, every single
+    // guest request came back ok:false - the UI then threw away a perfectly valid HTTP 200
+    // and showed the user the internal string `nested step "currentIdToken" reported a failure`.
+    p.skip("authenticated token", "Firebase is not configured on this deployment - the request is sent as a guest");
     return p.done(null);
   }
   const user = a.currentUser;
   if (!user) {
-    p.check("a user is signed in", false, "no session");
+    p.skip("authenticated token", "nobody is signed in on this device - the request is sent as a guest");
     return p.done(null);
   }
   try {

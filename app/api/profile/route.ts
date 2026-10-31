@@ -3,7 +3,7 @@
  * Stored at users/{uid}/profile/data. Guests keep this in localStorage only.
  */
 import { getProfile, upsertProfile } from "@/lib/db";
-import { failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
+import { errorResponse, failResponse, issueText, readBody, respond, workMode } from "@/lib/http";
 import { requireUser } from "@/lib/identity";
 import { ApplicantSchema } from "@/lib/schema";
 import { z } from "zod";
@@ -36,6 +36,6 @@ export async function POST(req: Request) {
     const r = await upsertProfile(who.data.uid, { ...parsed.data, email: who.data.email }, opts);
     return respond(r, r.ok ? 200 : undefined, { saved: r.ok });
   } catch (e) {
-    return failResponse(e instanceof Error ? e.message : String(e), [], false, 500);
+    return errorResponse(e);
   }
 }
